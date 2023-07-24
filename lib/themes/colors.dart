@@ -6,7 +6,7 @@ class AppColors {
   static const Color lightGrey = Color(0xFF9D9D9D);
   static const Color white = Color(0xFFFFFFFF);
 
-  static const LinearGradient blueGradient = LinearGradient(
+  static const LinearGradient blueToDarkGradient = LinearGradient(
     colors: [Color(0xFF2A3245), Color(0xFF080A0E)],
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,

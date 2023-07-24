@@ -5,7 +5,8 @@ import 'package:hessdeck/themes/colors.dart'; // Replace 'your_app_name' with th
 class AppTheme {
   static ThemeData lightTheme = ThemeData(
     primaryColor: AppColors.primaryBlack,
-    scaffoldBackgroundColor: AppColors.white,
+    scaffoldBackgroundColor:
+        AppColors.primaryBlack, // Set the background color to primaryBlack
     appBarTheme: const AppBarTheme(
       color: AppColors.primaryBlack,
       systemOverlayStyle: SystemUiOverlayStyle.light,
@@ -24,7 +25,8 @@ class AppTheme {
 
   static ThemeData darkTheme = ThemeData(
     primaryColor: AppColors.primaryBlack,
-    scaffoldBackgroundColor: AppColors.primaryBlack,
+    scaffoldBackgroundColor:
+        AppColors.primaryBlack, // Set the background color to primaryBlack
     appBarTheme: const AppBarTheme(
       color: AppColors.primaryBlack,
       systemOverlayStyle: SystemUiOverlayStyle.light,
