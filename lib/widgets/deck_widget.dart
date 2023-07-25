@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/models/deck.dart';
 import 'package:hessdeck/themes/colors.dart';
-import 'package:hessdeck/utils/helpers.dart';
+import 'package:hessdeck/widgets/decks/clickable_deck_widget.dart';
+import 'package:hessdeck/widgets/decks/dossier_deck_widget.dart';
 import 'package:hessdeck/widgets/decks/empty_deck_widget.dart';
 
 class DeckWidget extends StatelessWidget {
@@ -20,44 +21,48 @@ class DeckWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (deck!.defaultDeck) {
+    if (deck!.dossierDeck) {
+      return DossierDeckWidget(
+        deck: deck,
+        context: context,
+        deckIndex: deckIndex,
+      );
+    } else if (deck!.clickableDeck) {
+      return ClickableDeckWidget(
+        deck: deck,
+        context: context,
+        deckIndex: deckIndex,
+      );
+    } else if (deck!.defaultDeck) {
       return EmptyDeckWidget(
-          deck: deck, context: context, deckIndex: deckIndex);
-    } else {
-      return GestureDetector(
-        onTap: () {
-          // Helpers.updateDeck(context, deckIndex, deck!);
-          Helpers.openDeckScreen(context, deckIndex, deck!);
-        },
-        child: Container(
-          padding: const EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            gradient: deck!.backgroundColor,
-            border: Border.all(color: AppColors.darkGrey, width: 5),
-            borderRadius: BorderRadius.circular(10.0),
-            shape: BoxShape
-                .rectangle, // Use BoxShape.rectangle to add a rounded border
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Center(
-                child: Icon(
-                  deck!.iconData,
-                  color: Colors.white,
-                  size: 36.0,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                deck?.name ?? "Add name to deck",
-                style: const TextStyle(color: Colors.white, fontSize: 12),
-              ),
-            ],
-          ),
-        ),
+        deck: deck,
+        context: context,
+        deckIndex: deckIndex,
       );
     }
+
+    // Display CircularProgressIndicator and loading text when deck is null (loading)
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        border: Border.all(color: AppColors.darkGrey, width: 5),
+        borderRadius: BorderRadius.circular(10.0),
+        shape: BoxShape.rectangle,
+      ),
+      child: const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: 10),
+            Text(
+              'Loading...',
+              style: TextStyle(color: Colors.white, fontSize: 12),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

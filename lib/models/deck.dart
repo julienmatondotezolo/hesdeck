@@ -9,7 +9,9 @@ class Deck {
   final LinearGradient? backgroundColor; // Optional background color
   final Color? iconColor; // Optional icon color
   final bool defaultDeck; // Boolean to indicate if the deck is a default deck
-  final bool? clicked; // Boolean to indicate if the deck is clicked
+  final bool dossierDeck;
+  final bool popupDeck;
+  final bool clickableDeck;
 
   Deck({
     required this.name,
@@ -18,8 +20,18 @@ class Deck {
     this.backgroundColor = AppColors.blueToGreyGradient,
     this.iconColor,
     this.defaultDeck = false, // Default value is false for custom decks
-    this.clicked = false, // Default value is false
-  });
+    this.dossierDeck = false,
+    this.popupDeck = false,
+    this.clickableDeck = false,
+  }) : assert(
+          _checkSingleType(
+            defaultDeck,
+            dossierDeck,
+            popupDeck,
+            clickableDeck,
+          ),
+          "A deck can be only one type.",
+        );
 
   Deck copyWith({
     String? name,
@@ -28,7 +40,9 @@ class Deck {
     LinearGradient? backgroundColor,
     Color? iconColor,
     bool? defaultDeck,
-    bool? clicked, // Add the active parameter to the copyWith method
+    bool? dossierDeck,
+    bool? popupDeck,
+    bool? clickableDeck,
   }) {
     return Deck(
       name: name ?? this.name,
@@ -37,7 +51,9 @@ class Deck {
       backgroundColor: backgroundColor ?? this.backgroundColor,
       iconColor: iconColor ?? this.iconColor,
       defaultDeck: defaultDeck ?? this.defaultDeck,
-      clicked: clicked ?? this.clicked,
+      dossierDeck: dossierDeck ?? this.dossierDeck,
+      popupDeck: popupDeck ?? this.popupDeck,
+      clickableDeck: clickableDeck ?? this.clickableDeck,
     );
   }
 
@@ -58,7 +74,9 @@ class Deck {
           : null,
       'iconColor': iconColor?.value,
       'defaultDeck': defaultDeck,
-      'clicked': clicked,
+      'dossierDeck': dossierDeck,
+      'popupDeck': popupDeck,
+      'clickableDeck': clickableDeck,
     };
   }
 
@@ -80,7 +98,9 @@ class Deck {
           : null,
       iconColor: json['iconColor'] != null ? Color(json['iconColor']) : null,
       defaultDeck: json['defaultDeck'] ?? false,
-      clicked: json['clicked'] ?? false,
+      dossierDeck: json['dossierDeck'] ?? false,
+      popupDeck: json['popupDeck'] ?? false,
+      clickableDeck: json['clickableDeck'] ?? false,
     );
   }
 
@@ -112,5 +132,15 @@ class Deck {
     }
   }
 
-  // Add any additional methods or functionality for the Deck class.
+  // Check if only one type is set to true
+  static bool _checkSingleType(
+      bool defaultDeck, bool dossierDeck, bool popupDeck, bool clickableDeck) {
+    int trueCount = 0;
+    if (defaultDeck) trueCount++;
+    if (dossierDeck) trueCount++;
+    if (popupDeck) trueCount++;
+    if (clickableDeck) trueCount++;
+
+    return trueCount <= 1;
+  }
 }
