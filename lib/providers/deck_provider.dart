@@ -13,36 +13,44 @@ class DeckProvider extends ChangeNotifier {
   List<Deck> get decks => _decks;
 
   DeckProvider() {
+    // _clearDecks();
     _loadDecks(); // Load decks from SharedPreferences when the provider is created
+  }
+
+  // Call the clearDecks() method to remove all decks from SharedPreferences
+  Future<void> _clearDecks() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs
+        .remove(_deckListKey); // Remove the deckList key from SharedPreferences
+    _decks.clear(); // Clear the local list of decks
+    notifyListeners();
   }
 
   Future<void> _loadDecks() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? deckListJson = prefs.getString(_deckListKey);
 
-    for (int i = 1; i <= 15; i++) {
-      if (deckListJson == null) {
-        print('No decks found in SharedPreferences. Adding default decks.');
-        // If there is no data in SharedPreferences, add default decks
-        for (int i = 1; i <= 15; i++) {
-          _addDefaultDeck(i, false);
-        }
-      } else {
-        final List<dynamic> decksJson = jsonDecode(deckListJson);
-        _decks.clear();
-        _decks.addAll(decksJson.map((json) => Deck.fromJson(jsonDecode(json))));
-
-        // Check if the number of decks is less than 15 and add default decks accordingly
-        if (_decks.length < 15) {
-          final int remainingDefaultDecks = 15 - _decks.length;
-          for (int i = 1; i <= remainingDefaultDecks; i++) {
-            _addDefaultDeck(_decks.length + i, false);
-          }
-          print('Added $remainingDefaultDecks default decks to reach 15.');
-        }
-
-        notifyListeners();
+    if (deckListJson == null) {
+      print('No decks found in SharedPreferences. Adding default decks.');
+      // If there is no data in SharedPreferences, add default decks
+      for (int i = 1; i <= 15; i++) {
+        _addDefaultDeck(i, false);
       }
+    } else {
+      final List<dynamic> decksJson = jsonDecode(deckListJson);
+      _decks.clear();
+      _decks.addAll(decksJson.map((json) => Deck.fromJson(jsonDecode(json))));
+
+      // Check if the number of decks is less than 15 and add default decks accordingly
+      if (_decks.length < 15) {
+        final int remainingDefaultDecks = 15 - _decks.length;
+        for (int i = 1; i <= remainingDefaultDecks; i++) {
+          _addDefaultDeck(_decks.length + i, false);
+        }
+        print('Added $remainingDefaultDecks default decks to reach 15.');
+      }
+
+      notifyListeners();
     }
 
     print('[SHARED DECKS SAVED]: ${_decks.length}');
@@ -81,7 +89,7 @@ class DeckProvider extends ChangeNotifier {
   }
 
   void addDeck(Deck deck, int index) {
-    print('Position of Deck: $index');
+    print('Position of Deck: ${index + 1}');
 
     // Remove the default deck at the specified index
     _decks.removeAt(index);
@@ -93,26 +101,23 @@ class DeckProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeDeck(Deck deck) {
-    final int indexToRemove = _decks.indexOf(deck);
-    print('Position of Deck: $indexToRemove');
+  void removeDeck(Deck deck, int index) {
+    print('Position of Deck: ${index + 1}');
 
-    if (indexToRemove >= 0) {
-      _decks.removeAt(indexToRemove);
+    _decks.removeAt(index);
 
-      // Check if the number of decks is less than 15 and add a default deck to replace the removed one
-      if (_decks.length < 15) {
-        final int remainingDefaultDecks = 15 - _decks.length;
-        for (int i = 1; i <= remainingDefaultDecks; i++) {
-          _addDefaultDeck(indexToRemove, true);
-        }
-        print(
-            'Added $remainingDefaultDecks default decks to replace the removed one.');
+    // Check if the number of decks is less than 15 and add a default deck to replace the removed one
+    if (_decks.length < 15) {
+      final int remainingDefaultDecks = 15 - _decks.length;
+      for (int i = 1; i <= remainingDefaultDecks; i++) {
+        _addDefaultDeck(index, true);
       }
-
-      _saveDecks(); // Save decks to SharedPreferences when removing a deck
-      notifyListeners();
+      print(
+          'Added $remainingDefaultDecks default decks to replace the removed one.');
     }
+
+    _saveDecks(); // Save decks to SharedPreferences when removing a deck
+    notifyListeners();
   }
 
   // Add any additional methods for managing decks here.

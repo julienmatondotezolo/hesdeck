@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/models/deck.dart';
+import 'package:hessdeck/providers/deck_provider.dart';
 import 'package:hessdeck/widgets/button_widget.dart';
 
 class DeckScreen extends StatelessWidget {
   final Deck deck;
+  final int deckIndex; // Index of the deck in the list
 
-  const DeckScreen({super.key, required this.deck});
+  const DeckScreen({Key? key, required this.deck, required this.deckIndex})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,13 +33,19 @@ class DeckScreen extends StatelessWidget {
               },
             ),
           ),
+          Container(
+            color: Colors.red,
+            child: ElevatedButton(
+              onPressed: () {
+                deckProvider(context).removeDeck(deck, deckIndex);
+                Navigator.pop(context);
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              child: const Text('Remove Deck',
+                  style: TextStyle(color: Colors.white)),
+            ),
+          ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Implement adding a new button to the deck.
-        },
-        child: const Icon(Icons.add),
       ),
     );
   }
