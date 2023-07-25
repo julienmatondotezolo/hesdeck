@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/models/deck.dart';
 import 'package:hessdeck/providers/deck_provider.dart';
+import 'package:hessdeck/screens/deck_screen.dart';
 import 'package:hessdeck/themes/colors.dart';
 import 'package:provider/provider.dart';
 
@@ -48,6 +49,18 @@ class Helpers {
     final updatedDeck =
         deck.copyWith(clicked: deckClickToggle); // Mark the deck as active
     deckProvider.updateDeck(updatedDeck, deckIndex);
+  }
+
+  static void openDeckScreen(BuildContext context, int deckIndex, Deck deck) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DeckScreen(
+          deck: deck, // Provide a default value for deck
+          deckIndex: deckIndex,
+        ),
+      ),
+    );
   }
 
   LinearGradient deckGradient() {
