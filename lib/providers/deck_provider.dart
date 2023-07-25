@@ -14,7 +14,7 @@ class DeckProvider extends ChangeNotifier {
 
   DeckProvider() {
     // _clearDecks();
-    _loadDecks(); // Load decks from SharedPreferences when the provider is created
+    _loadDecks();
   }
 
   // Call the clearDecks() method to remove all decks from SharedPreferences
@@ -26,6 +26,7 @@ class DeckProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Load decks from SharedPreferences when the provider is created
   Future<void> _loadDecks() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? deckListJson = prefs.getString(_deckListKey);
@@ -99,6 +100,19 @@ class DeckProvider extends ChangeNotifier {
 
     _saveDecks(); // Save decks to SharedPreferences when adding a new deck
     notifyListeners();
+  }
+
+  // Method to update a deck in the list
+  void updateDeck(Deck updatedDeck, int index) {
+    if (index >= 0 && index < _decks.length) {
+      // Replace the deck at the specified index with the updatedDeck
+      _decks[index] = updatedDeck;
+
+      _saveDecks(); // Save decks to SharedPreferences when removing a deck
+      notifyListeners();
+    } else {
+      print('ERROR: Deck ${updatedDeck.name} is updated.');
+    }
   }
 
   void removeDeck(Deck deck, int index) {

@@ -42,6 +42,14 @@ class Helpers {
     );
   }
 
+  static void updateDeck(BuildContext context, int deckIndex, Deck deck) {
+    bool deckClickToggle = deck.clicked == true ? false : true;
+    final deckProvider = Provider.of<DeckProvider>(context, listen: false);
+    final updatedDeck =
+        deck.copyWith(clicked: deckClickToggle); // Mark the deck as active
+    deckProvider.updateDeck(updatedDeck, deckIndex);
+  }
+
   LinearGradient deckGradient() {
     return AppColors.blueToDarkGradient;
   }
