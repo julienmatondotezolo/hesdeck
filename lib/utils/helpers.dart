@@ -25,8 +25,9 @@ class Helpers {
                 if (deckNameController.text.isNotEmpty) {
                   final newDeck = Deck(
                     name: deckNameController.text,
-                    iconData: Icons.widgets,
-                    buttons: [], // Replace with the desired icon
+                    iconData: Icons.widgets, // Replace with the desired icon
+                    buttons: [],
+                    backgroundColor: AppColors.blueToDarkGradient,
                   );
                   Provider.of<DeckProvider>(context, listen: false)
                       .addDeck(newDeck, deckIndex);

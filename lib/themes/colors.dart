@@ -8,13 +8,13 @@ class AppColors {
 
   static const LinearGradient blueToDarkGradient = LinearGradient(
     colors: [Color(0xFF2A3245), Color(0xFF080A0E)],
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
+    begin: Alignment.topLeft,
+    end: Alignment.bottomLeft,
   );
 
   static const LinearGradient blueToGreyGradient = LinearGradient(
     colors: [Color(0xFF1F1E26), Color(0xFF262626)],
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
+    begin: Alignment.topLeft,
+    end: Alignment.bottomLeft,
   );
 }
