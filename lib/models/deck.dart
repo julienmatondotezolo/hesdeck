@@ -9,6 +9,7 @@ class Deck {
   final LinearGradient? backgroundColor; // Optional background color
   final Color? iconColor; // Optional icon color
   final bool defaultDeck; // Boolean to indicate if the deck is a default deck
+  final bool? clicked; // Boolean to indicate if the deck is clicked
 
   Deck({
     required this.name,
@@ -17,7 +18,28 @@ class Deck {
     this.backgroundColor = AppColors.blueToGreyGradient,
     this.iconColor,
     this.defaultDeck = false, // Default value is false for custom decks
+    this.clicked = false, // Default value is false
   });
+
+  Deck copyWith({
+    String? name,
+    IconData? iconData,
+    List<DeckButton>? buttons,
+    LinearGradient? backgroundColor,
+    Color? iconColor,
+    bool? defaultDeck,
+    bool? clicked, // Add the active parameter to the copyWith method
+  }) {
+    return Deck(
+      name: name ?? this.name,
+      iconData: iconData ?? this.iconData,
+      buttons: buttons ?? this.buttons,
+      backgroundColor: backgroundColor ?? this.backgroundColor,
+      iconColor: iconColor ?? this.iconColor,
+      defaultDeck: defaultDeck ?? this.defaultDeck,
+      clicked: clicked ?? this.clicked,
+    );
+  }
 
   // Method to convert Deck object to a JSON map
   Map<String, dynamic> toJson() {
@@ -36,6 +58,7 @@ class Deck {
           : null,
       'iconColor': iconColor?.value,
       'defaultDeck': defaultDeck,
+      'clicked': clicked,
     };
   }
 
@@ -57,6 +80,7 @@ class Deck {
           : null,
       iconColor: json['iconColor'] != null ? Color(json['iconColor']) : null,
       defaultDeck: json['defaultDeck'] ?? false,
+      clicked: json['clicked'] ?? false,
     );
   }
 
