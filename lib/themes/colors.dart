@@ -4,6 +4,7 @@ class AppColors {
   static const Color primaryBlack = Color(0xFF202020);
   static const Color darkGrey = Color(0xFF313131);
   static const Color lightGrey = Color(0xFF9D9D9D);
+  static const Color blueGrey = Color(0xFF303239);
   static const Color white = Color(0xFFFFFFFF);
 
   static const LinearGradient activeBlueToDarkGradient = LinearGradient(

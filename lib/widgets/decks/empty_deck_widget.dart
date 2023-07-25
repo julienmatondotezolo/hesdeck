@@ -19,7 +19,7 @@ class EmptyDeckWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Helpers.showAddDeckDialog(context, "Add new deck", deckIndex);
+        Helpers.showAddDeckDialog(context, deckIndex);
       },
       child: Container(
         padding: const EdgeInsets.all(8.0),
