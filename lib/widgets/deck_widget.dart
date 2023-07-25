@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/models/deck.dart';
-import 'package:hessdeck/screens/deck_screen.dart';
 import 'package:hessdeck/themes/colors.dart';
 import 'package:hessdeck/utils/helpers.dart';
+import 'package:hessdeck/widgets/decks/empty_deck_widget.dart';
 
 class DeckWidget extends StatelessWidget {
   final Deck? deck; // Deck can be null
@@ -21,54 +21,13 @@ class DeckWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (deck!.defaultDeck) {
-      return GestureDetector(
-        onTap: () {
-          Helpers.showAddDeckDialog(context, "Add new deck", deckIndex);
-        },
-        child: Container(
-          padding: const EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            gradient: deck!.backgroundColor,
-            border: Border.all(color: AppColors.darkGrey, width: 5),
-            borderRadius: BorderRadius.circular(10.0),
-            shape: BoxShape.rectangle,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Center(
-                child: Icon(
-                  deck!.iconData,
-                  color: AppColors.lightGrey,
-                  size: 48.0,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                deck!.name,
-                style: const TextStyle(color: Colors.white, fontSize: 12),
-              ),
-            ],
-          ),
-        ),
-      );
+      return EmptyDeckWidget(
+          deck: deck, context: context, deckIndex: deckIndex);
     } else {
       return GestureDetector(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DeckScreen(
-                deck: deck ??
-                    Deck(
-                      name: 'Default Deck',
-                      iconData: Icons.widgets,
-                      buttons: [],
-                    ),
-              ), // Provide a default value for deck
-            ),
-          );
+          // Helpers.updateDeck(context, deckIndex, deck!);
+          Helpers.openDeckScreen(context, deckIndex, deck!);
         },
         child: Container(
           padding: const EdgeInsets.all(8.0),
@@ -87,6 +46,7 @@ class DeckWidget extends StatelessWidget {
                 child: Icon(
                   deck!.iconData,
                   color: Colors.white,
+                  size: 36.0,
                 ),
               ),
               const SizedBox(height: 10),
