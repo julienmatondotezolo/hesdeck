@@ -64,7 +64,7 @@ class DeckProvider extends ChangeNotifier {
     final defaultDeck = Deck(
       // name: 'Deck $i',
       name: 'Add',
-      iconData: Icons.widgets, // Replace this with your desired default icon
+      iconData: Icons.add, // Replace this with your desired default icon
       buttons: [], // Replace this with any default buttons if needed
       defaultDeck: true,
     );
@@ -80,8 +80,15 @@ class DeckProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addDeck(Deck deck) {
-    _decks.add(deck);
+  void addDeck(Deck deck, int index) {
+    print('Position of Deck: $index');
+
+    // Remove the default deck at the specified index
+    _decks.removeAt(index);
+
+    // Insert the custom deck at the specified index
+    _decks.insert(index, deck);
+
     _saveDecks(); // Save decks to SharedPreferences when adding a new deck
     notifyListeners();
   }
