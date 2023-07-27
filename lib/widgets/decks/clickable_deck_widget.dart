@@ -17,7 +17,6 @@ class ClickableDeckWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('BACKGROUND: ${deck!.backgroundColor}');
     return GestureDetector(
       onTap: () {
         Helpers.updateDeck(context, deckIndex, deck!);

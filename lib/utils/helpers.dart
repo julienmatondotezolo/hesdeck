@@ -99,10 +99,11 @@ class Helpers {
                           GestureDetector(
                             onTap: () {
                               customDialog(
-                                  context,
-                                  'Add this ${actionDeck["name"]} action.',
-                                  deckIndex,
-                                  item['actionDecks'][0]);
+                                context,
+                                'Add this ${actionDeck["name"]} action.',
+                                deckIndex,
+                                actionDeck,
+                              );
                             },
                             child: Container(
                               decoration: const BoxDecoration(
@@ -138,46 +139,15 @@ class Helpers {
 
   static void customDialog(
       BuildContext context, String message, int deckIndex, dynamic actionDeck) {
-    // print('actionDeck $actionDeck');
-
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: Text(message),
-          // content: TextField(
-          //   controller: deckNameController,
-          //   decoration: InputDecoration(labelText: message),
-          // ),
           actions: [
             ElevatedButton(
               onPressed: () {
                 final newDeck = Deck.fromJson(actionDeck);
-
-                // final newDeck = Deck(
-                //   name: actionDeck['name'],
-                //   iconData: IconData(actionDeck['iconData'],
-                //       fontFamily: 'MaterialIcons'),
-                //   backgroundColor: actionDeck['backgroundColor'] != null
-                //       ? LinearGradient(
-                //           colors: (actionDeck['backgroundColor']['colors']
-                //                   as List<dynamic>)
-                //               .map<Color>((colorValue) => Color(colorValue))
-                //               .toList(),
-                //           begin: stringToAlignment(
-                //               actionDeck['backgroundColor']['begin']),
-                //           end: stringToAlignment(
-                //               actionDeck['backgroundColor']['end']),
-                //         )
-                //       : null,
-                //   iconColor: actionDeck['iconColor'] != null
-                //       ? Color(actionDeck['iconColor'])
-                //       : null,
-                //   defaultDeck: actionDeck['defaultDeck'],
-                //   dossierDeck: actionDeck['dossierDeck'],
-                //   popupDeck: actionDeck['popupDeck'],
-                //   clickableDeck: actionDeck['clickableDeck'],
-                // );
 
                 Provider.of<DeckProvider>(context, listen: false)
                     .addDeck(newDeck, deckIndex);
