@@ -8,9 +8,9 @@ class AppColors {
   static const Color white = Color(0xFFFFFFFF);
 
   static const LinearGradient activeBlueToDarkGradient = LinearGradient(
-    colors: [Color(0xFF1F53D0), Color(0xFF080A0E)],
+    colors: [Color(0xFF1D3D8C), Color.fromARGB(255, 0, 0, 0)],
     begin: Alignment.topLeft,
-    end: Alignment.bottomLeft,
+    end: Alignment.bottomRight,
   );
 
   static const LinearGradient blueToDarkGradient = LinearGradient(
