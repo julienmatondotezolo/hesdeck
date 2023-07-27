@@ -43,8 +43,7 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                height: screenHeight *
-                    0.05, // Set the height to 5% of the screen height
+                height: screenHeight * 0.05, // 5% of the screen height
               ),
               Expanded(
                 child: GridView.builder(

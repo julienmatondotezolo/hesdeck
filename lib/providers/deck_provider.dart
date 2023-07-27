@@ -24,12 +24,14 @@ class DeckProvider extends ChangeNotifier {
         .remove(_deckListKey); // Remove the deckList key from SharedPreferences
     _decks.clear(); // Clear the local list of decks
     notifyListeners();
+    print('Clearing all decks.');
   }
 
   // Load decks from SharedPreferences when the provider is created
   Future<void> _loadDecks() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? deckListJson = prefs.getString(_deckListKey);
+    print(deckListJson);
 
     if (deckListJson == null) {
       print('No decks found in SharedPreferences. Adding default decks.');
@@ -74,7 +76,6 @@ class DeckProvider extends ChangeNotifier {
       // name: 'Deck $i',
       name: 'Add',
       iconData: Icons.add, // Replace this with your desired default icon
-      buttons: [], // Replace this with any default buttons if needed
       defaultDeck: true,
     );
 

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:hessdeck/models/button.dart';
 import 'package:hessdeck/themes/colors.dart';
+import 'package:hessdeck/utils/helpers.dart';
 
 class Deck {
   final String name;
   final IconData iconData;
-  final List<DeckButton> buttons;
   final LinearGradient? backgroundColor; // Optional background color
   final Color? iconColor; // Optional icon color
   final bool defaultDeck; // Boolean to indicate if the deck is a default deck
@@ -16,7 +15,6 @@ class Deck {
   Deck({
     required this.name,
     required this.iconData,
-    required this.buttons,
     this.backgroundColor = AppColors.blueToGreyGradient,
     this.iconColor,
     this.defaultDeck = false, // Default value is false for custom decks
@@ -36,7 +34,6 @@ class Deck {
   Deck copyWith({
     String? name,
     IconData? iconData,
-    List<DeckButton>? buttons,
     LinearGradient? backgroundColor,
     Color? iconColor,
     bool? defaultDeck,
@@ -47,7 +44,6 @@ class Deck {
     return Deck(
       name: name ?? this.name,
       iconData: iconData ?? this.iconData,
-      buttons: buttons ?? this.buttons,
       backgroundColor: backgroundColor ?? this.backgroundColor,
       iconColor: iconColor ?? this.iconColor,
       defaultDeck: defaultDeck ?? this.defaultDeck,
@@ -61,9 +57,7 @@ class Deck {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
-      'iconData':
-          iconData.codePoint, // Save the icon data as its code point (int)
-      'buttons': buttons,
+      'iconData': iconData.codePoint, // Save the icon data (int)
       'backgroundColor': backgroundColor != null
           ? {
               'colors':
@@ -84,52 +78,25 @@ class Deck {
   factory Deck.fromJson(Map<String, dynamic> json) {
     return Deck(
       name: json['name'],
-      iconData: IconData(json['iconData'],
-          fontFamily: 'MaterialIcons'), // Reconstruct the IconData
-      buttons: List<DeckButton>.from(json['buttons']),
+      iconData: json['iconData'] != null
+          ? IconData(json['iconData'], fontFamily: 'MaterialIcons')
+          : Icons.widgets, // Replace with the default icon you want to use
       backgroundColor: json['backgroundColor'] != null
           ? LinearGradient(
               colors: (json['backgroundColor']['colors'] as List<dynamic>)
                   .map<Color>((colorValue) => Color(colorValue))
                   .toList(),
-              begin: _stringToAlignment(json['backgroundColor']['begin']),
-              end: _stringToAlignment(json['backgroundColor']['end']),
+              begin:
+                  Helpers.stringToAlignment(json['backgroundColor']['begin']),
+              end: Helpers.stringToAlignment(json['backgroundColor']['end']),
             )
-          : null,
+          : AppColors.blueToDarkGradient,
       iconColor: json['iconColor'] != null ? Color(json['iconColor']) : null,
       defaultDeck: json['defaultDeck'] ?? false,
       dossierDeck: json['dossierDeck'] ?? false,
       popupDeck: json['popupDeck'] ?? false,
       clickableDeck: json['clickableDeck'] ?? false,
     );
-  }
-
-  // Helper method to convert a string to AlignmentGeometry
-  static AlignmentGeometry _stringToAlignment(String alignmentString) {
-    switch (alignmentString) {
-      case 'Alignment.topLeft':
-        return Alignment.topLeft;
-      case 'Alignment.topCenter':
-        return Alignment.topCenter;
-      case 'Alignment.topRight':
-        return Alignment.topRight;
-      case 'Alignment.centerLeft':
-        return Alignment.centerLeft;
-      case 'Alignment.center':
-        return Alignment.center;
-      case 'Alignment.centerRight':
-        return Alignment.centerRight;
-      case 'Alignment.bottomLeft':
-        return Alignment.bottomLeft;
-      case 'Alignment.bottomCenter':
-        return Alignment.bottomCenter;
-      case 'Alignment.bottomRight':
-        return Alignment.bottomRight;
-      default:
-        // If the string doesn't match any of the predefined alignments,
-        // you can return a default alignment or throw an exception, depending on your use case.
-        return Alignment.center;
-    }
   }
 
   // Check if only one type is set to true

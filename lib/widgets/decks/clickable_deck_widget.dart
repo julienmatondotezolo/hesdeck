@@ -18,12 +18,38 @@ class ClickableDeckWidget extends StatefulWidget {
   _ClickableDeckWidgetState createState() => _ClickableDeckWidgetState();
 }
 
-class _ClickableDeckWidgetState extends State<ClickableDeckWidget> {
+class _ClickableDeckWidgetState extends State<ClickableDeckWidget>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<Color?> _colorAnimation;
   bool isClicked = false;
 
   @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    )..addListener(() {
+        setState(() {});
+      });
+
+    _colorAnimation = ColorTween(
+      begin: const Color.fromARGB(255, 18, 173, 193),
+      end: const Color.fromARGB(255, 18, 100, 193),
+    ).animate(_controller);
+
+    _controller.repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    print(const Color(0xFF222222).value);
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -36,12 +62,12 @@ class _ClickableDeckWidgetState extends State<ClickableDeckWidget> {
           gradient: isClicked
               ? AppColors.activeBlueToDarkGradient
               : widget.deck!.backgroundColor,
-          // gradient: const LinearGradient(
-          //   colors: [Color.fromARGB(255, 19, 50, 123), Color(0xFF080A0E)],
-          //   begin: Alignment.topLeft,
-          //   end: Alignment.bottomLeft,
-          // ),
-          border: Border.all(color: AppColors.darkGrey, width: 5),
+          border: Border.all(
+            color: isClicked
+                ? _colorAnimation.value ?? AppColors.darkGrey
+                : AppColors.darkGrey,
+            width: 5,
+          ),
           borderRadius: BorderRadius.circular(10.0),
           shape: BoxShape
               .rectangle, // Use BoxShape.rectangle to add a rounded border
