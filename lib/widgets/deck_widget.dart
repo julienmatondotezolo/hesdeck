@@ -4,6 +4,7 @@ import 'package:hessdeck/themes/colors.dart';
 import 'package:hessdeck/widgets/decks/clickable_deck_widget.dart';
 import 'package:hessdeck/widgets/decks/dossier_deck_widget.dart';
 import 'package:hessdeck/widgets/decks/empty_deck_widget.dart';
+import 'package:hessdeck/widgets/decks/popup_deck_widget.dart';
 
 class DeckWidget extends StatelessWidget {
   final Deck? deck; // Deck can be null
@@ -35,6 +36,12 @@ class DeckWidget extends StatelessWidget {
       );
     } else if (deck!.defaultDeck) {
       return EmptyDeckWidget(
+        deck: deck,
+        context: context,
+        deckIndex: deckIndex,
+      );
+    } else if (deck!.popupDeck) {
+      return PopupDeckWidget(
         deck: deck,
         context: context,
         deckIndex: deckIndex,
