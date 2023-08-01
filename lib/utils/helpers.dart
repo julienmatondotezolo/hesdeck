@@ -32,108 +32,106 @@ class Helpers {
 
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(30.0)),
       ),
       backgroundColor: const Color(0xFF262626),
       builder: (context) {
         return SafeArea(
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 25.0),
-            decoration: const BoxDecoration(
-              gradient: AppColors.blueToGreyGradient,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(25.0),
+          child: SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 25.0),
+              decoration: const BoxDecoration(
+                gradient: AppColors.blueToGreyGradient,
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(25.0),
+                ),
               ),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Divider(
-                  color: AppColors.darkGrey,
-                  thickness: 5,
-                  indent: 140,
-                  endIndent: 140,
-                ),
-                SizedBox(
-                  height: screenHeight * 0.03, // 3% of the screen height
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 26.0),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Add actions",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Divider(
+                    color: AppColors.darkGrey,
+                    thickness: 5,
+                    indent: 140,
+                    endIndent: 140,
                   ),
-                ),
-                SizedBox(
-                  height: screenHeight * 0.05, // 5% of the screen height
-                ),
-                for (var item in data)
-                  Container(
-                    decoration: const BoxDecoration(
-                      border: Border(
-                        top: BorderSide(color: Colors.white10, width: 2.0),
-                      ),
-                    ),
-                    child: ExpansionTile(
-                      tilePadding: const EdgeInsets.symmetric(horizontal: 26.0),
-                      backgroundColor: AppColors.primaryBlack,
-                      collapsedBackgroundColor: AppColors.darkGrey,
-                      collapsedIconColor: AppColors.white,
-                      iconColor: Colors.white,
-                      title: Text(
-                        item['actionName'],
-                        style: const TextStyle(
+                  SizedBox(
+                    height: screenHeight * 0.03, // 3% of the screen height
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 26.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Add actions",
+                        style: TextStyle(
                           color: Colors.white,
-                          fontSize: 14,
+                          fontSize: 24,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      children: [
-                        for (var actionDeck in item['actionDecks'])
-                          GestureDetector(
-                            onTap: () {
-                              openDeckSettingsScreen(context, deckIndex,
-                                  Deck.fromJson(actionDeck));
-                              // customDialog(
-                              //   context,
-                              //   'Add this ${actionDeck["name"]} action.',
-                              //   deckIndex,
-                              //   actionDeck,
-                              // );
-                            },
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                border: Border(
-                                  top: BorderSide(
-                                      color: Colors.white10, width: 1.0),
+                    ),
+                  ),
+                  SizedBox(
+                    height: screenHeight * 0.05, // 5% of the screen height
+                  ),
+                  for (var item in data)
+                    Container(
+                      decoration: const BoxDecoration(
+                        border: Border(
+                          top: BorderSide(color: Colors.white10, width: 2.0),
+                        ),
+                      ),
+                      child: ExpansionTile(
+                        tilePadding:
+                            const EdgeInsets.symmetric(horizontal: 26.0),
+                        backgroundColor: AppColors.primaryBlack,
+                        collapsedBackgroundColor: AppColors.darkGrey,
+                        collapsedIconColor: AppColors.white,
+                        iconColor: Colors.white,
+                        title: Text(
+                          item['actionName'],
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        children: [
+                          for (var actionDeck in item['actionDecks'])
+                            GestureDetector(
+                              onTap: () {
+                                openDeckSettingsScreen(context, deckIndex,
+                                    Deck.fromJson(actionDeck));
+                              },
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  border: Border(
+                                    top: BorderSide(
+                                        color: Colors.white10, width: 1.0),
+                                  ),
                                 ),
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 16.0, horizontal: 26.0),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  actionDeck['name'],
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 16.0, horizontal: 26.0),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    actionDeck['name'],
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
           ),
         );
@@ -263,9 +261,5 @@ class Helpers {
         );
       },
     );
-  }
-
-  LinearGradient deckGradient() {
-    return AppColors.blueToDarkGradient;
   }
 }
