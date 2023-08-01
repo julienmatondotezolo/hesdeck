@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hessdeck/providers/deck_provider.dart';
 import 'package:hessdeck/screens/home_screen.dart';
 import 'package:hessdeck/themes/app_theme.dart';
+import 'package:hessdeck/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (_) => DeckProvider(),
       child: MaterialApp(
-        title: 'HessDeck', // Replace with your app's title
+        title: Constants.appName, // Replace with your app's title
         // theme: ThemeData(
         //   primarySwatch: Colors.blue,
         //   visualDensity: VisualDensity.adaptivePlatformDensity,

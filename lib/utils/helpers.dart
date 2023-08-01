@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:hessdeck/models/deck.dart';
 import 'package:hessdeck/providers/deck_provider.dart';
 import 'package:hessdeck/screens/deck_screen.dart';
+import 'package:hessdeck/screens/deck_settings_screen.dart';
 import 'package:hessdeck/services/api_services.dart';
 import 'package:hessdeck/themes/colors.dart';
 import 'package:provider/provider.dart';
@@ -98,12 +100,14 @@ class Helpers {
                         for (var actionDeck in item['actionDecks'])
                           GestureDetector(
                             onTap: () {
-                              customDialog(
-                                context,
-                                'Add this ${actionDeck["name"]} action.',
-                                deckIndex,
-                                actionDeck,
-                              );
+                              openDeckSettingsScreen(context, deckIndex,
+                                  Deck.fromJson(actionDeck));
+                              // customDialog(
+                              //   context,
+                              //   'Add this ${actionDeck["name"]} action.',
+                              //   deckIndex,
+                              //   actionDeck,
+                              // );
                             },
                             child: Container(
                               decoration: const BoxDecoration(
@@ -189,6 +193,14 @@ class Helpers {
     }
   }
 
+  static void addNewDeck(BuildContext context, int deckIndex, Deck deck) {
+    final newDeck = deck;
+
+    Provider.of<DeckProvider>(context, listen: false)
+        .addDeck(newDeck, deckIndex);
+    Navigator.pop(context);
+  }
+
   static void updateDeck(BuildContext context, int deckIndex, Deck deck) {
     bool deckClickToggle = deck.clickableDeck == true ? false : true;
     final deckProvider = Provider.of<DeckProvider>(context, listen: false);
@@ -209,6 +221,47 @@ class Helpers {
           deckIndex: deckIndex,
         ),
       ),
+    );
+  }
+
+  static void openDeckSettingsScreen(
+      BuildContext context, int deckIndex, Deck deck) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => DeckSettingsScreen(
+          deck: deck, // Provide a default value for deck
+          deckIndex: deckIndex,
+        ),
+      ),
+    );
+  }
+
+  static void showColorPicker(
+      BuildContext context, Color color, void Function(Color) onColorChanged) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Select Color'),
+          content: SingleChildScrollView(
+            child: ColorPicker(
+              pickerColor: color,
+              onColorChanged: onColorChanged,
+              showLabel: true,
+              pickerAreaHeightPercent: 0.8,
+            ),
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Done'),
+            ),
+          ],
+        );
+      },
     );
   }
 
