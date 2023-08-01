@@ -13,7 +13,7 @@
                 "begin": "Alignment.topLeft",
                 "end": "Alignment.bottomRight"
              },
-             "iconColor": null,
+             "iconColor": 4294967295,
              "defaultDeck": false,
              "dossierDeck": false,
              "popupDeck": false,
@@ -47,7 +47,7 @@
                 "begin": "Alignment.topLeft",
                 "end": "Alignment.bottomRight"
              },
-             "iconColor": null,
+             "iconColor": 4294967295,
              "defaultDeck": false,
              "dossierDeck": true,
              "popupDeck": false,
@@ -69,7 +69,7 @@
                "begin": "Alignment.topLeft",
                "end": "Alignment.bottomRight"
             },
-            "iconColor": null,
+            "iconColor": 4294967295,
             "defaultDeck": false,
             "dossierDeck": true,
             "popupDeck": false,
@@ -86,7 +86,7 @@
                "begin": "Alignment.topLeft",
                "end": "Alignment.bottomRight"
             },
-            "iconColor": null,
+            "iconColor": 4294967295,
             "defaultDeck": false,
             "dossierDeck": false,
             "popupDeck": false,
@@ -103,7 +103,7 @@
                "begin": "Alignment.topLeft",
                "end": "Alignment.bottomRight"
             },
-            "iconColor": null,
+            "iconColor": 4294967295,
             "defaultDeck": false,
             "dossierDeck": false,
             "popupDeck": false,
@@ -125,7 +125,7 @@
                 "begin": "Alignment.topLeft",
                 "end": "Alignment.bottomRight"
              },
-             "iconColor": null,
+             "iconColor": 4294967295,
              "defaultDeck": false,
              "dossierDeck": true,
              "popupDeck": false,
@@ -142,7 +142,7 @@
                 "begin": "Alignment.topLeft",
                 "end": "Alignment.bottomLeft"
              },
-             "iconColor": null,
+             "iconColor": 4294967295,
              "defaultDeck": false,
              "dossierDeck": true,
              "popupDeck": false,

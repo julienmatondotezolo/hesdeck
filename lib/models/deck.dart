@@ -18,7 +18,7 @@ class Deck {
     required this.iconData,
     this.backgroundColor = AppColors.blueToGreyGradient,
     this.activeBackgroundColor = AppColors.activeBlueToDarkGradient,
-    this.iconColor,
+    this.iconColor = AppColors.lightGrey,
     this.defaultDeck = false, // Default value is false for custom decks
     this.dossierDeck = false,
     this.popupDeck = false,
@@ -116,7 +116,9 @@ class Deck {
                   json['activeBackgroundColor']['end']),
             )
           : AppColors.activeBlueToDarkGradient,
-      iconColor: json['iconColor'] != null ? Color(json['iconColor']) : null,
+      iconColor: json['iconColor'] != null
+          ? Color(json['iconColor'])
+          : AppColors.lightGrey,
       defaultDeck: json['defaultDeck'] ?? false,
       dossierDeck: json['dossierDeck'] ?? false,
       popupDeck: json['popupDeck'] ?? false,

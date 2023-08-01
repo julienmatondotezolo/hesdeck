@@ -36,7 +36,7 @@ class EmptyDeckWidget extends StatelessWidget {
             Center(
               child: Icon(
                 deck!.iconData,
-                color: AppColors.lightGrey,
+                color: deck!.iconColor,
                 size: 48.0,
               ),
             ),
