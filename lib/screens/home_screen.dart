@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hessdeck/models/deck.dart';
 import 'package:hessdeck/providers/deck_provider.dart';
 import 'package:hessdeck/themes/colors.dart';
 import 'package:hessdeck/widgets/deck_widget.dart';
@@ -58,11 +59,28 @@ class HomeScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     final deck = deckProvider.decks[index];
 
-                    return DeckWidget(
-                      deck: deck,
-                      homeScreenContext:
-                          context, // Pass the HomeScreen's context
-                      deckIndex: index, // Pass the index to DeckWidget
+                    return Draggable<Deck>(
+                      data: deck,
+                      feedback: DeckWidget(
+                        deck: deck,
+                        homeScreenContext: context,
+                        deckIndex: index,
+                      ),
+                      childWhenDragging: const SizedBox(),
+                      child: DeckWidget(
+                        deck: deck,
+                        homeScreenContext:
+                            context, // Pass the HomeScreen's context
+                        deckIndex: index, // Pass the index to DeckWidget
+                      ),
+                      onDragStarted: () {
+                        // Called when the drag operation starts.
+                        // You can add any desired effects or updates here.
+                      },
+                      onDragEnd: (details) {
+                        // Called when the drag operation ends.
+                        // You can add any desired effects or updates here.
+                      },
                     );
                   },
                 ),
