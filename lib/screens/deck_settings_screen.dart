@@ -46,9 +46,15 @@ class _DeckSettingsScreenState extends State<DeckSettingsScreen> {
               height: 100,
               borderRadius: BorderRadius.circular(5.0),
               colors: gradient.colors,
-              onColorsChanged: (colors) {
+              begin: gradient.begin,
+              end: gradient.end,
+              onColorsChanged: (colors, begin, end) {
                 setState(() {
-                  gradient = LinearGradient(colors: colors);
+                  gradient = LinearGradient(
+                    colors: colors,
+                    begin: begin,
+                    end: end,
+                  );
                 });
               },
               onGradientChanged: onGradientChanged,

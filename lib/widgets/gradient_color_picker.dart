@@ -6,8 +6,11 @@ class GradientColorPicker extends StatefulWidget {
   final double height;
   final BorderRadius borderRadius;
   final List<Color> colors;
-  final void Function(List<Color>) onColorsChanged;
+  final void Function(List<Color>, AlignmentGeometry, AlignmentGeometry)
+      onColorsChanged;
   final void Function(LinearGradient) onGradientChanged;
+  final AlignmentGeometry begin;
+  final AlignmentGeometry end;
 
   const GradientColorPicker({
     Key? key,
@@ -17,6 +20,8 @@ class GradientColorPicker extends StatefulWidget {
     required this.colors,
     required this.onColorsChanged,
     required this.onGradientChanged,
+    required this.begin,
+    required this.end,
   }) : super(key: key);
 
   @override
@@ -25,11 +30,15 @@ class GradientColorPicker extends StatefulWidget {
 
 class _GradientColorPickerState extends State<GradientColorPicker> {
   late List<Color> _colors;
+  late AlignmentGeometry _begin;
+  late AlignmentGeometry _end;
 
   @override
   void initState() {
     super.initState();
     _colors = widget.colors;
+    _begin = widget.begin;
+    _end = widget.end;
   }
 
   void _handleColorChange(Color oldColor, Color newColor) {
@@ -40,8 +49,12 @@ class _GradientColorPickerState extends State<GradientColorPicker> {
     setState(() {
       _colors = updatedColors; // Assign the updated list to _colors
     });
-    widget.onColorsChanged(_colors);
-    widget.onGradientChanged(LinearGradient(colors: _colors));
+    widget.onColorsChanged(_colors, _begin, _end);
+    widget.onGradientChanged(LinearGradient(
+      colors: _colors,
+      begin: _begin,
+      end: _end,
+    ));
   }
 
   @override
