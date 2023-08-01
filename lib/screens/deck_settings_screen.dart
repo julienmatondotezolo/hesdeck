@@ -129,25 +129,27 @@ class _DeckSettingsScreenState extends State<DeckSettingsScreen> {
                 },
               ),
               const SizedBox(height: 16.0),
-              ListTile(
-                title: const Text('Active Background Color',
-                    style: TextStyle(color: Colors.white)),
-                trailing: Container(
-                  width: 36.0,
-                  height: 36.0,
-                  decoration: BoxDecoration(
-                    gradient: _activeBackgroundColor,
-                    borderRadius: BorderRadius.circular(18.0),
-                  ),
-                ),
-                onTap: () {
-                  _showGradientPicker((gradient) {
-                    setState(() {
-                      _activeBackgroundColor = gradient;
-                    });
-                  }, _activeBackgroundColor);
-                },
-              ),
+              widget.deck.clickableDeck == true
+                  ? ListTile(
+                      title: const Text('Active Background Color',
+                          style: TextStyle(color: Colors.white)),
+                      trailing: Container(
+                        width: 36.0,
+                        height: 36.0,
+                        decoration: BoxDecoration(
+                          gradient: _activeBackgroundColor,
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                      ),
+                      onTap: () {
+                        _showGradientPicker((gradient) {
+                          setState(() {
+                            _activeBackgroundColor = gradient;
+                          });
+                        }, _activeBackgroundColor);
+                      },
+                    )
+                  : Container(),
               const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
