@@ -60,7 +60,7 @@ class _ClickableDeckWidgetState extends State<ClickableDeckWidget>
         padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           gradient: isClicked
-              ? AppColors.activeBlueToDarkGradient
+              ? widget.deck!.activeBackgroundColor
               : widget.deck!.backgroundColor,
           border: Border.all(
             color: isClicked

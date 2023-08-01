@@ -6,6 +6,7 @@ class Deck {
   final String name;
   final IconData iconData;
   final LinearGradient? backgroundColor; // Optional background color
+  final LinearGradient? activeBackgroundColor; //
   final Color? iconColor; // Optional icon color
   final bool defaultDeck; // Boolean to indicate if the deck is a default deck
   final bool dossierDeck;
@@ -16,6 +17,7 @@ class Deck {
     required this.name,
     required this.iconData,
     this.backgroundColor = AppColors.blueToGreyGradient,
+    this.activeBackgroundColor = AppColors.activeBlueToDarkGradient,
     this.iconColor,
     this.defaultDeck = false, // Default value is false for custom decks
     this.dossierDeck = false,
@@ -35,6 +37,7 @@ class Deck {
     String? name,
     IconData? iconData,
     LinearGradient? backgroundColor,
+    LinearGradient? activeBackgroundColor,
     Color? iconColor,
     bool? defaultDeck,
     bool? dossierDeck,
@@ -45,6 +48,8 @@ class Deck {
       name: name ?? this.name,
       iconData: iconData ?? this.iconData,
       backgroundColor: backgroundColor ?? this.backgroundColor,
+      activeBackgroundColor:
+          activeBackgroundColor ?? this.activeBackgroundColor,
       iconColor: iconColor ?? this.iconColor,
       defaultDeck: defaultDeck ?? this.defaultDeck,
       dossierDeck: dossierDeck ?? this.dossierDeck,
@@ -64,6 +69,15 @@ class Deck {
                   backgroundColor!.colors.map((color) => color.value).toList(),
               'begin': backgroundColor!.begin.toString(),
               'end': backgroundColor!.end.toString(),
+            }
+          : null,
+      'activeBackgroundColor': activeBackgroundColor != null
+          ? {
+              'colors': activeBackgroundColor!.colors
+                  .map((color) => color.value)
+                  .toList(),
+              'begin': activeBackgroundColor!.begin.toString(),
+              'end': activeBackgroundColor!.end.toString(),
             }
           : null,
       'iconColor': iconColor?.value,
@@ -91,6 +105,17 @@ class Deck {
               end: Helpers.stringToAlignment(json['backgroundColor']['end']),
             )
           : AppColors.blueToDarkGradient,
+      activeBackgroundColor: json['activeBackgroundColor'] != null
+          ? LinearGradient(
+              colors: (json['activeBackgroundColor']['colors'] as List<dynamic>)
+                  .map<Color>((colorValue) => Color(colorValue))
+                  .toList(),
+              begin: Helpers.stringToAlignment(
+                  json['activeBackgroundColor']['begin']),
+              end: Helpers.stringToAlignment(
+                  json['activeBackgroundColor']['end']),
+            )
+          : AppColors.activeBlueToDarkGradient,
       iconColor: json['iconColor'] != null ? Color(json['iconColor']) : null,
       defaultDeck: json['defaultDeck'] ?? false,
       dossierDeck: json['dossierDeck'] ?? false,
@@ -101,7 +126,11 @@ class Deck {
 
   // Check if only one type is set to true
   static bool _checkSingleType(
-      bool defaultDeck, bool dossierDeck, bool popupDeck, bool clickableDeck) {
+    bool defaultDeck,
+    bool dossierDeck,
+    bool popupDeck,
+    bool clickableDeck,
+  ) {
     int trueCount = 0;
     if (defaultDeck) trueCount++;
     if (dossierDeck) trueCount++;
