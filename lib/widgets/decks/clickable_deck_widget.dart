@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/models/deck.dart';
 import 'package:hessdeck/themes/colors.dart';
+import 'package:hessdeck/utils/helpers.dart';
 
 class ClickableDeckWidget extends StatefulWidget {
   final Deck? deck; // Deck can be null
@@ -55,6 +56,9 @@ class _ClickableDeckWidgetState extends State<ClickableDeckWidget>
         setState(() {
           isClicked = !isClicked;
         });
+      },
+      onLongPress: () {
+        Helpers.openDeckSettingsScreen(context, widget.deckIndex, widget.deck!);
       },
       child: Container(
         padding: const EdgeInsets.all(8.0),

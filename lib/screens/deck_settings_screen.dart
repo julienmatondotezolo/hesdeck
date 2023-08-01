@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/models/deck.dart';
 import 'package:hessdeck/providers/deck_provider.dart';
+import 'package:hessdeck/screens/home_screen.dart';
 import 'package:hessdeck/utils/helpers.dart';
 import 'package:hessdeck/widgets/gradient_color_picker.dart';
 
@@ -166,6 +167,12 @@ class _DeckSettingsScreenState extends State<DeckSettingsScreen> {
                     backgroundColor: _backgroundColor,
                   );
                   Helpers.addNewDeck(context, widget.deckIndex, updatedDeck);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const HomeScreen(),
+                    ),
+                  );
                 },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
                 child: const Text(
