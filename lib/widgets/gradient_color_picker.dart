@@ -33,9 +33,12 @@ class _GradientColorPickerState extends State<GradientColorPicker> {
   }
 
   void _handleColorChange(Color oldColor, Color newColor) {
-    final colorIndex = _colors.indexOf(oldColor);
+    final List<Color> updatedColors =
+        List.from(_colors); // Create a new list based on _colors
+    final colorIndex = updatedColors.indexOf(oldColor);
+    updatedColors[colorIndex] = newColor; // Modify the new list
     setState(() {
-      _colors[colorIndex] = newColor;
+      _colors = updatedColors; // Assign the updated list to _colors
     });
     widget.onColorsChanged(_colors);
     widget.onGradientChanged(LinearGradient(colors: _colors));
