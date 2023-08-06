@@ -12,6 +12,7 @@ class Deck {
   final bool dossierDeck;
   final bool popupDeck;
   final bool clickableDeck;
+  final List<Deck>? content;
 
   Deck({
     required this.name,
@@ -23,6 +24,7 @@ class Deck {
     this.dossierDeck = false,
     this.popupDeck = false,
     this.clickableDeck = false,
+    this.content,
   }) : assert(
           _checkSingleType(
             defaultDeck,
@@ -43,6 +45,7 @@ class Deck {
     bool? dossierDeck,
     bool? popupDeck,
     bool? clickableDeck,
+    List<Deck>? content,
   }) {
     return Deck(
       name: name ?? this.name,
@@ -55,6 +58,7 @@ class Deck {
       dossierDeck: dossierDeck ?? this.dossierDeck,
       popupDeck: popupDeck ?? this.popupDeck,
       clickableDeck: clickableDeck ?? this.clickableDeck,
+      content: content ?? this.content,
     );
   }
 
@@ -85,6 +89,11 @@ class Deck {
       'dossierDeck': dossierDeck,
       'popupDeck': popupDeck,
       'clickableDeck': clickableDeck,
+      'content': content != null
+          ? content!
+              .map((deck) => deck.toJson())
+              .toList() // Convert content decks to JSON
+          : null,
     };
   }
 
@@ -123,6 +132,11 @@ class Deck {
       dossierDeck: json['dossierDeck'] ?? false,
       popupDeck: json['popupDeck'] ?? false,
       clickableDeck: json['clickableDeck'] ?? false,
+      content: json['content'] != null
+          ? (json['content'] as List<dynamic>)
+              .map((deckJson) => Deck.fromJson(deckJson))
+              .toList() // Convert content JSON to List of Decks
+          : null,
     );
   }
 
