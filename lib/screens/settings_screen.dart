@@ -17,15 +17,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final TextEditingController _portController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  List<dynamic> _scenesList = [];
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // Load previously saved connection settings from SharedPreferences
     _loadConnectionSettings();
+    _fetchScenesList();
   }
 
-// Load previously saved connection settings from ConnectionProvider
+  // Load previously saved connection settings from ConnectionProvider
   void _loadConnectionSettings() {
     ConnectionProvider connectionProvider =
         Provider.of<ConnectionProvider>(context);
@@ -37,13 +39,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
+  Future<void> _fetchScenesList() async {
+    try {
+      ObsWebSocket? obsWebSocket =
+          Provider.of<ConnectionProvider>(context, listen: false).obsWebSocket;
+      SceneListResponse? response = await Connections.getScenes(obsWebSocket);
+
+      if (response != null) {
+        setState(() {
+          _scenesList =
+              response.scenes.map((scene) => scene.sceneName).toList();
+        });
+      }
+    } catch (e) {
+      // Handle any errors that occur while fetching the scenes list
+      print('Error fetching scenes: $e');
+      // Show an error message or take appropriate action
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // Use Consumer to listen for changes in ConnectionProvider
     return Consumer<ConnectionProvider>(
         builder: (context, connectionProvider, _) {
       ObsWebSocket? obsWebSocket = connectionProvider.obsWebSocket;
-      print('[STATUS]: $obsWebSocket');
       return Scaffold(
         appBar: AppBar(
           title: const Text('Settings'),
@@ -111,6 +131,42 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       return null;
                     },
                   ),
+                  const Spacer(),
+                  Expanded(
+                    child: GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 5, // Number of columns in the grid
+                      ),
+                      itemCount: _scenesList.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          child: GestureDetector(
+                            onTap: () {
+                              Connections.changeScenes(
+                                  obsWebSocket, _scenesList[index]);
+                            },
+                            child: Center(
+                              child: Text(_scenesList[index]),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  // Button to change scenes
+                  // ElevatedButton(
+                  //   onPressed: () => Connections.getScenes(obsWebSocket),
+                  //   style: ElevatedButton.styleFrom(
+                  //     backgroundColor: Colors.blue,
+                  //   ),
+                  //   child: const Text(
+                  //     'Change Scene',
+                  //     style: TextStyle(
+                  //       color: Colors.white,
+                  //     ),
+                  //   ),
+                  // ),
                   const Spacer(),
                   obsWebSocket != null
                       ? ElevatedButton(

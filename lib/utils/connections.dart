@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
+import 'package:obs_websocket/obs_websocket.dart';
 import 'package:provider/provider.dart';
 
 class Connections {
@@ -50,8 +51,25 @@ class Connections {
           ],
         ),
       );
-    } finally {
-      //
+    }
+  }
+
+  static Future<SceneListResponse?> getScenes(
+      ObsWebSocket? obsWebSocket) async {
+    SceneListResponse? response = await obsWebSocket?.scenes.getSceneList();
+    print('[SCENES]: $response');
+    return response;
+  }
+
+  static Future<void> changeScenes(
+      ObsWebSocket? obsWebSocket, String sceneName) async {
+    try {
+      await obsWebSocket?.scenes.setCurrentPreviewScene(sceneName);
+      print('[SCENES CHNAGED TO]: $sceneName');
+    } catch (e) {
+      // Handle any errors that occur while changing the scene
+      print('Error changing scene: $e');
+      // Show an error message or take appropriate action
     }
   }
 }
