@@ -51,7 +51,84 @@
              "defaultDeck": false,
              "dossierDeck": true,
              "popupDeck": false,
-             "clickableDeck": false
+             "clickableDeck": false,
+             "content": [
+               {
+                  "name": "Add",
+                  "iconData": 57415,
+                  "defaultDeck": true
+               },
+               {
+                  "name": "Add",
+                  "iconData": 57415,
+                  "defaultDeck": true
+               },
+               {
+                  "name": "Add",
+                  "iconData": 57415,
+                  "defaultDeck": true
+               },
+               {
+                  "name": "Add",
+                  "iconData": 57415,
+                  "defaultDeck": true
+               },
+               {
+                  "name": "Add",
+                  "iconData": 57415,
+                  "defaultDeck": true
+               },
+               {
+                  "name": "Add",
+                  "iconData": 57415,
+                  "defaultDeck": true
+               },
+               {
+                  "name": "Add",
+                  "iconData": 57415,
+                  "defaultDeck": true
+               },
+               {
+                  "name": "Add",
+                  "iconData": 57415,
+                  "defaultDeck": true
+               },
+               {
+                  "name": "Add",
+                  "iconData": 57415,
+                  "defaultDeck": true
+               },
+               {
+                  "name": "Add",
+                  "iconData": 57415,
+                  "defaultDeck": true
+               },
+               {
+                  "name": "Add",
+                  "iconData": 57415,
+                  "defaultDeck": true
+               },
+               {
+                  "name": "Add",
+                  "iconData": 57415,
+                  "defaultDeck": true
+               },
+               {
+                  "name": "Add",
+                  "iconData": 57415,
+                  "defaultDeck": true
+               },
+               {
+                  "name": "Add",
+                  "iconData": 57415,
+                  "defaultDeck": true
+               },
+               {
+                  "name": "Add",
+                  "iconData": 57415,
+                  "defaultDeck": true
+               }
+             ]
           }
        ]
     },
