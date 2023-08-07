@@ -64,8 +64,42 @@ class Connections {
   static Future<void> changeScenes(
       ObsWebSocket? obsWebSocket, String sceneName) async {
     try {
-      await obsWebSocket?.scenes.setCurrentPreviewScene(sceneName);
+      await obsWebSocket?.scenes.setCurrentProgramScene(sceneName);
       print('[SCENES CHNAGED TO]: $sceneName');
+    } catch (e) {
+      // Handle any errors that occur while changing the scene
+      print('Error changing scene: $e');
+      // Show an error message or take appropriate action
+    }
+  }
+
+  static Future<void> startRecord(ObsWebSocket? obsWebSocket) async {
+    try {
+      obsWebSocket?.record.startRecord();
+      print('[RECORD STATUS]: ${obsWebSocket?.record.getRecordStatus()}');
+    } catch (e) {
+      // Handle any errors that occur while changing the scene
+      print('Error changing scene: $e');
+      // Show an error message or take appropriate action
+    }
+  }
+
+  static Future<void> stopRecord(ObsWebSocket? obsWebSocket) async {
+    try {
+      obsWebSocket?.record.stopRecord();
+      print(
+          '[RECORD STATUS]: ${obsWebSocket?.record.getRecordStatus().toString()}');
+    } catch (e) {
+      // Handle any errors that occur while changing the scene
+      print('Error changing scene: $e');
+      // Show an error message or take appropriate action
+    }
+  }
+
+  static Future<void> stopStream(ObsWebSocket? obsWebSocket) async {
+    try {
+      obsWebSocket?.stream.stopStream();
+      print('[RECORD STATUS]: ${obsWebSocket?.record.getRecordStatus()}');
     } catch (e) {
       // Handle any errors that occur while changing the scene
       print('Error changing scene: $e');

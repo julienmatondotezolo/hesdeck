@@ -31,7 +31,6 @@ class DeckProvider extends ChangeNotifier {
   Future<void> _loadDecks() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final String? deckListJson = prefs.getString(_deckListKey);
-    print(deckListJson);
 
     if (deckListJson == null) {
       print('No decks found in SharedPreferences. Adding default decks.');
@@ -55,8 +54,6 @@ class DeckProvider extends ChangeNotifier {
 
       notifyListeners();
     }
-
-    print('[SHARED DECKS SAVED]: ${_decks.length}');
   }
 
   Future<void> _saveDecks() async {
