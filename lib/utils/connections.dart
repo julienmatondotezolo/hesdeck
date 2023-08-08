@@ -4,11 +4,15 @@ import 'package:obs_websocket/obs_websocket.dart';
 import 'package:provider/provider.dart';
 
 class Connections {
-  static Future<void> disconnectOBS(BuildContext context) async {
-    ConnectionProvider connectionProvider =
+  static Future<void> listenToEvents(BuildContext context,
+      ObsWebSocket? obsWebSocket, int eventSubscription) async {
+    final connectionProvider =
         Provider.of<ConnectionProvider>(context, listen: false);
+    final obsWebSocket = connectionProvider.obsWebSocket;
 
-    connectionProvider.disconnectFromOBS();
+    if (obsWebSocket != null) {
+      return await obsWebSocket.listen(eventSubscription);
+    }
   }
 
   static Future<void> connectToOBS(
@@ -52,6 +56,13 @@ class Connections {
         ),
       );
     }
+  }
+
+  static Future<void> disconnectOBS(BuildContext context) async {
+    ConnectionProvider connectionProvider =
+        Provider.of<ConnectionProvider>(context, listen: false);
+
+    connectionProvider.disconnectFromOBS();
   }
 
   static Future<SceneListResponse?> getScenes(

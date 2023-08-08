@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,14 +9,31 @@ class ConnectionProvider extends ChangeNotifier {
   String? _port;
   String? _password;
   ObsWebSocket? _obsWebSocket;
+  StreamController<dynamic>? _obsEventStreamController;
 
   String? get ipAddress => _ipAddress;
   String? get port => _port;
   String? get password => _password;
   ObsWebSocket? get obsWebSocket => _obsWebSocket;
+  Stream<dynamic>? get obsEventStream => _obsEventStreamController?.stream;
 
   ConnectionProvider() {
     _loadSettings();
+  }
+
+  void startWebSocketListener() async {
+    if (_obsWebSocket != null) {
+      _obsEventStreamController ??= StreamController<dynamic>.broadcast();
+
+      // Run a loop to periodically check for new events
+      Timer.periodic(const Duration(seconds: 1), (timer) async {
+        if (_obsWebSocket != null) {
+          final event = _obsWebSocket!;
+          _obsEventStreamController?.add(event);
+          print('STREAM: $obsEventStream');
+        }
+      });
+    }
   }
 
   // Load previously saved connection settings from SharedPreferences
@@ -23,9 +42,6 @@ class ConnectionProvider extends ChangeNotifier {
     _ipAddress = prefs.getString('obs_ip');
     _port = prefs.getString('obs_port');
     _password = prefs.getString('obs_password');
-    print('_ipAddress: $_ipAddress');
-    print('_port: $_port');
-    print('_password: $_password');
     notifyListeners();
   }
 
@@ -54,13 +70,16 @@ class ConnectionProvider extends ChangeNotifier {
           'IP address & password and port must be set before connecting.');
     }
 
-    _obsWebSocket = await ObsWebSocket.connect('ws://$_ipAddress:$_port',
-        password: _password);
+    _obsWebSocket = await ObsWebSocket.connect(
+      'ws://$_ipAddress:$_port',
+      password: _password,
+      fallbackEventHandler: (Event event) =>
+          print('type: ${event.eventType} data: ${event.eventData}'),
+    );
 
     try {
       StatsResponse stats = await _obsWebSocket!.general.getStats();
       print('Connected to OBS WebSocket server.');
-      print('[STATS]: $stats');
     } catch (e) {
       print('Error connecting to OBS WebSocket server: $e');
       throw Exception('Error connecting to OBS WebSocket server.');

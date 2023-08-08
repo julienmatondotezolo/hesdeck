@@ -17,14 +17,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final TextEditingController _portController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  List<dynamic> _scenesList = [];
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     // Load previously saved connection settings from SharedPreferences
     _loadConnectionSettings();
-    _fetchScenesList();
   }
 
   // Load previously saved connection settings from ConnectionProvider
@@ -39,31 +37,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
-  Future<void> _fetchScenesList() async {
-    try {
-      ObsWebSocket? obsWebSocket =
-          Provider.of<ConnectionProvider>(context, listen: false).obsWebSocket;
-      SceneListResponse? response = await Connections.getScenes(obsWebSocket);
-
-      if (response != null) {
-        setState(() {
-          _scenesList =
-              response.scenes.map((scene) => scene.sceneName).toList();
-        });
-      }
-    } catch (e) {
-      // Handle any errors that occur while fetching the scenes list
-      print('Error fetching scenes: $e');
-      // Show an error message or take appropriate action
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     // Use Consumer to listen for changes in ConnectionProvider
     return Consumer<ConnectionProvider>(
         builder: (context, connectionProvider, _) {
       ObsWebSocket? obsWebSocket = connectionProvider.obsWebSocket;
+      Stream<dynamic>? obsEventStream = connectionProvider.obsEventStream;
+
       return Scaffold(
         appBar: AppBar(
           title: const Text('Settings'),
@@ -132,41 +113,51 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     },
                   ),
                   const Spacer(),
-                  Expanded(
-                    child: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 5, // Number of columns in the grid
-                      ),
-                      itemCount: _scenesList.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          child: GestureDetector(
-                            onTap: () {
-                              Connections.changeScenes(
-                                  obsWebSocket, _scenesList[index]);
-                            },
-                            child: Center(
-                              child: Text(_scenesList[index]),
-                            ),
+                  StreamBuilder<dynamic>(
+                    stream: obsEventStream,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return FutureBuilder(
+                            future: (snapshot.data as ObsWebSocket)
+                                .general
+                                .getStats(),
+                            builder: (context, futureSnapshot) {
+                              if (futureSnapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Text(
+                                  'Fetching data...',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                );
+                              } else if (futureSnapshot.hasError) {
+                                return const Text(
+                                  'CPU: Error fetching data',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                );
+                              } else {
+                                // Process and display the data from the futureSnapshot
+                                StatsResponse? stats = futureSnapshot.data;
+                                return Text(
+                                  'CPU: ${stats!.cpuUsage}',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                );
+                              }
+                            });
+                      } else {
+                        return const Text(
+                          'Waiting for events...',
+                          style: TextStyle(
+                            color: Colors.white,
                           ),
                         );
-                      },
-                    ),
+                      }
+                    },
                   ),
-                  // Button to change scenes
-                  // ElevatedButton(
-                  //   onPressed: () => Connections.getScenes(obsWebSocket),
-                  //   style: ElevatedButton.styleFrom(
-                  //     backgroundColor: Colors.blue,
-                  //   ),
-                  //   child: const Text(
-                  //     'Change Scene',
-                  //     style: TextStyle(
-                  //       color: Colors.white,
-                  //     ),
-                  //   ),
-                  // ),
                   const Spacer(),
                   obsWebSocket != null
                       ? ElevatedButton(
@@ -181,12 +172,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                         )
                       : ElevatedButton(
-                          onPressed: () => Connections.connectToOBS(
-                              context,
-                              _formKey,
-                              _ipAddressController,
-                              _portController,
-                              _passwordController),
+                          onPressed: () async {
+                            await Connections.connectToOBS(
+                                context,
+                                _formKey,
+                                _ipAddressController,
+                                _portController,
+                                _passwordController);
+                            connectionProvider.startWebSocketListener();
+                          },
                           child: const Text(
                             'Connect',
                             style: TextStyle(
