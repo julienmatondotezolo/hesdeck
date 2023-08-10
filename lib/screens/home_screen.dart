@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/providers/deck_provider.dart';
-import 'package:hessdeck/screens/settings_screen.dart';
+import 'package:hessdeck/screens/settings/settings_screen.dart';
 import 'package:hessdeck/themes/colors.dart';
 import 'package:hessdeck/widgets/deck_grid_widget.dart';
 import 'package:provider/provider.dart';
@@ -39,7 +39,7 @@ class HomeScreen extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => SettingsScreen(),
+                          builder: (context) => const SettingsScreen(),
                         ),
                       );
                     },

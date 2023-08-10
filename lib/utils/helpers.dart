@@ -6,6 +6,7 @@ import 'package:hessdeck/screens/deck_screen.dart';
 import 'package:hessdeck/screens/deck_settings_screen.dart';
 import 'package:hessdeck/services/api_services.dart';
 import 'package:hessdeck/themes/colors.dart';
+import 'package:hessdeck/widgets/collapsable_widget.dart';
 import 'package:provider/provider.dart';
 
 class Helpers {
@@ -78,58 +79,7 @@ class Helpers {
                     height: screenHeight * 0.05, // 5% of the screen height
                   ),
                   for (var item in data)
-                    Container(
-                      decoration: const BoxDecoration(
-                        border: Border(
-                          top: BorderSide(color: Colors.white10, width: 2.0),
-                        ),
-                      ),
-                      child: ExpansionTile(
-                        tilePadding:
-                            const EdgeInsets.symmetric(horizontal: 26.0),
-                        backgroundColor: AppColors.primaryBlack,
-                        collapsedBackgroundColor: AppColors.darkGrey,
-                        collapsedIconColor: AppColors.white,
-                        iconColor: Colors.white,
-                        title: Text(
-                          item['actionName'],
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        children: [
-                          for (var actionDeck in item['actionDecks'])
-                            GestureDetector(
-                              onTap: () {
-                                openDeckSettingsScreen(context, deckIndex,
-                                    Deck.fromJson(actionDeck));
-                              },
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  border: Border(
-                                    top: BorderSide(
-                                        color: Colors.white10, width: 1.0),
-                                  ),
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 16.0, horizontal: 26.0),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    actionDeck['name'],
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
+                    CollapsableWidget(item: item, deckIndex: deckIndex),
                 ],
               ),
             ),
