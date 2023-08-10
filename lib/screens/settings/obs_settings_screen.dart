@@ -5,14 +5,14 @@ import 'package:hessdeck/utils/connections.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 import 'package:provider/provider.dart';
 
-class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({Key? key}) : super(key: key);
+class OBSSettingsScreen extends StatefulWidget {
+  const OBSSettingsScreen({Key? key}) : super(key: key);
 
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
+class _SettingsScreenState extends State<OBSSettingsScreen> {
   final TextEditingController _ipAddressController = TextEditingController();
   final TextEditingController _portController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -47,7 +47,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Settings'),
+          title: const Text('OBS Settings'),
         ),
         body: SafeArea(
           child: Container(
