@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hessdeck/models/connection.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 import 'package:provider/provider.dart';
 
-class Connections {
+class OBSConnections {
   static Future<void> listenToEvents(BuildContext context,
       ObsWebSocket? obsWebSocket, int eventSubscription) async {
     final connectionProvider =
@@ -24,18 +25,20 @@ class Connections {
     if (!formKey.currentState!.validate()) {
       return;
     }
-
     String ipAddress = ipAddressController.text;
     String port = portController.text;
     String password = passwordController.text;
+    OBSConnection obsObject = OBSConnection(
+      ipAddress: ipAddress,
+      port: port,
+      password: password,
+    );
 
     ConnectionProvider connectionProvider =
         Provider.of<ConnectionProvider>(context, listen: false);
 
     try {
-      await connectionProvider.updateConnectionSettings(
-          ipAddress, port, password);
-      await connectionProvider.connectToOBS();
+      await connectionProvider.connectToOBS(obsObject);
     } catch (e) {
       // Handle connection error here, show an error message or take appropriate action.
       print('Error connecting to OBS: $e');
