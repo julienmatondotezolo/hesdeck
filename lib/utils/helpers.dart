@@ -75,9 +75,7 @@ class Helpers {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: screenHeight * 0.05, // 5% of the screen height
-                  ),
+                  SizedBox(height: screenHeight * 0.025),
                   for (var item in data)
                     CollapsableWidget(item: item, deckIndex: deckIndex),
                 ],
