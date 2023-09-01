@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
 import 'package:hessdeck/themes/colors.dart';
-import 'package:hessdeck/utils/connections.dart';
+import 'package:hessdeck/services/connections/obs_connections.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 import 'package:provider/provider.dart';
 
@@ -31,15 +31,17 @@ class _SettingsScreenState extends State<OBSSettingsScreen> {
         Provider.of<ConnectionProvider>(context);
 
     setState(() {
-      _ipAddressController.text = connectionProvider.ipAddress ?? '';
-      _portController.text = connectionProvider.port ?? '4455';
-      _passwordController.text = connectionProvider.password ?? '';
+      _ipAddressController.text =
+          connectionProvider.obsConnectionObject.ipAddress;
+      _portController.text = connectionProvider.obsConnectionObject.port;
+      _passwordController.text =
+          connectionProvider.obsConnectionObject.password;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    // Use Consumer to listen for changes in ConnectionProvider
+    // Use Consumer to listen for changes in ConnectionProvider.obsConnectionObject
     return Consumer<ConnectionProvider>(
         builder: (context, connectionProvider, _) {
       ObsWebSocket? obsWebSocket = connectionProvider.obsWebSocket;
@@ -161,7 +163,10 @@ class _SettingsScreenState extends State<OBSSettingsScreen> {
                   const Spacer(),
                   obsWebSocket != null
                       ? ElevatedButton(
-                          onPressed: () => Connections.disconnectOBS(context),
+                          onPressed: () async {
+                            await OBSConnections.disconnectOBS(context);
+                            // Navigator.pop(context);
+                          },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.red),
                           child: const Text(
@@ -173,13 +178,14 @@ class _SettingsScreenState extends State<OBSSettingsScreen> {
                         )
                       : ElevatedButton(
                           onPressed: () async {
-                            await Connections.connectToOBS(
-                                context,
-                                _formKey,
-                                _ipAddressController,
-                                _portController,
-                                _passwordController);
-                            connectionProvider.startWebSocketListener();
+                            await OBSConnections.connectToOBS(
+                              context,
+                              _formKey,
+                              _ipAddressController,
+                              _portController,
+                              _passwordController,
+                            );
+                            // Navigator.pop(context);
                           },
                           child: const Text(
                             'Connect',
