@@ -194,6 +194,25 @@ class _SettingsScreenState extends State<OBSSettingsScreen> {
                             ),
                           ),
                         ),
+                  const SizedBox(height: 16.0),
+                  ElevatedButton(
+                    onPressed: () => {},
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: Colors.red,
+                      backgroundColor:
+                          Colors.transparent, // Set the text color to red
+                      side: const BorderSide(
+                        color: Colors.red,
+                        width: 3.0,
+                      ), // Set red border
+                    ),
+                    child: const Text(
+                      'Delete connection',
+                      style: TextStyle(
+                        color: Colors.red,
+                      ), // Set text color to red
+                    ),
+                  ),
                 ],
               ),
             ),
