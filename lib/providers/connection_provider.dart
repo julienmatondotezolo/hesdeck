@@ -22,7 +22,7 @@ class ConnectionProvider extends ChangeNotifier {
   OBSConnection get obsConnectionObject => _obsConnectionObject;
 
   ConnectionProvider() {
-    // _removeConnections();
+    // _removeAllConnectionFromSP();
     _loadConnectionSettings();
   }
 
@@ -60,8 +60,13 @@ class ConnectionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Call the clearDecks() method to remove all decks from SharedPreferences
-  Future<void> _removeConnections() async {
+  // Remove a connection from a SharedPreferences
+  Future<void> removeConnectionFromSP() async {
+    //
+  }
+
+  // Call the _removeAllConnections() method to remove all connections from SharedPreferences
+  Future<void> _removeAllConnectionFromSP() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('connections');
     notifyListeners();
