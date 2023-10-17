@@ -31,4 +31,17 @@ class ApiServices {
       throw Exception('Failed to load data');
     }
   }
+
+  // Function to fetch data from a local JSON file
+  static Future<dynamic> fetchConnections(String fileName) async {
+    try {
+      // Load the JSON data from the local file using rootBundle
+      String jsonString = await rootBundle.loadString(fileName);
+      // Parse the JSON data and return it
+      return json.decode(jsonString);
+    } catch (e) {
+      // If there's an error, throw an exception with the error message
+      throw Exception('Failed to load data');
+    }
+  }
 }

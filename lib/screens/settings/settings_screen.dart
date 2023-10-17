@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hessdeck/models/connection.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
 import 'package:hessdeck/screens/settings/obs_settings_screen.dart';
+import 'package:hessdeck/services/api_services.dart';
 import 'package:hessdeck/themes/colors.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +18,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   void _showConnectionsModal(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
+
+    List<dynamic> connectionsData = []; // Initialize data as an empty list
+
+    // Function to fetch data from the API
+    Future<void> fetchConnections() async {
+      try {
+        List<dynamic> data =
+            await ApiServices.fetchConnections('/assets/connections.json');
+        connectionsData = data; // Update the data list with the fetched data
+        // You can add further logic or processing here if needed
+      } catch (error) {
+        // Handle any errors that occur during the data fetching process
+        print('Error fetching data: $error');
+      }
+    }
+
+    fetchConnections();
+
+    print(connectionsData);
 
     showModalBottomSheet<void>(
       context: context,
@@ -102,41 +122,47 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      // _addConnection('Twitch');
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: AppColors.darkGrey, // Grey background color
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Colors.white10,
-                            width: 1.0,
-                          ), // Thin white border bottom
+                  /*ListView.builder(
+                    itemCount: connectionsData.length,
+                    itemBuilder: (context, index) {
+                      var connection = connectionsData[index];
+                      return GestureDetector(
+                        onTap: () {
+                          // _addConnection('Twitch');
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: AppColors.darkGrey, // Grey background color
+                            border: Border(
+                              bottom: BorderSide(
+                                color: Colors.white10,
+                                width: 1.0,
+                              ), // Thin white border bottom
+                            ),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 26.0,
+                            vertical: 16.0,
+                          ),
+                          child: Row(
+                            children: [
+                              Image.network(
+                                'https://cdn-icons-png.flaticon.com/512/2111/2111668.png', // Replace with the actual URL
+                                width: 24,
+                              ),
+                              const SizedBox(width: 16.0),
+                              Text(
+                                connection.name,
+                                style: const TextStyle(
+                                    color: Colors.white), // White text color
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 26.0,
-                        vertical: 16.0,
-                      ),
-                      child: Row(
-                        children: [
-                          Image.network(
-                            'https://cdn-icons-png.flaticon.com/512/2111/2111668.png', // Replace with the actual URL
-                            width: 24,
-                          ),
-                          const SizedBox(width: 16.0),
-                          const Text(
-                            'Twitch',
-                            style: TextStyle(
-                                color: Colors.white), // White text color
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                      );
+                    },
+                  ),*/
                 ],
               ),
             ),
@@ -207,7 +233,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           );
                         }
                       });
-                      // Navigator.pop(context);
                     },
                     child: Container(
                       decoration: const BoxDecoration(
