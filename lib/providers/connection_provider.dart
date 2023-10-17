@@ -61,8 +61,13 @@ class ConnectionProvider extends ChangeNotifier {
   }
 
   // Remove a connection from a SharedPreferences
-  Future<void> removeConnectionFromSP() async {
-    //
+  Future<void> removeConnectionFromSP(Connection connection) async {
+    if (checkIfConnectionExists(connection)) {
+      print('Object exists');
+    } else {
+      print('Impossible to delete ${connection.type} connection.');
+      throw Exception('Impossible to delete ${connection.type} connection.');
+    }
   }
 
   // Call the _removeAllConnections() method to remove all connections from SharedPreferences
@@ -77,6 +82,7 @@ class ConnectionProvider extends ChangeNotifier {
   Future<void> _loadConnectionSettings() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String>? connectionStrings = prefs.getStringList('connections');
+    print('SHARED PREFERENCES: $connectionStrings');
 
     if (connectionStrings != null) {
       _connections.clear();
@@ -85,9 +91,9 @@ class ConnectionProvider extends ChangeNotifier {
         final Map<String, dynamic> connJson = jsonDecode(connString);
 
         if (connJson["type"] == 'OBS') {
-          final connectionOBS = OBSConnection.fromJson(connJson);
-          addConnection(connectionOBS);
-          _obsConnectionObject = connectionOBS;
+          final connectionObject = OBSConnection.fromJson(connJson);
+          addConnection(connectionObject);
+          _obsConnectionObject = connectionObject;
         }
       }
     }
@@ -162,5 +168,18 @@ class ConnectionProvider extends ChangeNotifier {
       print('Error sending request to OBS WebSocket server: $e');
       throw Exception('Error sending request to OBS WebSocket server.');
     }
+  }
+
+  bool checkIfConnectionExists(Connection connection) {
+    // Check if a connection of the same type already exists
+    final existingConnectionIndex = _connections.indexWhere(
+      (existingConn) => existingConn.type == connection.type,
+    );
+
+    if (existingConnectionIndex != -1) {
+      return true;
+    }
+
+    return false;
   }
 }

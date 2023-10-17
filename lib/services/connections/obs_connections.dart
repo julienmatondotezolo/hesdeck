@@ -28,6 +28,7 @@ class OBSConnections {
     String ipAddress = ipAddressController.text;
     String port = portController.text;
     String password = passwordController.text;
+
     OBSConnection obsObject = OBSConnection(
       ipAddress: ipAddress,
       port: port,
@@ -61,10 +62,8 @@ class OBSConnections {
     }
   }
 
-  static Future<void> disconnectOBS(BuildContext context) async {
-    ConnectionProvider connectionProvider =
-        Provider.of<ConnectionProvider>(context, listen: false);
-
+  static Future<void> disconnectOBS(
+      ConnectionProvider connectionProvider) async {
     connectionProvider.disconnectFromOBS();
   }
 
@@ -118,6 +117,16 @@ class OBSConnections {
       // Handle any errors that occur while changing the scene
       print('Error changing scene: $e');
       // Show an error message or take appropriate action
+    }
+  }
+
+  static Future<void> deleteOBSConnection(ConnectionProvider connectionProvider,
+      OBSConnection obsConnectionObject) async {
+    try {
+      connectionProvider.removeConnectionFromSP(obsConnectionObject);
+    } catch (e) {
+      // Handle any errors that occur while changing the scene
+      print('Error disconnecting from OBS: $e');
     }
   }
 }

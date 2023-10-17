@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hessdeck/models/connection.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
 import 'package:hessdeck/themes/colors.dart';
 import 'package:hessdeck/services/connections/obs_connections.dart';
@@ -16,6 +17,7 @@ class _SettingsScreenState extends State<OBSSettingsScreen> {
   final TextEditingController _ipAddressController = TextEditingController();
   final TextEditingController _portController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  static String _connectionType = "";
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -36,6 +38,7 @@ class _SettingsScreenState extends State<OBSSettingsScreen> {
       _portController.text = connectionProvider.obsConnectionObject.port;
       _passwordController.text =
           connectionProvider.obsConnectionObject.password;
+      _connectionType = connectionProvider.obsConnectionObject.type;
     });
   }
 
@@ -46,6 +49,8 @@ class _SettingsScreenState extends State<OBSSettingsScreen> {
         builder: (context, connectionProvider, _) {
       ObsWebSocket? obsWebSocket = connectionProvider.obsWebSocket;
       Stream<dynamic>? obsEventStream = connectionProvider.obsEventStream;
+      OBSConnection obsConnectionObject =
+          connectionProvider.obsConnectionObject;
 
       return Scaffold(
         appBar: AppBar(
@@ -115,7 +120,7 @@ class _SettingsScreenState extends State<OBSSettingsScreen> {
                     },
                   ),
                   const Spacer(),
-                  StreamBuilder<dynamic>(
+                  /*StreamBuilder<dynamic>(
                     stream: obsEventStream,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
@@ -159,12 +164,13 @@ class _SettingsScreenState extends State<OBSSettingsScreen> {
                         );
                       }
                     },
-                  ),
+                  ),*/
                   const Spacer(),
                   obsWebSocket != null
                       ? ElevatedButton(
                           onPressed: () async {
-                            await OBSConnections.disconnectOBS(context);
+                            await OBSConnections.disconnectOBS(
+                                connectionProvider);
                             // Navigator.pop(context);
                           },
                           style: ElevatedButton.styleFrom(
@@ -195,24 +201,31 @@ class _SettingsScreenState extends State<OBSSettingsScreen> {
                           ),
                         ),
                   const SizedBox(height: 16.0),
-                  ElevatedButton(
-                    onPressed: () => {},
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.red,
-                      backgroundColor:
-                          Colors.transparent, // Set the text color to red
-                      side: const BorderSide(
-                        color: Colors.red,
-                        width: 3.0,
-                      ), // Set red border
-                    ),
-                    child: const Text(
-                      'Delete connection',
-                      style: TextStyle(
-                        color: Colors.red,
-                      ), // Set text color to red
-                    ),
-                  ),
+                  _connectionType == "OBS"
+                      ? ElevatedButton(
+                          onPressed: () async {
+                            await OBSConnections.deleteOBSConnection(
+                              connectionProvider,
+                              obsConnectionObject,
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.red,
+                            backgroundColor:
+                                Colors.transparent, // Set the text color to red
+                            side: const BorderSide(
+                              color: Colors.red,
+                              width: 3.0,
+                            ), // Set red border
+                          ),
+                          child: const Text(
+                            'Delete connection',
+                            style: TextStyle(
+                              color: Colors.red,
+                            ), // Set text color to red
+                          ),
+                        )
+                      : const Spacer(),
                 ],
               ),
             ),
