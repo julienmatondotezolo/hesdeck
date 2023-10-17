@@ -15,7 +15,7 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   late List<Connection> _connections;
 
-  void _showConnectionsModal() {
+  void _showConnectionsModal(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
 
     showModalBottomSheet<void>(
@@ -207,7 +207,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           );
                         }
                       });
-                      Navigator.pop(context);
+                      // Navigator.pop(context);
                     },
                     child: Container(
                       decoration: const BoxDecoration(
@@ -240,7 +240,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 SizedBox(height: screenHeight * 0.025),
                 ElevatedButton(
-                  onPressed: _showConnectionsModal,
+                  onPressed: () => _showConnectionsModal(context),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.darkGrey, // Dark grey color
                     shape: RoundedRectangleBorder(

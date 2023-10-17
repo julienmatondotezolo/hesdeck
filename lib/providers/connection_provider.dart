@@ -63,7 +63,13 @@ class ConnectionProvider extends ChangeNotifier {
   // Remove a connection from a SharedPreferences
   Future<void> removeConnectionFromSP(Connection connection) async {
     if (checkIfConnectionExists(connection)) {
-      print('Object exists');
+      final existingConnectionIndex = _connections.indexWhere(
+        (existingConn) => existingConn.type == connection.type,
+      );
+
+      print('Connection: $_connections');
+      print(
+          'Connection[$existingConnectionIndex]: ${_connections[existingConnectionIndex]}');
     } else {
       print('Impossible to delete ${connection.type} connection.');
       throw Exception('Impossible to delete ${connection.type} connection.');
