@@ -1,6 +1,7 @@
 class Connection {
   final String type;
-  Connection(this.type);
+  final String image;
+  Connection(this.type, this.image);
 }
 
 class OBSConnection extends Connection {
@@ -12,7 +13,10 @@ class OBSConnection extends Connection {
     required this.ipAddress,
     required this.port,
     required this.password,
-  }) : super('OBS');
+  }) : super(
+          'OBS',
+          'https://obsproject.com/assets/images/new_icon_small-r.png',
+        );
 
   OBSConnection copyWith({
     String? ipAddress,

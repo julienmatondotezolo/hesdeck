@@ -248,7 +248,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       child: Row(
                         children: [
                           Image.network(
-                            'https://cdn-icons-png.flaticon.com/512/2111/2111668.png', // Replace with the actual URL
+                            connection.image,
                             width: 24,
                           ),
                           const SizedBox(width: 16.0),

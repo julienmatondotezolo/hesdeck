@@ -11,9 +11,9 @@ class ConnectionProvider extends ChangeNotifier {
   StreamController<dynamic>? _obsEventStreamController;
   final List<Connection> _connections = [];
   late OBSConnection _obsConnectionObject = OBSConnection(
-    ipAddress: 'test',
+    ipAddress: 'xxx.xxx.xxx.x',
     port: '4455',
-    password: 'test',
+    password: '*********',
   );
 
   ObsWebSocket? get obsWebSocket => _obsWebSocket;
