@@ -227,6 +227,50 @@ class SettingsScreenState extends State<SettingsScreen> {
                               color: Colors.white,
                             ), // White text color
                           ),
+                          const Spacer(),
+                          connection.type == 'OBS'
+                              ? Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0, vertical: 5.0),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.green,
+                                      width: 1.5,
+                                    ), // Green border
+                                    borderRadius: BorderRadius.circular(
+                                        12.0), // Rounded corners
+                                  ),
+                                  child: const Text(
+                                    'Connected',
+                                    style: TextStyle(
+                                      color: Colors.green,
+                                      fontSize: 12.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                )
+                              : Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8.0, vertical: 5.0),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: AppColors.lightGrey,
+                                      width: 1.5,
+                                    ), // Green border
+                                    borderRadius: BorderRadius.circular(
+                                        12.0), // Rounded corners
+                                  ),
+                                  child: const Text(
+                                    'Not connected',
+                                    style: TextStyle(
+                                      color: AppColors
+                                          .lightGrey, // Green text color
+                                      fontSize:
+                                          12.0, // Adjust the font size as needed
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
                         ],
                       ),
                     ),
