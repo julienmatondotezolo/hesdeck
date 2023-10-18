@@ -198,4 +198,14 @@ class ConnectionProvider extends ChangeNotifier {
   /*
   ===== TWITCH CONNECTION SETTINGS ======
   */
+
+  // Connect to Twitch
+  Future<void> connectToTwitch(TwitchConnection TwitchObject) async {
+    //
+  }
+
+  // Disconnect from OBS WebSocket server
+  Future<void> disconnectFromTwitch() async {
+    //
+  }
 }

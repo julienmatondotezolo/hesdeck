@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hessdeck/services/connections/obs_connections.dart';
+import 'package:hessdeck/services/connections/manageConnections.dart';
 
 class ConnectionSettingsScreen extends StatefulWidget {
   final String connectionName;
@@ -76,11 +76,10 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
                   ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        await OBSConnections.connectToOBS(
+                        await ManageConnections.selectConnection(
                           context,
-                          controllers[0],
-                          controllers[1],
-                          controllers[2],
+                          widget.connectionName,
+                          controllers,
                         );
                       }
                     },
