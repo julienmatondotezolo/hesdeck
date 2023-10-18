@@ -184,6 +184,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                 for (var connection in _connections)
                   GestureDetector(
                     onTap: () {
+                      print('connection ${connection.toString()}');
                       Future.microtask(() {
                         // Navigator.push(
                         //   context,
