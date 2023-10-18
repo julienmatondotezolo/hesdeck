@@ -65,7 +65,6 @@ class ConnectionProvider extends ChangeNotifier {
       // Add the new connection to the list
       _connections.add(connection);
       print('Adding new ${connection.type} connection to list');
-      print('CONNECTED: ${connection.connected}');
     }
 
     notifyListeners();
@@ -225,7 +224,8 @@ class ConnectionProvider extends ChangeNotifier {
 
     try {
       print('Connected to OBS WebSocket client.');
-      addConnection(twitchConnectionObject);
+      twitchConnectionObject = twitchConnectionObject.copyWith(connected: true);
+
       _saveConnectionSettings();
     } catch (e) {
       print('Error connecting to Twitch client: $e');
@@ -237,6 +237,8 @@ class ConnectionProvider extends ChangeNotifier {
   Future<void> disconnectFromTwitch() async {
     if (_twitchClient != null) {
       _twitchClient = null;
+      _twitchConnectionObject =
+          _twitchConnectionObject.copyWith(connected: false);
       print('Disconnected from Twitch client.');
     }
     notifyListeners();
