@@ -12,7 +12,7 @@ class OBSConnections {
     final obsWebSocket = connectionProvider.obsWebSocket;
 
     if (obsWebSocket != null) {
-      return await obsWebSocket.listen(eventSubscription);
+      // return await obsWebSocket.listen(eventSubscription);
     }
   }
 
