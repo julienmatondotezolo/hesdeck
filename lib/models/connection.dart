@@ -1,7 +1,17 @@
 class Connection {
   final String type;
   final String image;
-  Connection(this.type, this.image);
+  final bool connected;
+
+  Connection(this.type, this.image, this.connected);
+
+  Connection copyWith({required bool connected}) {
+    return Connection(
+      type,
+      image,
+      connected,
+    );
+  }
 }
 
 class OBSConnection extends Connection {
@@ -13,20 +23,25 @@ class OBSConnection extends Connection {
     required this.ipAddress,
     required this.port,
     required this.password,
+    bool connected = false, // Provide a default value for connected
   }) : super(
           'OBS',
           'https://obsproject.com/assets/images/new_icon_small-r.png',
+          connected,
         );
 
+  @override
   OBSConnection copyWith({
     String? ipAddress,
     String? port,
     String? password,
+    required bool connected,
   }) {
     return OBSConnection(
       ipAddress: ipAddress ?? this.ipAddress,
       port: port ?? this.port,
       password: password ?? this.password,
+      connected: connected, // Update connected property
     );
   }
 
@@ -34,6 +49,7 @@ class OBSConnection extends Connection {
     return {
       'type': type,
       'image': image,
+      'connected': connected,
       'ipAddress': ipAddress,
       'port': port,
       'password': password,
@@ -61,12 +77,15 @@ class TwitchConnection extends Connection {
   }) : super(
           'Twitch',
           'https://cdn-icons-png.flaticon.com/512/2111/2111668.png',
+          false,
         );
 
+  @override
   TwitchConnection copyWith({
     String? clientId,
     String? port,
     String? password,
+    required bool connected,
   }) {
     return TwitchConnection(
       clientId: clientId ?? this.clientId,
@@ -79,6 +98,7 @@ class TwitchConnection extends Connection {
     return {
       'type': type,
       'image': image,
+      'connected': connected,
       'clientId': clientId,
       'port': port,
       'password': password,

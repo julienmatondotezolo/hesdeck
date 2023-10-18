@@ -161,7 +161,8 @@ class ConnectionProvider extends ChangeNotifier {
     try {
       print('Connected to OBS WebSocket server.');
       // StatsResponse stats = await _obsWebSocket!.general.getStats();
-      // print(stats);
+      obsConnectionObject = obsConnectionObject.copyWith(connected: true);
+
       addConnection(obsConnectionObject);
       _saveConnectionSettings();
     } catch (e) {
@@ -176,6 +177,7 @@ class ConnectionProvider extends ChangeNotifier {
     if (_obsWebSocket != null) {
       // await _obsWebSocket!.close();
       _obsWebSocket = null;
+      _obsConnectionObject = _obsConnectionObject.copyWith(connected: false);
       print('Disconnected from OBS WebSocket server.');
     }
     notifyListeners();
