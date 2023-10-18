@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hessdeck/providers/connection_provider.dart';
 import 'package:hessdeck/services/connections/manageConnections.dart';
+import 'package:provider/provider.dart';
 
 class ConnectionSettingsScreen extends StatefulWidget {
   final String connectionName;
@@ -24,9 +26,18 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
   @override
   void initState() {
     super.initState();
+
+    // Initialize controllers with values from the provider
     controllers = List.generate(widget.fields.length, (index) {
       return TextEditingController();
     });
+
+    // controllers = List.generate(widget.fields.length, (index) {
+    //   String initialValue = // Fetch initial values from the provider using ConnectionProvider
+    //       Provider.of<ConnectionProvider>(context, listen: false)
+    //           .getInitialValueForField(widget.fields[index]);
+    //   return TextEditingController(text: initialValue);
+    // });
   }
 
   @override
@@ -39,103 +50,114 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('${widget.connectionName} settings'),
-      ),
-      body: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.all(25.0),
-          child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  for (var i = 0; i < widget.fields.length; i++)
-                    Column(
-                      children: [
-                        TextFormField(
-                          controller: controllers[i],
-                          style: const TextStyle(color: Colors.white),
-                          decoration: InputDecoration(
-                            labelText: widget.fields[i],
-                            labelStyle: const TextStyle(color: Colors.white),
-                            border: const OutlineInputBorder(),
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter the ${widget.fields[i]}';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 16),
-                      ],
-                    ),
-                  const Spacer(),
-                  ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        await ManageConnections.selectConnection(
-                          context,
-                          widget.connectionName,
-                          controllers,
-                        );
-                      }
-                    },
-                    child: const Text(
-                      'Connect',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
+    return Consumer<ConnectionProvider>(
+        builder: (context, connectionProvider, _) {
+      Map<String, dynamic>? connected;
+      Map<String, dynamic>? obsWebSocket = connectionProvider.obsWebSocket;
+      Map<String, dynamic>? twitchClient = connectionProvider.twitchClient;
 
-                  /*
-                  ElevatedButton(
-                          onPressed: () async {
-                            await OBSConnections.disconnectOBS(
-                                connectionProvider);
-                            // Navigator.pop(context);
-                          },
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red),
-                          child: const Text(
-                            'Disconnect',
-                            style: TextStyle(
-                              color: Colors.white,
+      if (widget.connectionName == "OBS") {
+        connected = obsWebSocket;
+      } else if (widget.connectionName == "Twitch") {
+        connected = twitchClient;
+      }
+
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('${widget.connectionName} settings'),
+        ),
+        body: SafeArea(
+          child: Container(
+            padding: const EdgeInsets.all(25.0),
+            child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    for (var i = 0; i < widget.fields.length; i++)
+                      Column(
+                        children: [
+                          TextFormField(
+                            controller: controllers[i],
+                            style: const TextStyle(color: Colors.white),
+                            decoration: InputDecoration(
+                              labelText: widget.fields[i],
+                              labelStyle: const TextStyle(color: Colors.white),
+                              border: const OutlineInputBorder(),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter the ${widget.fields[i]}';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 16),
+                        ],
+                      ),
+                    const Spacer(),
+                    connected == null
+                        ? ElevatedButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                ManageConnections.selectConnection(
+                                  context,
+                                  widget.connectionName,
+                                  controllers,
+                                );
+                                // This line will be executed after the connection is selected
+                                Navigator.pop(context);
+                              }
+                            },
+                            child: const Text(
+                              'Connect',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        : ElevatedButton(
+                            onPressed: () async {
+                              Navigator.pop(context);
+                            },
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red),
+                            child: const Text(
+                              'Disconnect',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
                             ),
                           ),
-                        )
-                  */
-                  const SizedBox(height: 16.0),
-                  ElevatedButton(
-                    onPressed: () async {
-                      // await OBSConnections.deleteOBSConnection(
-                      //   connectionProvider,
-                      //   obsConnectionObject,
-                      // );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.red,
-                      backgroundColor:
-                          Colors.transparent, // Set the text color to red
-                      side: const BorderSide(
-                        color: Colors.red,
-                        width: 3.0,
-                      ), // Set red border
-                    ),
-                    child: Text(
-                      'Delete ${widget.connectionName} connection',
-                      style: const TextStyle(
-                        color: Colors.red,
-                      ), // Set text color to red
-                    ),
-                  )
-                ],
-              )),
+                    const SizedBox(height: 16.0),
+                    ElevatedButton(
+                      onPressed: () async {
+                        // await OBSConnections.deleteOBSConnection(
+                        //   connectionProvider,
+                        //   obsConnectionObject,
+                        // );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.red,
+                        backgroundColor:
+                            Colors.transparent, // Set the text color to red
+                        side: const BorderSide(
+                          color: Colors.red,
+                          width: 3.0,
+                        ), // Set red border
+                      ),
+                      child: Text(
+                        'Delete ${widget.connectionName} connection',
+                        style: const TextStyle(
+                          color: Colors.red,
+                        ), // Set text color to red
+                      ),
+                    )
+                  ],
+                )),
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

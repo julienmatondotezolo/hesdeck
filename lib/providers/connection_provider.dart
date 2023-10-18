@@ -3,23 +3,34 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hessdeck/models/connection.dart';
-import 'package:obs_websocket/obs_websocket.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ConnectionProvider extends ChangeNotifier {
-  ObsWebSocket? _obsWebSocket;
-  StreamController<dynamic>? _obsEventStreamController;
   final List<Connection> _connections = [];
   late OBSConnection _obsConnectionObject = OBSConnection(
     ipAddress: 'xxx.xxx.xxx.x',
     port: '4455',
     password: '*********',
   );
+  // ObsWebSocket? _obsWebSocket;
+  Map<String, dynamic>? _obsWebSocket;
+  StreamController<dynamic>? _obsEventStreamController;
 
-  ObsWebSocket? get obsWebSocket => _obsWebSocket;
-  Stream<dynamic>? get obsEventStream => _obsEventStreamController?.stream;
+  late final TwitchConnection _twitchConnectionObject = TwitchConnection(
+    clientId: 'xxx.xxx.xxx.x',
+    port: '4455',
+    password: '*********',
+  );
+  Map<String, dynamic>? _twitchClient;
+
   List<Connection> get connections => _connections;
   OBSConnection get obsConnectionObject => _obsConnectionObject;
+  // ObsWebSocket? get obsWebSocket => _obsWebSocket;
+  Map<String, dynamic>? get obsWebSocket => _obsWebSocket;
+  Stream<dynamic>? get obsEventStream => _obsEventStreamController?.stream;
+
+  TwitchConnection get twitchConnectionObject => _twitchConnectionObject;
+  Map<String, dynamic>? get twitchClient => _twitchClient;
 
   ConnectionProvider() {
     // _removeAllConnectionFromSP();
@@ -128,23 +139,25 @@ class ConnectionProvider extends ChangeNotifier {
   //   notifyListeners();
   // }
 
-  /*
-  ===== OBS CONNECTION SETTINGS ======
-  */
+  /* ===================================================
+           ===== OBS CONNECTION SETTINGS ======
+  *** ================================================= */
 
   // Connect to OBS WebSocket server
   Future<void> connectToOBS(OBSConnection obsConnectionObject) async {
-    _obsWebSocket = await ObsWebSocket.connect(
-      'ws://${obsConnectionObject.ipAddress}:${obsConnectionObject.port}',
-      password: obsConnectionObject.password,
-      fallbackEventHandler: (Event event) =>
-          print('type: ${event.eventType} data: ${event.eventData}'),
-    );
+    // _obsWebSocket = await ObsWebSocket.connect(
+    //   'ws://${obsConnectionObject.ipAddress}:${obsConnectionObject.port}',
+    //   password: obsConnectionObject.password,
+    //   fallbackEventHandler: (Event event) =>
+    //       print('type: ${event.eventType} data: ${event.eventData}'),
+    // );
+
+    _obsWebSocket = {"Connected": true};
 
     try {
-      StatsResponse stats = await _obsWebSocket!.general.getStats();
       print('Connected to OBS WebSocket server.');
-      print(stats);
+      // StatsResponse stats = await _obsWebSocket!.general.getStats();
+      // print(stats);
       addConnection(obsConnectionObject);
       _saveConnectionSettings();
     } catch (e) {
@@ -157,7 +170,7 @@ class ConnectionProvider extends ChangeNotifier {
   // Disconnect from OBS WebSocket server
   Future<void> disconnectFromOBS() async {
     if (_obsWebSocket != null) {
-      await _obsWebSocket!.close();
+      // await _obsWebSocket!.close();
       _obsWebSocket = null;
       print('Disconnected from OBS WebSocket server.');
     }
@@ -188,24 +201,37 @@ class ConnectionProvider extends ChangeNotifier {
     }
 
     try {
-      return await _obsWebSocket!.send(command, request);
+      // return await _obsWebSocket!.send(command, request);
     } catch (e) {
       print('Error sending request to OBS WebSocket server: $e');
       throw Exception('Error sending request to OBS WebSocket server.');
     }
   }
 
-  /*
-  ===== TWITCH CONNECTION SETTINGS ======
-  */
+  /* ===================================================
+          ===== TWITCH CONNECTION SETTINGS ======
+  *** ================================================= */
 
   // Connect to Twitch
-  Future<void> connectToTwitch(TwitchConnection TwitchObject) async {
-    //
+  Future<void> connectToTwitch(TwitchConnection twitchConnectionObject) async {
+    _twitchClient = {"Connected": true};
+
+    try {
+      print('Connected to OBS WebSocket server.');
+      addConnection(twitchConnectionObject);
+      _saveConnectionSettings();
+    } catch (e) {
+      print('Error connecting to Twitch server: $e');
+      throw Exception('Error connecting to Twitch server.');
+    }
   }
 
   // Disconnect from OBS WebSocket server
   Future<void> disconnectFromTwitch() async {
-    //
+    if (_twitchClient != null) {
+      _twitchClient = null;
+      print('Disconnected from OBS WebSocket server.');
+    }
+    notifyListeners();
   }
 }
