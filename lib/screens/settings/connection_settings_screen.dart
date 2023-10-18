@@ -52,14 +52,15 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
   Widget build(BuildContext context) {
     return Consumer<ConnectionProvider>(
         builder: (context, connectionProvider, _) {
-      Map<String, dynamic>? connected;
-      Map<String, dynamic>? obsWebSocket = connectionProvider.obsWebSocket;
-      Map<String, dynamic>? twitchClient = connectionProvider.twitchClient;
+      bool isConnected = false;
+      bool isConnectedToOBS = connectionProvider.obsConnectionObject.connected;
+      bool isConnectedToTwittch =
+          connectionProvider.twitchConnectionObject.connected;
 
       if (widget.connectionName == "OBS") {
-        connected = obsWebSocket;
+        isConnected = isConnectedToOBS;
       } else if (widget.connectionName == "Twitch") {
-        connected = twitchClient;
+        isConnected = isConnectedToTwittch;
       }
 
       return Scaffold(
@@ -96,7 +97,7 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
                         ],
                       ),
                     const Spacer(),
-                    connected == null
+                    !isConnected
                         ? ElevatedButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
@@ -123,7 +124,8 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
                               Navigator.pop(context);
                             },
                             style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.red),
+                              backgroundColor: Colors.red,
+                            ),
                             child: const Text(
                               'Disconnect',
                               style: TextStyle(
