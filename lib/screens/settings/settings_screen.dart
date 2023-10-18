@@ -4,6 +4,7 @@ import 'package:hessdeck/providers/connection_provider.dart';
 import 'package:hessdeck/screens/settings/connection_settings_screen.dart';
 import 'package:hessdeck/services/api_services.dart';
 import 'package:hessdeck/themes/colors.dart';
+import 'package:hessdeck/utils/helpers.dart';
 import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -15,26 +16,30 @@ class SettingsScreen extends StatefulWidget {
 
 class SettingsScreenState extends State<SettingsScreen> {
   late List<Connection> _connections;
+  List<dynamic> allConnectionsData = []; // Initialize data as an empty list
+
+  @override
+  void initState() {
+    super.initState();
+    fetchConnections();
+  }
+
+  // Function to fetch data from the API
+  Future<void> fetchConnections() async {
+    try {
+      List<dynamic> data =
+          await ApiServices.fetchConnections('connections.json');
+      setState(() {
+        allConnectionsData = data; // Update the data list with the fetched data
+      });
+    } catch (error) {
+      // Handle any errors that occur during the data fetching process
+      print('Error fetching data: $error');
+    }
+  }
 
   void _showConnectionsModal(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-
-    List<dynamic> allConnectionsData = []; // Initialize data as an empty list
-
-    // Function to fetch data from the API
-    Future<void> fetchConnections() async {
-      try {
-        List<dynamic> data =
-            await ApiServices.fetchConnections('connections.json');
-
-        allConnectionsData = data; // Update the data list with the fetched data
-      } catch (error) {
-        // Handle any errors that occur during the data fetching process
-        print('Error fetching data: $error');
-      }
-    }
-
-    fetchConnections();
 
     showModalBottomSheet<void>(
       context: context,
@@ -184,17 +189,17 @@ class SettingsScreenState extends State<SettingsScreen> {
                 for (var connection in _connections)
                   GestureDetector(
                     onTap: () {
-                      print('connection ${connection.toString()}');
                       Future.microtask(() {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => ConnectionSettingsScreen(
-                        //     connectionName: connection.type,
-                        //     fields: connection.,
-                        //   ),
-                        //   ),
-                        // );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ConnectionSettingsScreen(
+                              connectionName: connection.type,
+                              fields: Helpers.getConnectionField(
+                                  allConnectionsData, connection.type),
+                            ),
+                          ),
+                        );
                       });
                     },
                     child: Container(
