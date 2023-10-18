@@ -210,4 +210,17 @@ class Helpers {
       },
     );
   }
+
+  static List<dynamic> getConnectionField(
+      List<dynamic> allConnectionsData, String connectionType) {
+    List<dynamic> fields = [];
+
+    for (var connectionData in allConnectionsData) {
+      if (connectionData['name'] == connectionType) {
+        fields = connectionData['fields'];
+      }
+    }
+
+    return fields;
+  }
 }
