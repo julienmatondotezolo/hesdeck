@@ -16,7 +16,7 @@ class ConnectionProvider extends ChangeNotifier {
   Map<String, dynamic>? _obsWebSocket;
   StreamController<dynamic>? _obsEventStreamController;
 
-  late final TwitchConnection _twitchConnectionObject = TwitchConnection(
+  late TwitchConnection _twitchConnectionObject = TwitchConnection(
     clientId: 'xxx.xxx.xxx.x',
     port: '4455',
     password: '*********',
@@ -107,9 +107,13 @@ class ConnectionProvider extends ChangeNotifier {
         final Map<String, dynamic> connJson = jsonDecode(connString);
 
         if (connJson["type"] == 'OBS') {
-          final connectionObject = OBSConnection.fromJson(connJson);
-          addConnection(connectionObject);
-          _obsConnectionObject = connectionObject;
+          final obsConnectionObject = OBSConnection.fromJson(connJson);
+          addConnection(obsConnectionObject);
+          _obsConnectionObject = obsConnectionObject;
+        } else if (connJson["type"] == 'Twitch') {
+          final twitchConnectionObject = TwitchConnection.fromJson(connJson);
+          addConnection(twitchConnectionObject);
+          _twitchConnectionObject = twitchConnectionObject;
         }
       }
     }

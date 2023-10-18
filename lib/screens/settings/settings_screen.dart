@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hessdeck/models/connection.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
 import 'package:hessdeck/screens/settings/connection_settings_screen.dart';
-import 'package:hessdeck/screens/settings/obs_settings_screen.dart';
 import 'package:hessdeck/services/api_services.dart';
 import 'package:hessdeck/themes/colors.dart';
 import 'package:provider/provider.dart';
@@ -186,14 +185,15 @@ class SettingsScreenState extends State<SettingsScreen> {
                   GestureDetector(
                     onTap: () {
                       Future.microtask(() {
-                        if (connection.type == 'OBS') {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const OBSSettingsScreen(),
-                            ),
-                          );
-                        }
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => ConnectionSettingsScreen(
+                        //     connectionName: connection.type,
+                        //     fields: connection.,
+                        //   ),
+                        //   ),
+                        // );
                       });
                     },
                     child: Container(
