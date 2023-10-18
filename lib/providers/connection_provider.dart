@@ -221,12 +221,12 @@ class ConnectionProvider extends ChangeNotifier {
     _twitchClient = {"Connected": true};
 
     try {
-      print('Connected to OBS WebSocket server.');
+      print('Connected to OBS WebSocket client.');
       addConnection(twitchConnectionObject);
       _saveConnectionSettings();
     } catch (e) {
-      print('Error connecting to Twitch server: $e');
-      throw Exception('Error connecting to Twitch server.');
+      print('Error connecting to Twitch client: $e');
+      throw Exception('Error connecting to Twitch client.');
     }
   }
 
@@ -234,7 +234,7 @@ class ConnectionProvider extends ChangeNotifier {
   Future<void> disconnectFromTwitch() async {
     if (_twitchClient != null) {
       _twitchClient = null;
-      print('Disconnected from OBS WebSocket server.');
+      print('Disconnected from Twitch client.');
     }
     notifyListeners();
   }

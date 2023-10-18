@@ -105,7 +105,7 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
                                   widget.connectionName,
                                   controllers,
                                 );
-                                // This line will be executed after the connection is selected
+
                                 Navigator.pop(context);
                               }
                             },
@@ -118,6 +118,8 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
                           )
                         : ElevatedButton(
                             onPressed: () async {
+                              ManageConnections.selectDisconnection(
+                                  widget.connectionName, connectionProvider);
                               Navigator.pop(context);
                             },
                             style: ElevatedButton.styleFrom(

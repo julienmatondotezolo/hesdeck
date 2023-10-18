@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hessdeck/providers/connection_provider.dart';
 import 'package:hessdeck/services/connections/obs_connections.dart';
 import 'package:hessdeck/services/connections/twitch_connections%20.dart';
 
@@ -24,6 +25,15 @@ class ManageConnections {
       );
     } else {
       print('No CONNECTION for [$connectionType] exists in this services.');
+    }
+  }
+
+  static Future<void> selectDisconnection(
+      String connectionType, ConnectionProvider connectionProvider) async {
+    if (connectionType == 'OBS') {
+      await OBSConnections.disconnectOBS(connectionProvider);
+    } else if (connectionType == 'Twitch') {
+      await TwitchConnections.disconnectTwitch(connectionProvider);
     }
   }
 }
