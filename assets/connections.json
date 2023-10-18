@@ -9,20 +9,20 @@
         ]
     },
     {
+        "name": "Spotify",
+        "image": "https://cdn-icons-png.flaticon.com/512/174/174872.png",
+        "fields": [
+            "clientId",
+            "clientSecret"
+        ]
+    },
+    {
         "name": "Twitch",
         "image": "https://cdn-icons-png.flaticon.com/512/2111/2111668.png",
         "fields": [
             "clientId",
             "username",
             "password"
-        ]
-    },
-    {
-        "name": "Spotify",
-        "image": "https://cdn-icons-png.flaticon.com/512/174/174872.png",
-        "fields": [
-            "clientId",
-            "clientSecret"
         ]
     }
 ]

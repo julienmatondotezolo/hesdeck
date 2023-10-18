@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/services/connections/obs_connections.dart';
+import 'package:hessdeck/services/connections/twitch_connections%20.dart';
 
 class ManageConnections {
   static Future<void> selectConnection(
@@ -17,7 +18,12 @@ class ManageConnections {
     }
 
     if (connectionType == 'Twitch') {
-      print("Twitch connection...");
+      await TwitchConnections.connectToTwitch(
+        context,
+        controllers[0],
+        controllers[1],
+        controllers[2],
+      );
     }
   }
 }
