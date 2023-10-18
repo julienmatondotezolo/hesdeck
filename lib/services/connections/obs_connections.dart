@@ -17,14 +17,11 @@ class OBSConnections {
   }
 
   static Future<void> connectToOBS(
-      BuildContext context,
-      GlobalKey<FormState> formKey,
-      TextEditingController ipAddressController,
-      TextEditingController portController,
-      TextEditingController passwordController) async {
-    if (!formKey.currentState!.validate()) {
-      return;
-    }
+    BuildContext context,
+    TextEditingController ipAddressController,
+    TextEditingController portController,
+    TextEditingController passwordController,
+  ) async {
     String ipAddress = ipAddressController.text;
     String port = portController.text;
     String password = passwordController.text;

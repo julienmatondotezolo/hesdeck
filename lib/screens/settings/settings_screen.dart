@@ -11,10 +11,10 @@ class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
   @override
-  _SettingsScreenState createState() => _SettingsScreenState();
+  SettingsScreenState createState() => SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
+class SettingsScreenState extends State<SettingsScreen> {
   late List<Connection> _connections;
 
   void _showConnectionsModal(BuildContext context) {
@@ -125,47 +125,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                       ),
                     ),
-                  /*ListView.builder(
-                    itemCount: connectionsData.length,
-                    itemBuilder: (context, index) {
-                      var connection = connectionsData[index];
-                      return GestureDetector(
-                        onTap: () {
-                          // _addConnection('Twitch');
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            color: AppColors.darkGrey, // Grey background color
-                            border: Border(
-                              bottom: BorderSide(
-                                color: Colors.white10,
-                                width: 1.0,
-                              ), // Thin white border bottom
-                            ),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 26.0,
-                            vertical: 16.0,
-                          ),
-                          child: Row(
-                            children: [
-                              Image.network(
-                                'https://cdn-icons-png.flaticon.com/512/2111/2111668.png', // Replace with the actual URL
-                                width: 24,
-                              ),
-                              const SizedBox(width: 16.0),
-                              Text(
-                                connection.name,
-                                style: const TextStyle(
-                                    color: Colors.white), // White text color
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),*/
                 ],
               ),
             ),

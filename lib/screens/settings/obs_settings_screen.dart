@@ -184,13 +184,13 @@ class _SettingsScreenState extends State<OBSSettingsScreen> {
                         )
                       : ElevatedButton(
                           onPressed: () async {
-                            await OBSConnections.connectToOBS(
-                              context,
-                              _formKey,
-                              _ipAddressController,
-                              _portController,
-                              _passwordController,
-                            );
+                            // await OBSConnections.connectToOBS(
+                            //   context,
+                            //   _formKey,
+                            //   _ipAddressController,
+                            //   _portController,
+                            //   _passwordController,
+                            // );
                             // Navigator.pop(context);
                           },
                           child: const Text(
