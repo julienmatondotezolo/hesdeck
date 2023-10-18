@@ -60,11 +60,12 @@ class ConnectionProvider extends ChangeNotifier {
     if (existingConnectionIndex != -1) {
       // Replace the existing connection with the new connection
       _connections[existingConnectionIndex] = connection;
-      print("Updating current connection to list");
+      print('Updating current connection to list');
     } else {
       // Add the new connection to the list
       _connections.add(connection);
-      print("Adding new connection to list");
+      print('Adding new ${connection.type} connection to list');
+      print('CONNECTED: ${connection.connected}');
     }
 
     notifyListeners();

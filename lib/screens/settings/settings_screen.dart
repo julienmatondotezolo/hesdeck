@@ -140,175 +140,178 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final ConnectionProvider connectionProvider =
-        Provider.of<ConnectionProvider>(context);
+    return Consumer<ConnectionProvider>(
+        builder: (context, connectionProvider, _) {
+      final ConnectionProvider connectionProvider =
+          Provider.of<ConnectionProvider>(context);
 
-    _connections = connectionProvider.connections;
+      _connections = connectionProvider.connections;
 
-    // Get the screen height using MediaQuery
-    final screenHeight = MediaQuery.of(context).size.height;
+      // Get the screen height using MediaQuery
+      final screenHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-      ),
-      body: SafeArea(
-        child: Container(
-          padding: const EdgeInsets.all(25.0),
-          child: DefaultTextStyle(
-            style: const TextStyle(
-              color: Colors.white, // Set the text color to white
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Text(
-                  "Connections",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: screenHeight * 0.025),
-                if (_connections.isEmpty)
-                  const Card(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          "No connections",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
+      return Scaffold(
+        appBar: AppBar(
+          title: const Text('Settings'),
+        ),
+        body: SafeArea(
+          child: Container(
+            padding: const EdgeInsets.all(25.0),
+            child: DefaultTextStyle(
+              style: const TextStyle(
+                color: Colors.white, // Set the text color to white
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const Text(
+                    "Connections",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                for (var connection in _connections)
-                  GestureDetector(
-                    onTap: () {
-                      Future.microtask(() {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ConnectionSettingsScreen(
-                              connectionName: connection.type,
-                              fields: Helpers.getConnectionField(
-                                  allConnectionsData, connection.type),
+                  SizedBox(height: screenHeight * 0.025),
+                  if (_connections.isEmpty)
+                    const Card(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "No connections",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                        );
-                      });
-                    },
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Colors.white10,
-                            width: 1.0,
-                          ), // Thin white border bottom
-                        ),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 16.0,
-                      ),
-                      child: Row(
-                        children: [
-                          Image.network(
-                            connection.image,
-                            width: 24,
-                          ),
-                          const SizedBox(width: 16.0),
-                          Text(
-                            connection.type,
-                            style: const TextStyle(
-                              color: Colors.white,
-                            ), // White text color
-                          ),
-                          const Spacer(),
-                          connection.type == 'OBS'
-                              ? Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0, vertical: 5.0),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.green,
-                                      width: 1.5,
-                                    ), // Green border
-                                    borderRadius: BorderRadius.circular(
-                                        12.0), // Rounded corners
-                                  ),
-                                  child: const Text(
-                                    'Connected',
-                                    style: TextStyle(
-                                      color: Colors.green,
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                )
-                              : Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0, vertical: 5.0),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: AppColors.lightGrey,
-                                      width: 1.5,
-                                    ), // Green border
-                                    borderRadius: BorderRadius.circular(
-                                        12.0), // Rounded corners
-                                  ),
-                                  child: const Text(
-                                    'Not connected',
-                                    style: TextStyle(
-                                      color: AppColors
-                                          .lightGrey, // Green text color
-                                      fontSize:
-                                          12.0, // Adjust the font size as needed
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
                         ],
                       ),
                     ),
-                  ),
-                SizedBox(height: screenHeight * 0.025),
-                ElevatedButton(
-                  onPressed: () => _showConnectionsModal(context),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.darkGrey, // Dark grey color
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(20.0), // Rounded corners
+                  for (var connection in _connections)
+                    GestureDetector(
+                      onTap: () {
+                        Future.microtask(() {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ConnectionSettingsScreen(
+                                connectionName: connection.type,
+                                fields: Helpers.getConnectionField(
+                                    allConnectionsData, connection.type),
+                              ),
+                            ),
+                          );
+                        });
+                      },
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: Colors.white10,
+                              width: 1.0,
+                            ), // Thin white border bottom
+                          ),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 16.0,
+                        ),
+                        child: Row(
+                          children: [
+                            Image.network(
+                              connection.image,
+                              width: 24,
+                            ),
+                            const SizedBox(width: 16.0),
+                            Text(
+                              connection.type,
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ), // White text color
+                            ),
+                            const Spacer(),
+                            connection.connected
+                                ? Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0, vertical: 5.0),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.green,
+                                        width: 1.5,
+                                      ), // Green border
+                                      borderRadius: BorderRadius.circular(
+                                          12.0), // Rounded corners
+                                    ),
+                                    child: const Text(
+                                      'Connected',
+                                      style: TextStyle(
+                                        color: Colors.green,
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  )
+                                : Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0, vertical: 5.0),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: AppColors.lightGrey,
+                                        width: 1.5,
+                                      ), // Green border
+                                      borderRadius: BorderRadius.circular(
+                                          12.0), // Rounded corners
+                                    ),
+                                    child: const Text(
+                                      'Not connected',
+                                      style: TextStyle(
+                                        color: AppColors
+                                            .lightGrey, // Green text color
+                                        fontSize:
+                                            12.0, // Adjust the font size as needed
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  SizedBox(height: screenHeight * 0.025),
+                  ElevatedButton(
+                    onPressed: () => _showConnectionsModal(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.darkGrey, // Dark grey color
+                      shape: RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(20.0), // Rounded corners
+                      ),
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.add, color: Colors.white), // + icon
+                        SizedBox(width: 8), // Spacing
+                        Text('Add Connection'), // Text
+                      ],
                     ),
                   ),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.add, color: Colors.white), // + icon
-                      SizedBox(width: 8), // Spacing
-                      Text('Add Connection'), // Text
-                    ],
+                  const Spacer(),
+                  ElevatedButton(
+                    onPressed: () => {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                    ),
+                    child: const Text(
+                      'Logout',
+                    ),
                   ),
-                ),
-                const Spacer(),
-                ElevatedButton(
-                  onPressed: () => {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                  ),
-                  child: const Text(
-                    'Logout',
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

@@ -61,6 +61,7 @@ class OBSConnection extends Connection {
       ipAddress: json['ipAddress'],
       port: json['port'],
       password: json['password'],
+      connected: json['connected'],
     );
   }
 }
@@ -74,10 +75,11 @@ class TwitchConnection extends Connection {
     required this.clientId,
     required this.port,
     required this.password,
+    bool connected = false, // Provide a default value for connected
   }) : super(
           'Twitch',
           'https://cdn-icons-png.flaticon.com/512/2111/2111668.png',
-          false,
+          connected,
         );
 
   @override
@@ -110,6 +112,7 @@ class TwitchConnection extends Connection {
       clientId: json['clientId'],
       port: json['port'],
       password: json['password'],
+      connected: json['connected'],
     );
   }
 }
