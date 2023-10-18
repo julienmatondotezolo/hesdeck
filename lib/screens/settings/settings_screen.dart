@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/models/connection.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
+import 'package:hessdeck/screens/settings/connection_settings_screen.dart';
 import 'package:hessdeck/screens/settings/obs_settings_screen.dart';
 import 'package:hessdeck/services/api_services.dart';
 import 'package:hessdeck/themes/colors.dart';
@@ -84,12 +85,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   for (var connectionData in allConnectionsData)
                     GestureDetector(
                       onTap: () {
-                        /*Navigator.push(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const OBSSettingsScreen(),
+                            builder: (context) => ConnectionSettingsScreen(
+                              connectionName: connectionData['name'],
+                              fields: connectionData['fields'],
+                            ),
                           ),
-                        );*/
+                        );
                       },
                       child: Container(
                         decoration: const BoxDecoration(

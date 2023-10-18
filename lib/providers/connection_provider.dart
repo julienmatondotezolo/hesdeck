@@ -26,21 +26,20 @@ class ConnectionProvider extends ChangeNotifier {
     _loadConnectionSettings();
   }
 
-  void startWebSocketListener() async {
-    if (_obsWebSocket != null) {
-      _obsEventStreamController ??= StreamController<dynamic>.broadcast();
+  bool checkIfConnectionExists(Connection connection) {
+    // Check if a connection of the same type already exists
+    final existingConnectionIndex = _connections.indexWhere(
+      (existingConn) => existingConn.type == connection.type,
+    );
 
-      // Run a loop to periodically check for new events
-      Timer.periodic(const Duration(seconds: 1), (timer) async {
-        if (_obsWebSocket != null) {
-          final event = _obsWebSocket!;
-          _obsEventStreamController?.add(event);
-          print('STREAM: $obsEventStream');
-        }
-      });
+    if (existingConnectionIndex != -1) {
+      return true;
     }
+
+    return false;
   }
 
+  // Add a connection to LIST
   void addConnection(Connection connection) {
     // Check if a connection of the same type already exists
     final existingConnectionIndex = _connections.indexWhere(
@@ -129,6 +128,10 @@ class ConnectionProvider extends ChangeNotifier {
   //   notifyListeners();
   // }
 
+  /*
+  ===== OBS CONNECTION SETTINGS ======
+  */
+
   // Connect to OBS WebSocket server
   Future<void> connectToOBS(OBSConnection obsConnectionObject) async {
     _obsWebSocket = await ObsWebSocket.connect(
@@ -161,6 +164,22 @@ class ConnectionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  // LISTEN TO OBS WEBSOCKET
+  void startWebSocketListener() async {
+    if (_obsWebSocket != null) {
+      _obsEventStreamController ??= StreamController<dynamic>.broadcast();
+
+      // Run a loop to periodically check for new events
+      Timer.periodic(const Duration(seconds: 1), (timer) async {
+        if (_obsWebSocket != null) {
+          final event = _obsWebSocket!;
+          _obsEventStreamController?.add(event);
+          print('STREAM: $obsEventStream');
+        }
+      });
+    }
+  }
+
   // Send a request to OBS WebSocket server
   Future<dynamic> sendRequest(
       String command, Map<String, dynamic> request) async {
@@ -176,16 +195,7 @@ class ConnectionProvider extends ChangeNotifier {
     }
   }
 
-  bool checkIfConnectionExists(Connection connection) {
-    // Check if a connection of the same type already exists
-    final existingConnectionIndex = _connections.indexWhere(
-      (existingConn) => existingConn.type == connection.type,
-    );
-
-    if (existingConnectionIndex != -1) {
-      return true;
-    }
-
-    return false;
-  }
+  /*
+  ===== TWITCH CONNECTION SETTINGS ======
+  */
 }
