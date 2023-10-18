@@ -29,9 +29,12 @@ class ManageConnections {
   }
 
   static Future<void> selectDisconnection(
-      String connectionType, ConnectionProvider connectionProvider) async {
+    BuildContext context,
+    String connectionType,
+    ConnectionProvider connectionProvider,
+  ) async {
     if (connectionType == 'OBS') {
-      await OBSConnections.disconnectOBS(connectionProvider);
+      await OBSConnections.disconnectOBS(context, connectionProvider);
     } else if (connectionType == 'Twitch') {
       await TwitchConnections.disconnectTwitch(connectionProvider);
     }

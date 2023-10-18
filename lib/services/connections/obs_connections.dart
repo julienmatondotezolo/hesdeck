@@ -60,8 +60,28 @@ class OBSConnections {
   }
 
   static Future<void> disconnectOBS(
-      ConnectionProvider connectionProvider) async {
-    connectionProvider.disconnectFromOBS();
+    BuildContext context,
+    ConnectionProvider connectionProvider,
+  ) async {
+    try {
+      connectionProvider.disconnectFromOBS();
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Connection Error'),
+          content: Text('Failed to disconnect from OBS. $e'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   static Future<SceneListResponse?> getScenes(
