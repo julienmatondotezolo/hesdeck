@@ -19,15 +19,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void _showConnectionsModal(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
 
-    List<dynamic> connectionsData = []; // Initialize data as an empty list
+    List<dynamic> allConnectionsData = []; // Initialize data as an empty list
 
     // Function to fetch data from the API
     Future<void> fetchConnections() async {
       try {
         List<dynamic> data =
-            await ApiServices.fetchConnections('/assets/connections.json');
-        connectionsData = data; // Update the data list with the fetched data
-        // You can add further logic or processing here if needed
+            await ApiServices.fetchConnections('connections.json');
+
+        allConnectionsData = data; // Update the data list with the fetched data
       } catch (error) {
         // Handle any errors that occur during the data fetching process
         print('Error fetching data: $error');
@@ -35,8 +35,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
 
     fetchConnections();
-
-    print(connectionsData);
 
     showModalBottomSheet<void>(
       context: context,
@@ -83,45 +81,46 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                   ),
                   SizedBox(height: screenHeight * 0.025),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const OBSSettingsScreen(),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: AppColors.darkGrey, // Grey background color
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Colors.white10,
-                            width: 1.0,
-                          ), // Thin white border bottom
-                        ),
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 26.0,
-                        vertical: 16.0,
-                      ),
-                      child: Row(
-                        children: [
-                          Image.network(
-                            'https://obsproject.com/assets/images/new_icon_small-r.png', // Replace with the actual URL
-                            width: 24,
+                  for (var connectionData in allConnectionsData)
+                    GestureDetector(
+                      onTap: () {
+                        /*Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const OBSSettingsScreen(),
                           ),
-                          const SizedBox(width: 16.0),
-                          const Text(
-                            'OBS',
-                            style: TextStyle(
-                                color: Colors.white), // White text color
+                        );*/
+                      },
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: AppColors.darkGrey, // Grey background color
+                          border: Border(
+                            bottom: BorderSide(
+                              color: Colors.white10,
+                              width: 1.0,
+                            ), // Thin white border bottom
                           ),
-                        ],
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 26.0,
+                          vertical: 16.0,
+                        ),
+                        child: Row(
+                          children: [
+                            Image.network(
+                              connectionData['image'],
+                              width: 24,
+                            ),
+                            const SizedBox(width: 16.0),
+                            Text(
+                              connectionData['name'],
+                              style: const TextStyle(
+                                  color: Colors.white), // White text color
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
                   /*ListView.builder(
                     itemCount: connectionsData.length,
                     itemBuilder: (context, index) {

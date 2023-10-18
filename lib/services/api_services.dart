@@ -36,7 +36,7 @@ class ApiServices {
   static Future<dynamic> fetchConnections(String fileName) async {
     try {
       // Load the JSON data from the local file using rootBundle
-      String jsonString = await rootBundle.loadString(fileName);
+      String jsonString = await rootBundle.loadString('assets/$fileName');
       // Parse the JSON data and return it
       return json.decode(jsonString);
     } catch (e) {
