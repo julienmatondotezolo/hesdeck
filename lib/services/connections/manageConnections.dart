@@ -15,15 +15,15 @@ class ManageConnections {
         controllers[1],
         controllers[2],
       );
-    }
-
-    if (connectionType == 'Twitch') {
+    } else if (connectionType == 'Twitch') {
       await TwitchConnections.connectToTwitch(
         context,
         controllers[0],
         controllers[1],
         controllers[2],
       );
+    } else {
+      print('No CONNECTION for [$connectionType] exists in this services.');
     }
   }
 }
