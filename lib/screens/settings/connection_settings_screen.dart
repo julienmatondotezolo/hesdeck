@@ -58,8 +58,12 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
           connectionProvider.twitchConnectionObject.connected;
 
       if (widget.connectionName == "OBS") {
+        print(
+            'OBS STATUS: ${connectionProvider.obsConnectionObject.connected}');
         isConnected = isConnectedToOBS;
       } else if (widget.connectionName == "Twitch") {
+        print(
+            'TWITCH STATUS: ${connectionProvider.twitchConnectionObject.toString()}');
         isConnected = isConnectedToTwittch;
       }
 
@@ -120,7 +124,10 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
                         : ElevatedButton(
                             onPressed: () async {
                               ManageConnections.selectDisconnection(
-                                  widget.connectionName, connectionProvider);
+                                context,
+                                widget.connectionName,
+                                connectionProvider,
+                              );
                               Navigator.pop(context);
                             },
                             style: ElevatedButton.styleFrom(
