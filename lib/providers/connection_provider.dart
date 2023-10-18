@@ -108,7 +108,8 @@ class ConnectionProvider extends ChangeNotifier {
 
         if (connJson["type"] == 'OBS') {
           final obsConnectionObject = OBSConnection.fromJson(connJson);
-          addConnection(obsConnectionObject);
+          connectToOBS(obsConnectionObject);
+          // addConnection(obsConnectionObject);
           _obsConnectionObject = obsConnectionObject;
         } else if (connJson["type"] == 'Twitch') {
           final twitchConnectionObject = TwitchConnection.fromJson(connJson);
@@ -159,12 +160,14 @@ class ConnectionProvider extends ChangeNotifier {
     _obsWebSocket = {"Connected": true};
 
     try {
-      print('Connected to OBS WebSocket server.');
-      // StatsResponse stats = await _obsWebSocket!.general.getStats();
-      obsConnectionObject = obsConnectionObject.copyWith(connected: true);
+      if (_obsWebSocket != null) {
+        print('Connected to OBS WebSocket server.');
+        // StatsResponse stats = await _obsWebSocket!.general.getStats();
+        obsConnectionObject = obsConnectionObject.copyWith(connected: true);
 
-      addConnection(obsConnectionObject);
-      _saveConnectionSettings();
+        addConnection(obsConnectionObject);
+        _saveConnectionSettings();
+      }
     } catch (e) {
       print('Error connecting to OBS WebSocket server: $e');
       throw Exception('Error connecting to OBS WebSocket server.');
@@ -176,11 +179,24 @@ class ConnectionProvider extends ChangeNotifier {
   Future<void> disconnectFromOBS() async {
     if (_obsWebSocket != null) {
       // await _obsWebSocket!.close();
+
+      // Update the connected property of the existing connection object
+      final existingConnectionIndex = _connections.indexWhere(
+          (existingConn) => existingConn.type == _obsConnectionObject.type);
+
+      if (existingConnectionIndex != -1) {
+        _connections[existingConnectionIndex] =
+            _obsConnectionObject.copyWith(connected: false);
+        print('Disconnected from OBS WebSocket server.');
+      } else {
+        print('Connection not found in the list.');
+      }
+
       _obsWebSocket = null;
-      _obsConnectionObject = _obsConnectionObject.copyWith(connected: false);
-      print('Disconnected from OBS WebSocket server.');
+      notifyListeners();
+    } else {
+      throw Exception('You are not connected to OBS.');
     }
-    notifyListeners();
   }
 
   // LISTEN TO OBS WEBSOCKET
