@@ -239,9 +239,10 @@ class ConnectionProvider extends ChangeNotifier {
     _twitchClient = {"Connected": true};
 
     try {
-      print('Connected to OBS WebSocket client.');
+      print('Connected to Twitch client.');
       twitchConnectionObject = twitchConnectionObject.copyWith(connected: true);
 
+      addConnection(twitchConnectionObject);
       _saveConnectionSettings();
     } catch (e) {
       print('Error connecting to Twitch client: $e');
