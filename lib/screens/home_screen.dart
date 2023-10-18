@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/providers/deck_provider.dart';
-import 'package:hessdeck/widgets/deck_widget.dart';
+import 'package:hessdeck/screens/settings/settings_screen.dart';
+import 'package:hessdeck/themes/colors.dart';
+import 'package:hessdeck/widgets/deck_grid_widget.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -10,38 +12,51 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final deckProvider = Provider.of<DeckProvider>(context);
 
+    // Get the screen height using MediaQuery
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Mobile StreamDeck'), // Replace with your app's title
-      ),
-      body: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3, // Number of items in each row
-          crossAxisSpacing: 8.0, // Spacing between columns
-          mainAxisSpacing: 8.0, // Spacing between rows
+      body: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.all(25.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: CircleAvatar(
+                  backgroundColor:
+                      AppColors.darkGrey, // Set the grey color here
+                  radius: 20, // Set the desired radius for the circle
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.settings,
+                      color: Colors.white,
+                      size: 24.0,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SettingsScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: screenHeight * 0.05, // 5% of the screen height
+              ),
+              Expanded(
+                child: DeckGridWidget(deckList: deckProvider.decks),
+              ),
+              // Add additional widgets below if needed
+            ],
+          ),
         ),
-        itemCount: deckProvider.decks.length,
-        itemBuilder: (context, index) {
-          final deck = deckProvider.decks[index];
-          return DeckWidget(
-            deck: deck,
-            onPressed: () {
-              // Navigate to the individual deck screen or perform some other action
-            },
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showAddDeckDialog(context);
-        },
-        child: const Icon(Icons.add),
       ),
     );
-  }
-
-  // Function to show a dialog for adding a new deck
-  void _showAddDeckDialog(BuildContext context) {
-    // ... (rest of the function remains the same)
   }
 }

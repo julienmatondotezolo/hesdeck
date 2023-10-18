@@ -1,0 +1,28 @@
+[
+    {
+        "name": "OBS",
+        "image": "https://obsproject.com/assets/images/new_icon_small-r.png",
+        "fields": [
+            "ipAddress",
+            "port",
+            "password"
+        ]
+    },
+    {
+        "name": "Twitch",
+        "image": "https://cdn-icons-png.flaticon.com/512/2111/2111668.png",
+        "fields": [
+            "clientId",
+            "username",
+            "password"
+        ]
+    },
+    {
+        "name": "Spotify",
+        "image": "https://cdn-icons-png.flaticon.com/512/174/174872.png",
+        "fields": [
+            "clientId",
+            "clientSecret"
+        ]
+    }
+]
