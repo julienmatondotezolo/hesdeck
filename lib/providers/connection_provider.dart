@@ -60,7 +60,7 @@ class ConnectionProvider extends ChangeNotifier {
     if (existingConnectionIndex != -1) {
       // Replace the existing connection with the new connection
       _connections[existingConnectionIndex] = connection;
-      print('Updating current connection to list');
+      print('Updating current ${connection.type} connection in list');
     } else {
       // Add the new connection to the list
       _connections.add(connection);
@@ -107,12 +107,22 @@ class ConnectionProvider extends ChangeNotifier {
         final Map<String, dynamic> connJson = jsonDecode(connString);
 
         if (connJson["type"] == 'OBS') {
-          final obsConnectionObject = OBSConnection.fromJson(connJson);
-          connectToOBS(obsConnectionObject);
-          // addConnection(obsConnectionObject);
+          OBSConnection obsConnectionObject = OBSConnection.fromJson(connJson);
+          // If OBS WebSocket is null put connected to false
+          _obsWebSocket == null
+              ? obsConnectionObject =
+                  obsConnectionObject.copyWith(connected: false)
+              : obsConnectionObject;
+          addConnection(obsConnectionObject);
           _obsConnectionObject = obsConnectionObject;
         } else if (connJson["type"] == 'Twitch') {
-          final twitchConnectionObject = TwitchConnection.fromJson(connJson);
+          TwitchConnection twitchConnectionObject =
+              TwitchConnection.fromJson(connJson);
+          // If OBS WebSocket is null put connected to false
+          _twitchClient == null
+              ? twitchConnectionObject =
+                  twitchConnectionObject.copyWith(connected: false)
+              : twitchConnectionObject;
           addConnection(twitchConnectionObject);
           _twitchConnectionObject = twitchConnectionObject;
         }
@@ -189,7 +199,7 @@ class ConnectionProvider extends ChangeNotifier {
             _obsConnectionObject.copyWith(connected: false);
         print('Disconnected from OBS WebSocket server.');
       } else {
-        print('Connection not found in the list.');
+        print('OBS connection not found in the list.');
       }
 
       _obsWebSocket = null;
