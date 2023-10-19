@@ -136,8 +136,8 @@ class SpotifyConnection extends Connection {
     required this.clientSecret,
     bool connected = false, // Provide a default value for connected
   }) : super(
-          'Twitch',
-          'https://cdn-icons-png.flaticon.com/512/2111/2111668.png',
+          'Spotify',
+          'https://cdn-icons-png.flaticon.com/512/174/174872.png',
           connected,
         );
 
@@ -161,7 +161,7 @@ class SpotifyConnection extends Connection {
       'image': image,
       'connected': connected,
       'clientId': clientId,
-      'port': clientSecret,
+      'clientSecret': clientSecret,
     };
   }
 

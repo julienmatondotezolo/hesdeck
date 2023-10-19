@@ -24,7 +24,7 @@ class ConnectionProvider extends ChangeNotifier {
   );
   Map<String, dynamic>? _twitchClient;
 
-  late final SpotifyConnection _spotifyConnectionObject = SpotifyConnection(
+  late SpotifyConnection _spotifyConnectionObject = SpotifyConnection(
     clientId: '**********',
     clientSecret: '************',
   );
@@ -150,6 +150,16 @@ class ConnectionProvider extends ChangeNotifier {
               : twitchConnectionObject;
           addConnection(twitchConnectionObject);
           _twitchConnectionObject = twitchConnectionObject;
+        } else if (connJson["type"] == 'Spotify') {
+          SpotifyConnection spotifyConnectionObject =
+              SpotifyConnection.fromJson(connJson);
+          // If OBS WebSocket is null put connected to false
+          _spotifyClient == null
+              ? spotifyConnectionObject =
+                  spotifyConnectionObject.copyWith(connected: false)
+              : spotifyConnectionObject;
+          addConnection(spotifyConnectionObject);
+          _spotifyConnectionObject = spotifyConnectionObject;
         }
       }
     }
