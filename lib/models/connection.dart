@@ -12,6 +12,14 @@ class Connection {
       connected,
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type,
+      'image': image,
+      'connected': connected,
+    };
+  }
 }
 
 class OBSConnection extends Connection {
@@ -45,6 +53,7 @@ class OBSConnection extends Connection {
     );
   }
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type,
@@ -97,6 +106,7 @@ class TwitchConnection extends Connection {
     );
   }
 
+  @override
   Map<String, dynamic> toJson() {
     return {
       'type': type,

@@ -50,6 +50,15 @@ class ConnectionProvider extends ChangeNotifier {
     return false;
   }
 
+  // Get current connection Object using connectionType
+  Connection getCurrentCoonnection(String type) {
+    final existingConnectionIndex = _connections.indexWhere(
+      (existingConn) => existingConn.type == type,
+    );
+
+    return _connections[existingConnectionIndex];
+  }
+
   // Add a connection to LIST
   void addConnection(Connection connection) {
     // Check if a connection of the same type already exists

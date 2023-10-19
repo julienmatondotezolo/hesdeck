@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hessdeck/models/connection.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
 import 'package:hessdeck/services/connections/manageConnections.dart';
 import 'package:provider/provider.dart';
@@ -52,16 +53,8 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
   Widget build(BuildContext context) {
     return Consumer<ConnectionProvider>(
         builder: (context, connectionProvider, _) {
-      bool isConnected = false;
-      bool isConnectedToOBS = connectionProvider.obsConnectionObject.connected;
-      bool isConnectedToTwitch =
-          connectionProvider.twitchConnectionObject.connected;
-
-      if (widget.connectionName == "OBS") {
-        isConnected = isConnectedToOBS;
-      } else if (widget.connectionName == "Twitch") {
-        isConnected = isConnectedToTwitch;
-      }
+      Connection currentConnection =
+          connectionProvider.getCurrentCoonnection(widget.connectionName);
 
       return Scaffold(
         appBar: AppBar(
@@ -97,7 +90,7 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
                         ],
                       ),
                     const Spacer(),
-                    !isConnected
+                    !currentConnection.connected
                         ? ElevatedButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
