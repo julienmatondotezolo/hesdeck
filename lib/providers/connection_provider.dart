@@ -86,9 +86,10 @@ class ConnectionProvider extends ChangeNotifier {
         (existingConn) => existingConn.type == connection.type,
       );
 
-      print('Connection: $_connections');
+      _connections.removeAt(existingConnectionIndex);
+      await _saveConnectionSettings();
       print(
-          'Connection[$existingConnectionIndex]: ${_connections[existingConnectionIndex]}');
+          '${_connections[existingConnectionIndex].type} connection is deleted.');
     } else {
       print('Impossible to delete ${connection.type} connection.');
       throw Exception('Impossible to delete ${connection.type} connection.');
