@@ -93,6 +93,7 @@ class TwitchConnection extends Connection {
       clientId: clientId ?? this.clientId,
       port: port ?? this.port,
       password: password ?? this.password,
+      connected: connected, // Update connected property
     );
   }
 
