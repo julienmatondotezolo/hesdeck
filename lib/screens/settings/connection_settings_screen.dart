@@ -54,17 +54,13 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
         builder: (context, connectionProvider, _) {
       bool isConnected = false;
       bool isConnectedToOBS = connectionProvider.obsConnectionObject.connected;
-      bool isConnectedToTwittch =
+      bool isConnectedToTwitch =
           connectionProvider.twitchConnectionObject.connected;
 
       if (widget.connectionName == "OBS") {
-        print(
-            'OBS STATUS: ${connectionProvider.obsConnectionObject.connected}');
         isConnected = isConnectedToOBS;
       } else if (widget.connectionName == "Twitch") {
-        print(
-            'TWITCH STATUS: ${connectionProvider.twitchConnectionObject.toString()}');
-        isConnected = isConnectedToTwittch;
+        isConnected = isConnectedToTwitch;
       }
 
       return Scaffold(

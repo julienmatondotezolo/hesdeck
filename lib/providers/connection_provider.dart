@@ -253,11 +253,22 @@ class ConnectionProvider extends ChangeNotifier {
   // Disconnect from OBS WebSocket server
   Future<void> disconnectFromTwitch() async {
     if (_twitchClient != null) {
+      // Update the connected property of the existing connection object
+      final existingConnectionIndex = _connections.indexWhere(
+          (existingConn) => existingConn.type == _twitchConnectionObject.type);
+
+      if (existingConnectionIndex != -1) {
+        _connections[existingConnectionIndex] =
+            _twitchConnectionObject.copyWith(connected: false);
+        print('Disconnected from Twitch WebSocket server.');
+      } else {
+        print('Twitch connection not found in the list.');
+      }
+
       _twitchClient = null;
-      _twitchConnectionObject =
-          _twitchConnectionObject.copyWith(connected: false);
-      print('Disconnected from Twitch client.');
+      notifyListeners();
+    } else {
+      throw Exception('You are not connected to Twitch.');
     }
-    notifyListeners();
   }
 }
