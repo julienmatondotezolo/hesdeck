@@ -52,7 +52,10 @@ class ManageConnections {
         connectionObject,
       );
     } else if (connectionType == 'Twitch') {
-      //
+      await TwitchConnections.deleteTwitchConnection(
+        connectionProvider,
+        connectionObject,
+      );
     }
   }
 }

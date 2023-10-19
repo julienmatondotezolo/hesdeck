@@ -53,13 +53,14 @@ class TwitchConnections {
   }
 
   static Future<void> deleteTwitchConnection(
-      ConnectionProvider connectionProvider,
-      TwitchConnection twitchConnectionObject) async {
+    ConnectionProvider connectionProvider,
+    Connection connectionObject,
+  ) async {
     try {
-      connectionProvider.removeConnectionFromSP(twitchConnectionObject);
+      connectionProvider.removeConnectionFromSP(connectionObject);
     } catch (e) {
       // Handle any errors that occur while changing the scene
-      print('Error disconnecting from Twitch: $e');
+      print('Error deleting twitch connection: $e');
     }
   }
 }

@@ -137,8 +137,10 @@ class OBSConnections {
     }
   }
 
-  static Future<void> deleteOBSConnection(ConnectionProvider connectionProvider,
-      Connection connectionObject) async {
+  static Future<void> deleteOBSConnection(
+    ConnectionProvider connectionProvider,
+    Connection connectionObject,
+  ) async {
     try {
       connectionProvider.removeConnectionFromSP(connectionObject);
     } catch (e) {
