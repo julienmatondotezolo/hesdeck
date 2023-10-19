@@ -53,8 +53,14 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
   Widget build(BuildContext context) {
     return Consumer<ConnectionProvider>(
         builder: (context, connectionProvider, _) {
-      Connection currentConnection =
+      bool isConnected = false;
+
+      Connection? currentConnection =
           connectionProvider.getCurrentCoonnection(widget.connectionName);
+
+      if (currentConnection != null) {
+        isConnected = currentConnection.connected;
+      }
 
       return Scaffold(
         appBar: AppBar(
@@ -90,7 +96,7 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
                         ],
                       ),
                     const Spacer(),
-                    !currentConnection.connected
+                    !isConnected
                         ? ElevatedButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
@@ -135,7 +141,7 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
                         ManageConnections.selectDeleteConnection(
                           widget.connectionName,
                           connectionProvider,
-                          currentConnection,
+                          currentConnection!,
                         );
                         Navigator.pop(context);
                       },

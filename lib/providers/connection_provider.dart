@@ -51,12 +51,19 @@ class ConnectionProvider extends ChangeNotifier {
   }
 
   // Get current connection Object using connectionType
-  Connection getCurrentCoonnection(String type) {
+  Connection? getCurrentCoonnection(String type) {
     final existingConnectionIndex = _connections.indexWhere(
       (existingConn) => existingConn.type == type,
     );
 
-    return _connections[existingConnectionIndex];
+    if (existingConnectionIndex != -1) {
+      return _connections[existingConnectionIndex];
+    } else {
+      // Handle the case where the connection doesn't exist
+      // You can either return null or throw an exception based on your requirement
+      return null;
+      throw Exception('No connection found for type: $type');
+    }
   }
 
   // Add a connection to LIST
@@ -100,6 +107,7 @@ class ConnectionProvider extends ChangeNotifier {
   Future<void> _removeAllConnectionFromSP() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('connections');
+    await _saveConnectionSettings();
     notifyListeners();
     print('Remove connection from SharedPreferences.');
   }
