@@ -132,10 +132,12 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
                     const SizedBox(height: 16.0),
                     ElevatedButton(
                       onPressed: () async {
-                        // await OBSConnections.deleteOBSConnection(
-                        //   connectionProvider,
-                        //   obsConnectionObject,
-                        // );
+                        ManageConnections.selectDeleteConnection(
+                          widget.connectionName,
+                          connectionProvider,
+                          currentConnection,
+                        );
+                        Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.red,

@@ -138,12 +138,12 @@ class OBSConnections {
   }
 
   static Future<void> deleteOBSConnection(ConnectionProvider connectionProvider,
-      OBSConnection obsConnectionObject) async {
+      Connection connectionObject) async {
     try {
-      connectionProvider.removeConnectionFromSP(obsConnectionObject);
+      connectionProvider.removeConnectionFromSP(connectionObject);
     } catch (e) {
       // Handle any errors that occur while changing the scene
-      print('Error disconnecting from OBS: $e');
+      print('Error deleting OBS connection: $e');
     }
   }
 }

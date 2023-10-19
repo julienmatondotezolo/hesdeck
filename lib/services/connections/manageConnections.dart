@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hessdeck/models/connection.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
 import 'package:hessdeck/services/connections/obs_connections.dart';
 import 'package:hessdeck/services/connections/twitch_connections%20.dart';
@@ -37,6 +38,21 @@ class ManageConnections {
       await OBSConnections.disconnectOBS(context, connectionProvider);
     } else if (connectionType == 'Twitch') {
       await TwitchConnections.disconnectTwitch(connectionProvider);
+    }
+  }
+
+  static Future<void> selectDeleteConnection(
+    String connectionType,
+    ConnectionProvider connectionProvider,
+    Connection connectionObject,
+  ) async {
+    if (connectionType == 'OBS') {
+      await OBSConnections.deleteOBSConnection(
+        connectionProvider,
+        connectionObject,
+      );
+    } else if (connectionType == 'Twitch') {
+      //
     }
   }
 }
