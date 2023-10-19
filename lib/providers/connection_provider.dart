@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class ConnectionProvider extends ChangeNotifier {
   final List<Connection> _connections = [];
+
   late OBSConnection _obsConnectionObject = OBSConnection(
     ipAddress: 'xxx.xxx.xxx.x',
     port: '4455',
@@ -23,6 +24,12 @@ class ConnectionProvider extends ChangeNotifier {
   );
   Map<String, dynamic>? _twitchClient;
 
+  late final SpotifyConnection _spotifyConnectionObject = SpotifyConnection(
+    clientId: '**********',
+    clientSecret: '************',
+  );
+  Map<String, dynamic>? _spotifyClient;
+
   List<Connection> get connections => _connections;
   OBSConnection get obsConnectionObject => _obsConnectionObject;
   // ObsWebSocket? get obsWebSocket => _obsWebSocket;
@@ -31,6 +38,9 @@ class ConnectionProvider extends ChangeNotifier {
 
   TwitchConnection get twitchConnectionObject => _twitchConnectionObject;
   Map<String, dynamic>? get twitchClient => _twitchClient;
+
+  SpotifyConnection get spotifyConnectionObject => _spotifyConnectionObject;
+  Map<String, dynamic>? get spotifyClient => _spotifyClient;
 
   ConnectionProvider() {
     // _removeAllConnectionFromSP();
@@ -294,6 +304,50 @@ class ConnectionProvider extends ChangeNotifier {
       notifyListeners();
     } else {
       throw Exception('You are not connected to Twitch.');
+    }
+  }
+
+  /* ===================================================
+          =====  SPOTIFY CONNECTION SETTINGS ======
+  *** ================================================= */
+
+  // Connect to Spotify
+  Future<void> connectToSpotify(
+      SpotifyConnection spotifyConnectionObject) async {
+    _spotifyClient = {"Connected": true};
+
+    try {
+      print('Connected to Spotify client.');
+      spotifyConnectionObject =
+          spotifyConnectionObject.copyWith(connected: true);
+
+      addConnection(spotifyConnectionObject);
+      _saveConnectionSettings();
+    } catch (e) {
+      print('Error connecting to Spotify client: $e');
+      throw Exception('Error connecting to Spotify client.');
+    }
+  }
+
+  // Disconnect from OBS WebSocket server
+  Future<void> disconnectFromSpotify() async {
+    if (_spotifyClient != null) {
+      // Update the connected property of the existing connection object
+      final existingConnectionIndex = _connections.indexWhere(
+          (existingConn) => existingConn.type == _spotifyConnectionObject.type);
+
+      if (existingConnectionIndex != -1) {
+        _connections[existingConnectionIndex] =
+            _spotifyConnectionObject.copyWith(connected: false);
+        print('Disconnected from Spotify WebSocket server.');
+      } else {
+        print('Spotify connection not found in the list.');
+      }
+
+      _spotifyClient = null;
+      notifyListeners();
+    } else {
+      throw Exception('You are not connected to Spotify.');
     }
   }
 }
