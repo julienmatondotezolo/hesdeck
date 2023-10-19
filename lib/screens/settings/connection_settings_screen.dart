@@ -136,31 +136,32 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
                             ),
                           ),
                     const SizedBox(height: 16.0),
-                    ElevatedButton(
-                      onPressed: () async {
-                        ManageConnections.selectDeleteConnection(
-                          widget.connectionName,
-                          connectionProvider,
-                          currentConnection!,
-                        );
-                        Navigator.pop(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.red,
-                        backgroundColor:
-                            Colors.transparent, // Set the text color to red
-                        side: const BorderSide(
-                          color: Colors.red,
-                          width: 3.0,
-                        ), // Set red border
-                      ),
-                      child: Text(
-                        'Delete ${widget.connectionName} connection',
-                        style: const TextStyle(
-                          color: Colors.red,
-                        ), // Set text color to red
-                      ),
-                    )
+                    if (currentConnection != null)
+                      ElevatedButton(
+                        onPressed: () async {
+                          ManageConnections.selectDeleteConnection(
+                            widget.connectionName,
+                            connectionProvider,
+                            currentConnection,
+                          );
+                          Navigator.pop(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.red,
+                          backgroundColor:
+                              Colors.transparent, // Set the text color to red
+                          side: const BorderSide(
+                            color: Colors.red,
+                            width: 3.0,
+                          ), // Set red border
+                        ),
+                        child: Text(
+                          'Delete ${widget.connectionName} connection',
+                          style: const TextStyle(
+                            color: Colors.red,
+                          ), // Set text color to red
+                        ),
+                      )
                   ],
                 )),
           ),

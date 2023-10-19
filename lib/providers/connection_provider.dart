@@ -59,10 +59,8 @@ class ConnectionProvider extends ChangeNotifier {
     if (existingConnectionIndex != -1) {
       return _connections[existingConnectionIndex];
     } else {
-      // Handle the case where the connection doesn't exist
-      // You can either return null or throw an exception based on your requirement
+      print('No connection found for type: $type');
       return null;
-      throw Exception('No connection found for type: $type');
     }
   }
 
@@ -92,11 +90,10 @@ class ConnectionProvider extends ChangeNotifier {
       final existingConnectionIndex = _connections.indexWhere(
         (existingConn) => existingConn.type == connection.type,
       );
-
-      _connections.removeAt(existingConnectionIndex);
-      await _saveConnectionSettings();
       print(
           '${_connections[existingConnectionIndex].type} connection is deleted.');
+      _connections.removeAt(existingConnectionIndex);
+      await _saveConnectionSettings();
     } else {
       print('Impossible to delete ${connection.type} connection.');
       throw Exception('Impossible to delete ${connection.type} connection.');
