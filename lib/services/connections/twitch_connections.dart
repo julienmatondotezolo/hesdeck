@@ -27,7 +27,6 @@ class TwitchConnections {
       await connectionProvider.connectToTwitch(twitchObject);
     } catch (e) {
       // Handle connection error here, show an error message or take appropriate action.
-      print('Error connecting to Twitch: $e');
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -44,6 +43,7 @@ class TwitchConnections {
           ],
         ),
       );
+      throw Exception('Error connecting to Twitch: $e');
     }
   }
 
@@ -60,7 +60,7 @@ class TwitchConnections {
       connectionProvider.removeConnectionFromSP(connectionObject);
     } catch (e) {
       // Handle any errors that occur while changing the scene
-      print('Error deleting twitch connection: $e');
+      throw Exception('Error deleting twitch connection: $e');
     }
   }
 }

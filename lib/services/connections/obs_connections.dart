@@ -39,7 +39,6 @@ class OBSConnections {
       await connectionProvider.connectToOBS(obsObject);
     } catch (e) {
       // Handle connection error here, show an error message or take appropriate action.
-      print('Error connecting to OBS: $e');
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -56,6 +55,7 @@ class OBSConnections {
           ],
         ),
       );
+      throw Exception('Error connecting to OBS: $e');
     }
   }
 
@@ -98,7 +98,7 @@ class OBSConnections {
       print('[SCENES CHNAGED TO]: $sceneName');
     } catch (e) {
       // Handle any errors that occur while changing the scene
-      print('Error changing scene: $e');
+      throw Exception('Error changing scene: $e');
       // Show an error message or take appropriate action
     }
   }
@@ -109,7 +109,7 @@ class OBSConnections {
       print('[RECORD STATUS]: ${obsWebSocket?.record.getRecordStatus()}');
     } catch (e) {
       // Handle any errors that occur while changing the scene
-      print('Error changing scene: $e');
+      throw Exception('Error changing scene: $e');
       // Show an error message or take appropriate action
     }
   }
@@ -121,7 +121,7 @@ class OBSConnections {
           '[RECORD STATUS]: ${obsWebSocket?.record.getRecordStatus().toString()}');
     } catch (e) {
       // Handle any errors that occur while changing the scene
-      print('Error changing scene: $e');
+      throw Exception('Error changing scene: $e');
       // Show an error message or take appropriate action
     }
   }
@@ -132,7 +132,7 @@ class OBSConnections {
       print('[RECORD STATUS]: ${obsWebSocket?.record.getRecordStatus()}');
     } catch (e) {
       // Handle any errors that occur while changing the scene
-      print('Error changing scene: $e');
+      throw Exception('Error changing scene: $e');
       // Show an error message or take appropriate action
     }
   }
@@ -145,7 +145,7 @@ class OBSConnections {
       connectionProvider.removeConnectionFromSP(connectionObject);
     } catch (e) {
       // Handle any errors that occur while changing the scene
-      print('Error deleting OBS connection: $e');
+      throw Exception('Error deleting OBS connection: $e');
     }
   }
 }

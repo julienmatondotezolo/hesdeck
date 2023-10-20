@@ -34,7 +34,7 @@ class SettingsScreenState extends State<SettingsScreen> {
       });
     } catch (error) {
       // Handle any errors that occur during the data fetching process
-      print('Error fetching data: $error');
+      throw Exception('Error fetching data: $error');
     }
   }
 

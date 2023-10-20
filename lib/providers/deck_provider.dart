@@ -109,7 +109,7 @@ class DeckProvider extends ChangeNotifier {
       _saveDecks(); // Save decks to SharedPreferences when removing a deck
       notifyListeners();
     } else {
-      print('ERROR: Deck ${updatedDeck.name} is updated.');
+      throw Exception('ERROR UPDATING: Deck ${updatedDeck.name}.');
     }
   }
 

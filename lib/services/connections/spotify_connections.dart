@@ -24,7 +24,6 @@ class SpotifyConnections {
       await connectionProvider.connectToSpotify(spotifyObject);
     } catch (e) {
       // Handle connection error here, show an error message or take appropriate action.
-      print('Error connecting to Spotify: $e');
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -41,6 +40,7 @@ class SpotifyConnections {
           ],
         ),
       );
+      throw Exception('Error connecting to Spotify: $e');
     }
   }
 
@@ -57,7 +57,7 @@ class SpotifyConnections {
       connectionProvider.removeConnectionFromSP(connectionObject);
     } catch (e) {
       // Handle any errors that occur while changing the scene
-      print('Error deleting Spotify connection: $e');
+      throw Exception('Error deleting Spotify connection: $e');
     }
   }
 }

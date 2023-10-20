@@ -76,7 +76,7 @@ class ConnectionProvider extends ChangeNotifier {
   }
 
   // Get current connection Object using connectionType
-  Connection? getCurrentCoonnection(String type) {
+  Connection? getCurrentConnection(String type) {
     final existingConnectionIndex = _connections.indexWhere(
       (existingConn) => existingConn.type == type,
     );
@@ -120,7 +120,6 @@ class ConnectionProvider extends ChangeNotifier {
       _connections.removeAt(existingConnectionIndex);
       await _saveConnectionSettings();
     } else {
-      print('Impossible to delete ${connection.type} connection.');
       throw Exception('Impossible to delete ${connection.type} connection.');
     }
   }
@@ -229,7 +228,6 @@ class ConnectionProvider extends ChangeNotifier {
         _saveConnectionSettings();
       }
     } catch (e) {
-      print('Error connecting to OBS WebSocket server: $e');
       throw Exception('Error connecting to OBS WebSocket server.');
     }
     notifyListeners();
@@ -286,7 +284,7 @@ class ConnectionProvider extends ChangeNotifier {
       // return await _obsWebSocket!.send(command, request);
     } catch (e) {
       print('Error sending request to OBS WebSocket server: $e');
-      throw Exception('Error sending request to OBS WebSocket server.');
+      throw Exception('Error sending request to OBS WebSocket server: $e');
     }
   }
 
@@ -305,8 +303,7 @@ class ConnectionProvider extends ChangeNotifier {
       addConnection(twitchConnectionObject);
       _saveConnectionSettings();
     } catch (e) {
-      print('Error connecting to Twitch client: $e');
-      throw Exception('Error connecting to Twitch client.');
+      throw Exception('Error connecting to Twitch client: $e');
     }
   }
 
@@ -349,8 +346,7 @@ class ConnectionProvider extends ChangeNotifier {
       addConnection(spotifyConnectionObject);
       _saveConnectionSettings();
     } catch (e) {
-      print('Error connecting to Spotify client: $e');
-      throw Exception('Error connecting to Spotify client.');
+      throw Exception('Error connecting to Spotify client: $e');
     }
   }
 

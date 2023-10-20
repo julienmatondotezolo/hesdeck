@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/models/connection.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
-import 'package:hessdeck/services/connections/manageConnections.dart';
+import 'package:hessdeck/services/connections/manage_connections.dart';
 import 'package:provider/provider.dart';
 
 class ConnectionSettingsScreen extends StatefulWidget {
@@ -28,16 +28,12 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
   void initState() {
     super.initState();
 
-    // // Initialize controllers with values from the provider
-    // controllers = List.generate(widget.fields.length, (index) {
-    //   return TextEditingController();
-    // });
-
+    // Initialize controllers with values from the provider
     controllers = List.generate(widget.fields.length, (index) {
       String fieldValue =
           Provider.of<ConnectionProvider>(context, listen: false)
               .getFieldValue(widget.fields[index], widget.connectionName);
-      print('FIELD VALUE: $fieldValue');
+
       return TextEditingController(text: fieldValue);
     });
   }
@@ -57,7 +53,7 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
       bool isConnected = false;
 
       Connection? currentConnection =
-          connectionProvider.getCurrentCoonnection(widget.connectionName);
+          connectionProvider.getCurrentConnection(widget.connectionName);
 
       if (currentConnection != null) {
         isConnected = currentConnection.connected;

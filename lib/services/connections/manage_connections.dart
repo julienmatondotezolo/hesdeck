@@ -3,7 +3,7 @@ import 'package:hessdeck/models/connection.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
 import 'package:hessdeck/services/connections/obs_connections.dart';
 import 'package:hessdeck/services/connections/spotify_connections.dart';
-import 'package:hessdeck/services/connections/twitch_connections%20.dart';
+import 'package:hessdeck/services/connections/twitch_connections.dart';
 
 class ManageConnections {
   static Future<void> selectConnection(
@@ -32,7 +32,8 @@ class ManageConnections {
         controllers[1],
       );
     } else {
-      print('No CONNECTION for [$connectionType] exists in this services.');
+      throw Exception(
+          'No CONNECTION for [$connectionType] exists in this services.');
     }
   }
 
