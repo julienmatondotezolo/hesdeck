@@ -20,9 +20,9 @@ class DeckGridWidget extends StatelessWidget {
           mainAxisSpacing: 20.0,
           childAspectRatio: 1, // Aspect ratio of each grid item (width/height)
         ),
-        itemCount: deckList?.length,
+        itemCount: deckList.length,
         itemBuilder: (context, index) {
-          final deck = deckList?[index];
+          final deck = deckList[index];
 
           return DragTarget<Deck>(
             onWillAccept: (data) {
@@ -77,9 +77,9 @@ class DeckGridWidget extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: [
             CircularProgressIndicator(),
-            SizedBox(height: 10),
+            SizedBox(height: 20),
             Text(
-              'Loading...',
+              'Loading Decks...',
               style: TextStyle(color: Colors.white, fontSize: 12),
             ),
           ],
