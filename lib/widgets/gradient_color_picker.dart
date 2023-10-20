@@ -25,10 +25,10 @@ class GradientColorPicker extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _GradientColorPickerState createState() => _GradientColorPickerState();
+  GradientColorPickerState createState() => GradientColorPickerState();
 }
 
-class _GradientColorPickerState extends State<GradientColorPicker> {
+class GradientColorPickerState extends State<GradientColorPicker> {
   late List<Color> _colors;
   late AlignmentGeometry _begin;
   late AlignmentGeometry _end;
@@ -79,7 +79,7 @@ class _GradientColorPickerState extends State<GradientColorPicker> {
                         onColorChanged: (newColor) {
                           _handleColorChange(_colors[index], newColor);
                         },
-                        showLabel: true,
+                        labelTypes: const [], // Use an empty list to disable the label
                         pickerAreaHeightPercent: 0.8,
                       ),
                     ),
