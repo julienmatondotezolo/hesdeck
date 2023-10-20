@@ -1,18 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/models/deck.dart';
+import 'package:hessdeck/providers/deck_provider.dart';
 import 'package:hessdeck/widgets/deck_widget.dart';
+import 'package:provider/provider.dart';
+import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 
 class DeckGridWidget extends StatelessWidget {
-  final List<Deck>? deckList; // Deck can be null
-
   const DeckGridWidget({
     Key? key,
-    required this.deckList,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (deckList != null) {
+    List<Deck> deckList = Provider.of<DeckProvider>(context).decks;
+
+    return ReorderableGridView.builder(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        crossAxisSpacing: 20.0,
+        mainAxisSpacing: 20.0,
+        childAspectRatio: 1, // Aspect ratio of each grid item (width/height)
+      ),
+      onReorder: (oldIndex, newIndex) {
+        print('oldIndex: $oldIndex');
+        print('newIndex: $newIndex');
+      },
+      itemCount: deckList.length,
+      itemBuilder: (context, index) {
+        final deck = deckList[index];
+        return DeckWidget(
+          key: ValueKey(index),
+          deck: deck,
+          homeScreenContext: context, // Pass the HomeScreen's context
+          deckIndex: index, // Pass the index to DeckWidget
+        );
+      },
+    );
+
+    if (deckList.isNotEmpty) {
       return GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
