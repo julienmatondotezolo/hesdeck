@@ -19,7 +19,7 @@ class ConnectionProvider extends ChangeNotifier {
 
   late TwitchConnection _twitchConnectionObject = TwitchConnection(
     clientId: 'xxx.xxx.xxx.x',
-    port: '4455',
+    username: 'YOUR USERNAME',
     password: '*********',
   );
   Map<String, dynamic>? _twitchClient;

@@ -7,11 +7,11 @@ class TwitchConnections {
   static Future<void> connectToTwitch(
     BuildContext context,
     TextEditingController ipAddressController,
-    TextEditingController portController,
+    TextEditingController usernameController,
     TextEditingController passwordController,
   ) async {
     String clientId = ipAddressController.text;
-    String port = portController.text;
+    String username = usernameController.text;
     String password = passwordController.text;
 
     TwitchConnection twitchObject = TwitchConnection(

@@ -77,12 +77,12 @@ class OBSConnection extends Connection {
 
 class TwitchConnection extends Connection {
   final String clientId;
-  final String port;
+  final String username;
   final String password;
 
   TwitchConnection({
     required this.clientId,
-    required this.port,
+    required this.username,
     required this.password,
     bool connected = false, // Provide a default value for connected
   }) : super(
@@ -94,13 +94,13 @@ class TwitchConnection extends Connection {
   @override
   TwitchConnection copyWith({
     String? clientId,
-    String? port,
+    String? username,
     String? password,
     required bool connected,
   }) {
     return TwitchConnection(
       clientId: clientId ?? this.clientId,
-      port: port ?? this.port,
+      username: username ?? this.username,
       password: password ?? this.password,
       connected: connected, // Update connected property
     );
@@ -113,7 +113,7 @@ class TwitchConnection extends Connection {
       'image': image,
       'connected': connected,
       'clientId': clientId,
-      'port': port,
+      'username': username,
       'password': password,
     };
   }
@@ -121,7 +121,7 @@ class TwitchConnection extends Connection {
   factory TwitchConnection.fromJson(Map<String, dynamic> json) {
     return TwitchConnection(
       clientId: json['clientId'],
-      port: json['port'],
+      username: json['username'],
       password: json['password'],
       connected: json['connected'],
     );
