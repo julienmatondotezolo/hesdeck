@@ -16,7 +16,7 @@ class TwitchConnections {
 
     TwitchConnection twitchObject = TwitchConnection(
       clientId: clientId,
-      port: port,
+      username: username,
       password: password,
     );
 

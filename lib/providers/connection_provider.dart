@@ -60,6 +60,21 @@ class ConnectionProvider extends ChangeNotifier {
     return false;
   }
 
+  // Define the method to get initial field value
+  String getFieldValue(String fieldName, String connectionType) {
+    for (var connection in _connections) {
+      // Check if the connection type matches the current connectionName
+      if (connection.type == connectionType) {
+        final Map<String, dynamic> connectionMap = connection.toJson();
+
+        if (connectionMap.containsKey(fieldName)) {
+          return connectionMap[fieldName];
+        }
+      }
+    }
+    return '';
+  }
+
   // Get current connection Object using connectionType
   Connection? getCurrentCoonnection(String type) {
     final existingConnectionIndex = _connections.indexWhere(

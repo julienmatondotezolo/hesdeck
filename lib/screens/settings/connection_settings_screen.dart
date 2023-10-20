@@ -28,17 +28,18 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
   void initState() {
     super.initState();
 
-    // Initialize controllers with values from the provider
-    controllers = List.generate(widget.fields.length, (index) {
-      return TextEditingController();
-    });
-
+    // // Initialize controllers with values from the provider
     // controllers = List.generate(widget.fields.length, (index) {
-    //   String initialValue = // Fetch initial values from the provider using ConnectionProvider
-    //       Provider.of<ConnectionProvider>(context, listen: false)
-    //           .getInitialValueForField(widget.fields[index]);
-    //   return TextEditingController(text: initialValue);
+    //   return TextEditingController();
     // });
+
+    controllers = List.generate(widget.fields.length, (index) {
+      String fieldValue =
+          Provider.of<ConnectionProvider>(context, listen: false)
+              .getFieldValue(widget.fields[index], widget.connectionName);
+      print('FIELD VALUE: $fieldValue');
+      return TextEditingController(text: fieldValue);
+    });
   }
 
   @override
