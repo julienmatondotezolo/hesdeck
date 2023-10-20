@@ -18,7 +18,7 @@ class PopupDeckWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print("Clicked on POP-UP DECK");
+        //
       },
       child: Container(
         padding: const EdgeInsets.all(8.0),

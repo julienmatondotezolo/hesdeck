@@ -25,7 +25,7 @@ class Helpers {
         // You can add further logic or processing here if needed
       } catch (error) {
         // Handle any errors that occur during the data fetching process
-        print('Error fetching data: $error');
+        throw Exception('Error fetching data: $error');
       }
     }
 
@@ -194,7 +194,7 @@ class Helpers {
             child: ColorPicker(
               pickerColor: color,
               onColorChanged: onColorChanged,
-              showLabel: true,
+              labelTypes: const [],
               pickerAreaHeightPercent: 0.8,
             ),
           ),
@@ -209,5 +209,18 @@ class Helpers {
         );
       },
     );
+  }
+
+  static List<dynamic> getConnectionField(
+      List<dynamic> allConnectionsData, String connectionType) {
+    List<dynamic> fields = [];
+
+    for (var connectionData in allConnectionsData) {
+      if (connectionData['name'] == connectionType) {
+        fields = connectionData['fields'];
+      }
+    }
+
+    return fields;
   }
 }

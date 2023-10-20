@@ -12,19 +12,16 @@ class OBSConnections {
     final obsWebSocket = connectionProvider.obsWebSocket;
 
     if (obsWebSocket != null) {
-      return await obsWebSocket.listen(eventSubscription);
+      // return await obsWebSocket.listen(eventSubscription);
     }
   }
 
   static Future<void> connectToOBS(
-      BuildContext context,
-      GlobalKey<FormState> formKey,
-      TextEditingController ipAddressController,
-      TextEditingController portController,
-      TextEditingController passwordController) async {
-    if (!formKey.currentState!.validate()) {
-      return;
-    }
+    BuildContext context,
+    TextEditingController ipAddressController,
+    TextEditingController portController,
+    TextEditingController passwordController,
+  ) async {
     String ipAddress = ipAddressController.text;
     String port = portController.text;
     String password = passwordController.text;
@@ -42,7 +39,6 @@ class OBSConnections {
       await connectionProvider.connectToOBS(obsObject);
     } catch (e) {
       // Handle connection error here, show an error message or take appropriate action.
-      print('Error connecting to OBS: $e');
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -59,12 +55,33 @@ class OBSConnections {
           ],
         ),
       );
+      throw Exception('Error connecting to OBS: $e');
     }
   }
 
   static Future<void> disconnectOBS(
-      ConnectionProvider connectionProvider) async {
-    connectionProvider.disconnectFromOBS();
+    BuildContext context,
+    ConnectionProvider connectionProvider,
+  ) async {
+    try {
+      connectionProvider.disconnectFromOBS();
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Connection Error'),
+          content: Text('Failed to disconnect from OBS. $e'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   static Future<SceneListResponse?> getScenes(
@@ -81,7 +98,7 @@ class OBSConnections {
       print('[SCENES CHNAGED TO]: $sceneName');
     } catch (e) {
       // Handle any errors that occur while changing the scene
-      print('Error changing scene: $e');
+      throw Exception('Error changing scene: $e');
       // Show an error message or take appropriate action
     }
   }
@@ -92,7 +109,7 @@ class OBSConnections {
       print('[RECORD STATUS]: ${obsWebSocket?.record.getRecordStatus()}');
     } catch (e) {
       // Handle any errors that occur while changing the scene
-      print('Error changing scene: $e');
+      throw Exception('Error changing scene: $e');
       // Show an error message or take appropriate action
     }
   }
@@ -104,7 +121,7 @@ class OBSConnections {
           '[RECORD STATUS]: ${obsWebSocket?.record.getRecordStatus().toString()}');
     } catch (e) {
       // Handle any errors that occur while changing the scene
-      print('Error changing scene: $e');
+      throw Exception('Error changing scene: $e');
       // Show an error message or take appropriate action
     }
   }
@@ -115,18 +132,20 @@ class OBSConnections {
       print('[RECORD STATUS]: ${obsWebSocket?.record.getRecordStatus()}');
     } catch (e) {
       // Handle any errors that occur while changing the scene
-      print('Error changing scene: $e');
+      throw Exception('Error changing scene: $e');
       // Show an error message or take appropriate action
     }
   }
 
-  static Future<void> deleteOBSConnection(ConnectionProvider connectionProvider,
-      OBSConnection obsConnectionObject) async {
+  static Future<void> deleteOBSConnection(
+    ConnectionProvider connectionProvider,
+    Connection connectionObject,
+  ) async {
     try {
-      connectionProvider.removeConnectionFromSP(obsConnectionObject);
+      connectionProvider.removeConnectionFromSP(connectionObject);
     } catch (e) {
       // Handle any errors that occur while changing the scene
-      print('Error disconnecting from OBS: $e');
+      throw Exception('Error deleting OBS connection: $e');
     }
   }
 }

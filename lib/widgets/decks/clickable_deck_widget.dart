@@ -16,10 +16,10 @@ class ClickableDeckWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ClickableDeckWidgetState createState() => _ClickableDeckWidgetState();
+  ClickableDeckWidgetState createState() => ClickableDeckWidgetState();
 }
 
-class _ClickableDeckWidgetState extends State<ClickableDeckWidget>
+class ClickableDeckWidgetState extends State<ClickableDeckWidget>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Color?> _colorAnimation;
