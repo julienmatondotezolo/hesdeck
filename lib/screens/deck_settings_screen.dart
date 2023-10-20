@@ -16,10 +16,10 @@ class DeckSettingsScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _DeckSettingsScreenState createState() => _DeckSettingsScreenState();
+  DeckSettingsScreenState createState() => DeckSettingsScreenState();
 }
 
-class _DeckSettingsScreenState extends State<DeckSettingsScreen> {
+class DeckSettingsScreenState extends State<DeckSettingsScreen> {
   late String _name;
   late Color _iconColor;
   late LinearGradient _backgroundColor;
