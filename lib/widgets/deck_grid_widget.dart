@@ -24,26 +24,45 @@ class DeckGridWidget extends StatelessWidget {
         itemBuilder: (context, index) {
           final deck = deckList?[index];
 
-          return Draggable<Deck>(
-            data: deck,
-            feedback: DeckWidget(
-              deck: deck,
-              homeScreenContext: context,
-              deckIndex: index,
-            ),
-            childWhenDragging: const SizedBox(),
-            child: DeckWidget(
-              deck: deck,
-              homeScreenContext: context, // Pass the HomeScreen's context
-              deckIndex: index, // Pass the index to DeckWidget
-            ),
-            onDragStarted: () {
-              // Called when the drag operation starts.
-              // You can add any desired effects or updates here.
+          return DragTarget<Deck>(
+            onWillAccept: (data) {
+              // Specify the logic to determine if the drop is allowed or not.
+              // For example, you can compare deck properties and return true if it's a valid drop.
+              return true;
             },
-            onDragEnd: (details) {
-              // Called when the drag operation ends.
-              // You can add any desired effects or updates here.
+            onAccept: (data) {
+              // Handle the accepted data here.
+              // For example, update the deck positions.
+              // You can access the index variable to know where the item was dropped.
+              // Update the deck positions using setState or your preferred state management solution.
+            },
+            builder: (context, candidateData, rejectedData) {
+              return Draggable<Deck>(
+                data: deck,
+                feedback: SizedBox(
+                  width: 120,
+                  height: 120,
+                  child: DeckWidget(
+                    deck: deck,
+                    homeScreenContext: context,
+                    deckIndex: index,
+                  ),
+                ),
+                childWhenDragging: const SizedBox(),
+                child: DeckWidget(
+                  deck: deck,
+                  homeScreenContext: context, // Pass the HomeScreen's context
+                  deckIndex: index, // Pass the index to DeckWidget
+                ),
+                onDragStarted: () {
+                  // Called when the drag operation starts.
+                  // You can add any desired effects or updates here.
+                },
+                onDragEnd: (details) {
+                  // Called when the drag operation ends.
+                  // You can add any desired effects or updates here.
+                },
+              );
             },
           );
         },
