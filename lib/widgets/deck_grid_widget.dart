@@ -15,6 +15,7 @@ class DeckGridWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gridViewKey = GlobalKey();
+
     return Consumer<DeckProvider>(builder: (context, deckProvider, child) {
       List<Deck> deckList = Provider.of<DeckProvider>(context).decks;
 
@@ -30,7 +31,18 @@ class DeckGridWidget extends StatelessWidget {
 
       if (deckList.isNotEmpty) {
         return ReorderableBuilder(
-          children: generatedChildren,
+          dragChildBoxDecoration: BoxDecoration(
+            color: Colors.blue, // Change the background color as needed
+            borderRadius:
+                BorderRadius.circular(10), // Add border radius if desired
+            boxShadow: const [
+              BoxShadow(
+                color: Color.fromARGB(255, 18, 100, 193),
+                spreadRadius: 3,
+                blurRadius: 5,
+              ),
+            ],
+          ),
           onReorder: (List<OrderUpdateEntity> orderUpdateEntities) {
             // Create a copy of the deck list
             List<Deck> updatedDeckList = List.from(deckList);
@@ -48,6 +60,12 @@ class DeckGridWidget extends StatelessWidget {
 
             ProcessDecks.dragDecks(context, updatedDeckList);
           },
+          onDragStarted: () {
+            print('Drag started');
+          },
+          onDragEnd: () {
+            print('Drag End');
+          },
           builder: (children) {
             return GridView(
               key: gridViewKey,
@@ -61,6 +79,7 @@ class DeckGridWidget extends StatelessWidget {
               children: children,
             );
           },
+          children: generatedChildren,
         );
       }
 
