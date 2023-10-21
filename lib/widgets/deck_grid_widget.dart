@@ -30,6 +30,8 @@ class DeckGridWidget extends StatelessWidget {
 
       if (deckList.isNotEmpty) {
         return ReorderableGridView.builder(
+          // dragEnabled: false,
+          dragStartDelay: const Duration(milliseconds: 300),
           dragWidgetBuilder: (index, child) {
             return DecoratedBox(
               decoration: BoxDecoration(
@@ -54,7 +56,12 @@ class DeckGridWidget extends StatelessWidget {
             );
           },
           onReorder: onReorder,
-          onDragStart: (index) {},
+          onDragStart: (index) {
+            debugPrint('index: $index');
+          },
+          onDragUpdate: (dragIndex, position, delta) => {
+            debugPrint('position: $position'),
+          },
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
             crossAxisSpacing: 20.0,
