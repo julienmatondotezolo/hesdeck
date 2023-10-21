@@ -147,6 +147,10 @@ class Helpers {
     Navigator.pop(context);
   }
 
+  static void removeDeck(BuildContext context, int deckIndex, Deck deck) {
+    deckProvider(context).removeDeck(deck, deckIndex);
+  }
+
   static void updateDeck(BuildContext context, int deckIndex, Deck deck) {
     bool deckClickToggle = deck.clickableDeck == true ? false : true;
     final deckProvider = Provider.of<DeckProvider>(context, listen: false);

@@ -14,104 +14,73 @@ class DeckGridWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Deck> deckList = Provider.of<DeckProvider>(context).decks;
+    final gridViewKey = GlobalKey();
+    return Consumer<DeckProvider>(builder: (context, deckProvider, child) {
+      List<Deck> deckList = Provider.of<DeckProvider>(context).decks;
 
-    return ReorderableGridView.builder(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        crossAxisSpacing: 20.0,
-        mainAxisSpacing: 20.0,
-        childAspectRatio: 1, // Aspect ratio of each grid item (width/height)
-      ),
-      onReorder: (oldIndex, newIndex) {
-        print('oldIndex: $oldIndex');
-        print('newIndex: $newIndex');
-      },
-      itemCount: deckList.length,
-      itemBuilder: (context, index) {
-        final deck = deckList[index];
+      final generatedChildren = List.generate(deckList.length, (index) {
+        Deck deck = deckList[index];
         return DeckWidget(
           key: ValueKey(index),
           deck: deck,
-          homeScreenContext: context, // Pass the HomeScreen's context
-          deckIndex: index, // Pass the index to DeckWidget
+          homeScreenContext: context,
+          deckIndex: index,
         );
-      },
-    );
+      });
 
-    if (deckList.isNotEmpty) {
-      return GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 20.0,
-          mainAxisSpacing: 20.0,
-          childAspectRatio: 1, // Aspect ratio of each grid item (width/height)
+      if (deckList.isNotEmpty) {
+        return ReorderableBuilder(
+          children: generatedChildren,
+          onReorder: (List<OrderUpdateEntity> orderUpdateEntities) {
+            // Create a copy of the deck list
+            List<Deck> updatedDeckList = List.from(deckList);
+
+            for (final orderUpdateEntity in orderUpdateEntities) {
+              int newIndex = orderUpdateEntity.newIndex;
+              int oldIndex = orderUpdateEntity.oldIndex;
+
+              // Get the deck that is being moved
+              Deck movedDeck = updatedDeckList.removeAt(oldIndex);
+
+              // Insert the moved deck at the new index
+              updatedDeckList.insert(newIndex, movedDeck);
+            }
+
+            ProcessDecks.dragDecks(context, updatedDeckList);
+          },
+          builder: (children) {
+            return GridView(
+              key: gridViewKey,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 20.0,
+                mainAxisSpacing: 20.0,
+                childAspectRatio:
+                    1, // Aspect ratio of each grid item (width/height)
+              ),
+              children: children,
+            );
+          },
+        );
+      }
+
+      return Container(
+        padding: const EdgeInsets.all(8.0),
+        child: const Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(height: 20),
+              Text(
+                'Loading Decks...',
+                style: TextStyle(color: Colors.white, fontSize: 12),
+              ),
+            ],
+          ),
         ),
-        itemCount: deckList.length,
-        itemBuilder: (context, index) {
-          final deck = deckList[index];
-
-          return DragTarget<Deck>(
-            onWillAccept: (data) {
-              // Specify the logic to determine if the drop is allowed or not.
-              // For example, you can compare deck properties and return true if it's a valid drop.
-              return true;
-            },
-            onAccept: (data) {
-              // Handle the accepted data here.
-              // For example, update the deck positions.
-              // You can access the index variable to know where the item was dropped.
-              // Update the deck positions using setState or your preferred state management solution.
-            },
-            builder: (context, candidateData, rejectedData) {
-              return Draggable<Deck>(
-                data: deck,
-                feedback: SizedBox(
-                  width: 120,
-                  height: 120,
-                  child: DeckWidget(
-                    deck: deck,
-                    homeScreenContext: context,
-                    deckIndex: index,
-                  ),
-                ),
-                childWhenDragging: const SizedBox(),
-                child: DeckWidget(
-                  deck: deck,
-                  homeScreenContext: context, // Pass the HomeScreen's context
-                  deckIndex: index, // Pass the index to DeckWidget
-                ),
-                onDragStarted: () {
-                  // Called when the drag operation starts.
-                  // You can add any desired effects or updates here.
-                },
-                onDragEnd: (details) {
-                  // Called when the drag operation ends.
-                  // You can add any desired effects or updates here.
-                },
-              );
-            },
-          );
-        },
       );
-    }
-    // Display CircularProgressIndicator and loading text when deck is null (loading)
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      child: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            CircularProgressIndicator(),
-            SizedBox(height: 20),
-            Text(
-              'Loading Decks...',
-              style: TextStyle(color: Colors.white, fontSize: 12),
-            ),
-          ],
-        ),
-      ),
-    );
+    });
   }
 }
