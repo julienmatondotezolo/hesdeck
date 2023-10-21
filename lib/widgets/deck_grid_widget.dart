@@ -13,20 +13,8 @@ class DeckGridWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gridViewKey = GlobalKey();
-
     return Consumer<DeckProvider>(builder: (context, deckProvider, child) {
       List<Deck> deckList = Provider.of<DeckProvider>(context).decks;
-
-      // final deckWidgetList = List.generate(deckList.length, (index) {
-      //   Deck deck = deckList[index];
-      //   return DeckWidget(
-      //     key: ValueKey(index),
-      //     deck: deck,
-      //     homeScreenContext: context,
-      //     deckIndex: index,
-      //   );
-      // });
 
       void onReorder(int oldIndex, int newIndex) {
         List<Deck> updatedDeckList = List.from(deckList);
@@ -42,7 +30,31 @@ class DeckGridWidget extends StatelessWidget {
 
       if (deckList.isNotEmpty) {
         return ReorderableGridView.builder(
+          dragWidgetBuilder: (index, child) {
+            return DecoratedBox(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.blue.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 10,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: child,
+            );
+          },
+          placeholderBuilder: (dropIndex, dropInddex, dragWidget) {
+            return Opacity(
+              opacity: 0.5,
+              child: dragWidget,
+            );
+          },
           onReorder: onReorder,
+          onDragStart: (index) {},
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
             crossAxisSpacing: 20.0,
@@ -53,7 +65,6 @@ class DeckGridWidget extends StatelessWidget {
           itemCount: deckList.length,
           itemBuilder: (context, index) {
             final deck = deckList[index];
-
             return DeckWidget(
               key: ValueKey(index),
               deck: deck,
