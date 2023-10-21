@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_reorderable_grid_view/entities/order_update_entity.dart';
-import 'package:flutter_reorderable_grid_view/widgets/reorderable_builder.dart';
 import 'package:hessdeck/models/deck.dart';
 import 'package:hessdeck/providers/deck_provider.dart';
 import 'package:hessdeck/services/decks/process_decks.dart';
 import 'package:hessdeck/widgets/deck_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 
 class DeckGridWidget extends StatelessWidget {
   const DeckGridWidget({
@@ -19,67 +18,49 @@ class DeckGridWidget extends StatelessWidget {
     return Consumer<DeckProvider>(builder: (context, deckProvider, child) {
       List<Deck> deckList = Provider.of<DeckProvider>(context).decks;
 
-      final generatedChildren = List.generate(deckList.length, (index) {
-        Deck deck = deckList[index];
-        return DeckWidget(
-          key: ValueKey(index),
-          deck: deck,
-          homeScreenContext: context,
-          deckIndex: index,
-        );
-      });
+      // final deckWidgetList = List.generate(deckList.length, (index) {
+      //   Deck deck = deckList[index];
+      //   return DeckWidget(
+      //     key: ValueKey(index),
+      //     deck: deck,
+      //     homeScreenContext: context,
+      //     deckIndex: index,
+      //   );
+      // });
+
+      void onReorder(int oldIndex, int newIndex) {
+        List<Deck> updatedDeckList = List.from(deckList);
+
+        // Get the deck that is being moved
+        Deck movedDeck = updatedDeckList.removeAt(oldIndex);
+
+        // Insert the moved deck at the new index
+        updatedDeckList.insert(newIndex, movedDeck);
+
+        ProcessDecks.dragDecks(context, updatedDeckList);
+      }
 
       if (deckList.isNotEmpty) {
-        return ReorderableBuilder(
-          dragChildBoxDecoration: BoxDecoration(
-            color: Colors.blue, // Change the background color as needed
-            borderRadius:
-                BorderRadius.circular(10), // Add border radius if desired
-            boxShadow: const [
-              BoxShadow(
-                color: Color.fromARGB(255, 18, 100, 193),
-                spreadRadius: 3,
-                blurRadius: 5,
-              ),
-            ],
+        return ReorderableGridView.builder(
+          onReorder: onReorder,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            crossAxisSpacing: 20.0,
+            mainAxisSpacing: 20.0,
+            childAspectRatio:
+                1, // Aspect ratio of each grid item (width/height)
           ),
-          onReorder: (List<OrderUpdateEntity> orderUpdateEntities) {
-            // Create a copy of the deck list
-            List<Deck> updatedDeckList = List.from(deckList);
+          itemCount: deckList.length,
+          itemBuilder: (context, index) {
+            final deck = deckList[index];
 
-            for (final orderUpdateEntity in orderUpdateEntities) {
-              int newIndex = orderUpdateEntity.newIndex;
-              int oldIndex = orderUpdateEntity.oldIndex;
-
-              // Get the deck that is being moved
-              Deck movedDeck = updatedDeckList.removeAt(oldIndex);
-
-              // Insert the moved deck at the new index
-              updatedDeckList.insert(newIndex, movedDeck);
-            }
-
-            ProcessDecks.dragDecks(context, updatedDeckList);
-          },
-          onDragStarted: () {
-            print('Drag started');
-          },
-          onDragEnd: () {
-            print('Drag End');
-          },
-          builder: (children) {
-            return GridView(
-              key: gridViewKey,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 20.0,
-                mainAxisSpacing: 20.0,
-                childAspectRatio:
-                    1, // Aspect ratio of each grid item (width/height)
-              ),
-              children: children,
+            return DeckWidget(
+              key: ValueKey(index),
+              deck: deck,
+              homeScreenContext: context, // Pass the HomeScreen's context
+              deckIndex: index, // Pass the index to DeckWidget
             );
           },
-          children: generatedChildren,
         );
       }
 
