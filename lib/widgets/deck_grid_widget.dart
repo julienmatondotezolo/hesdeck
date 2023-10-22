@@ -56,12 +56,6 @@ class DeckGridWidget extends StatelessWidget {
             );
           },
           onReorder: onReorder,
-          onDragStart: (index) {
-            debugPrint('index: $index');
-          },
-          onDragUpdate: (dragIndex, position, delta) => {
-            debugPrint('position: $position'),
-          },
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
             crossAxisSpacing: 20.0,

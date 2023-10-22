@@ -57,7 +57,7 @@ class ClickableDeckWidgetState extends State<ClickableDeckWidget>
           isClicked = !isClicked;
         });
       },
-      onLongPress: () {
+      onDoubleTap: () {
         Helpers.openDeckSettingsScreen(context, widget.deckIndex, widget.deck!);
       },
       child: Container(

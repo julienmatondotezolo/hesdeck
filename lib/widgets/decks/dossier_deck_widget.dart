@@ -21,7 +21,7 @@ class DossierDeckWidget extends StatelessWidget {
       onTap: () {
         Helpers.openDeckScreen(context, deckIndex, deck!);
       },
-      onLongPress: () {
+      onDoubleTap: () {
         Helpers.openDeckSettingsScreen(context, deckIndex, deck!);
       },
       child: Container(
