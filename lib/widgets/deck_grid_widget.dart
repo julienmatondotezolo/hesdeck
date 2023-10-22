@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hessdeck/models/deck.dart';
 import 'package:hessdeck/providers/deck_provider.dart';
 import 'package:hessdeck/services/decks/process_decks.dart';
+import 'package:hessdeck/utils/helpers.dart';
 import 'package:hessdeck/widgets/deck_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
@@ -30,7 +31,6 @@ class DeckGridWidget extends StatelessWidget {
 
       if (deckList.isNotEmpty) {
         return ReorderableGridView.builder(
-          // dragEnabled: false,
           dragStartDelay: const Duration(milliseconds: 300),
           dragWidgetBuilder: (index, child) {
             return DecoratedBox(
@@ -55,6 +55,7 @@ class DeckGridWidget extends StatelessWidget {
               child: dragWidget,
             );
           },
+          onDragStart: (dragIndex) => Helpers.vibration(),
           onReorder: onReorder,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,

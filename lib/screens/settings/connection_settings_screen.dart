@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hessdeck/models/connection.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
 import 'package:hessdeck/services/connections/manage_connections.dart';
+import 'package:hessdeck/utils/helpers.dart';
 import 'package:provider/provider.dart';
 
 class ConnectionSettingsScreen extends StatefulWidget {
@@ -84,6 +86,7 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
+                                HapticFeedback.vibrate();
                                 return 'Please enter the ${widget.fields[i]}';
                               }
                               return null;
@@ -97,6 +100,7 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
                         ? ElevatedButton(
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
+                                Helpers.vibration();
                                 ManageConnections.selectConnection(
                                   context,
                                   widget.connectionName,
@@ -115,6 +119,7 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
                           )
                         : ElevatedButton(
                             onPressed: () async {
+                              Helpers.vibration();
                               ManageConnections.selectDisconnection(
                                 context,
                                 widget.connectionName,
@@ -136,6 +141,7 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
                     if (currentConnection != null)
                       ElevatedButton(
                         onPressed: () async {
+                          HapticFeedback.vibrate();
                           ManageConnections.selectDeleteConnection(
                             widget.connectionName,
                             connectionProvider,

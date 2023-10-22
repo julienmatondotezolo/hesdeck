@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:hessdeck/models/deck.dart';
 import 'package:hessdeck/providers/deck_provider.dart';
@@ -10,6 +13,13 @@ import 'package:hessdeck/widgets/collapsable_widget.dart';
 import 'package:provider/provider.dart';
 
 class Helpers {
+  // Vibrations
+  static void vibration() {
+    if (Platform.isAndroid || Platform.isIOS) {
+      HapticFeedback.heavyImpact();
+    }
+  }
+
   // Function to show a dialog
   static void showAddDeckDialog(BuildContext context, int deckIndex) {
     // Get the screen height using MediaQuery

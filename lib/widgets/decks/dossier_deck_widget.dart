@@ -19,9 +19,11 @@ class DossierDeckWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        Helpers.vibration();
         Helpers.openDeckScreen(context, deckIndex, deck!);
       },
       onDoubleTap: () {
+        Helpers.vibration();
         Helpers.openDeckSettingsScreen(context, deckIndex, deck!);
       },
       child: Container(
