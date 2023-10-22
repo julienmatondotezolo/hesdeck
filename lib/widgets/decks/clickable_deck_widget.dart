@@ -53,11 +53,13 @@ class ClickableDeckWidgetState extends State<ClickableDeckWidget>
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        Helpers.vibration();
         setState(() {
           isClicked = !isClicked;
         });
       },
-      onLongPress: () {
+      onDoubleTap: () {
+        Helpers.vibration();
         Helpers.openDeckSettingsScreen(context, widget.deckIndex, widget.deck!);
       },
       child: Container(

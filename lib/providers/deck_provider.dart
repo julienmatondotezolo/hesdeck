@@ -113,6 +113,18 @@ class DeckProvider extends ChangeNotifier {
     }
   }
 
+  // Method to update the decks with a new list
+  void updateDecks(List<Deck> newDecks) {
+    _decks.clear(); // Clear the existing decks
+    _decks.addAll(newDecks); // Add the new decks to the internal list
+
+    // Save the updated decks to SharedPreferences
+    _saveDecks();
+
+    // Notify listeners to rebuild widgets
+    notifyListeners();
+  }
+
   void removeDeck(Deck deck, int index) {
     print('Position of Deck: ${index + 1}');
 

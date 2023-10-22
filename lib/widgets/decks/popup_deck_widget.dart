@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/models/deck.dart';
 import 'package:hessdeck/themes/colors.dart';
+import 'package:hessdeck/utils/helpers.dart';
 
 class PopupDeckWidget extends StatelessWidget {
   final Deck? deck; // Deck can be null
@@ -19,6 +20,9 @@ class PopupDeckWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         //
+      },
+      onDoubleTap: () {
+        Helpers.openDeckSettingsScreen(context, deckIndex, deck!);
       },
       child: Container(
         padding: const EdgeInsets.all(8.0),

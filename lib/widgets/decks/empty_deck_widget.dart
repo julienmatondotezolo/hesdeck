@@ -19,6 +19,7 @@ class EmptyDeckWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        Helpers.vibration();
         Helpers.showAddDeckDialog(context, deckIndex);
       },
       child: Container(

@@ -32,8 +32,8 @@ class DeckScreen extends StatelessWidget {
               SizedBox(
                 height: screenHeight * 0.02, // 5% of the screen height
               ),
-              Expanded(
-                child: DeckGridWidget(deckList: deck.content),
+              const Expanded(
+                child: DeckGridWidget(),
               ),
             ],
           ),
