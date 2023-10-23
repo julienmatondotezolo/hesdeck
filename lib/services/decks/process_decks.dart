@@ -10,4 +10,25 @@ class ProcessDecks {
 
     deckProvider.updateDecks(newDeckList);
   }
+
+  static void addNewDeck(
+      BuildContext context, int deckIndex, int? folderIndex, Deck deck) {
+    Deck newDeck = deck;
+
+    if (folderIndex != null) {
+      Deck currentDeck = Provider.of<DeckProvider>(context, listen: false)
+          .getDeckbyIndex(folderIndex);
+
+      List<Deck>? newContent = List.from(currentDeck.content!);
+      newContent[deckIndex] = deck;
+
+      newDeck = currentDeck.copyWith(
+        content: newContent,
+      );
+    }
+
+    Provider.of<DeckProvider>(context, listen: false)
+        .addDeck(newDeck, folderIndex ?? deckIndex);
+    Navigator.pop(context);
+  }
 }
