@@ -30,11 +30,12 @@ class DeckScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               SizedBox(
-                height: screenHeight * 0.02, // 5% of the screen height
+                height: screenHeight * 0.02, // 2% of the screen height
               ),
               Expanded(
                 child: DeckGridWidget(
                   content: deck.content,
+                  folderIndex: deckIndex,
                 ),
               ),
             ],

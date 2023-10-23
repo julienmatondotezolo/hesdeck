@@ -21,7 +21,8 @@ class Helpers {
   }
 
   // Function to show a dialog
-  static void showAddDeckDialog(BuildContext context, int deckIndex) {
+  static void showAddDeckDialog(
+      BuildContext context, int deckIndex, int? folderIndex) {
     // Get the screen height using MediaQuery
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -87,7 +88,11 @@ class Helpers {
                   ),
                   SizedBox(height: screenHeight * 0.025),
                   for (var item in data)
-                    CollapsableWidget(item: item, deckIndex: deckIndex),
+                    CollapsableWidget(
+                      item: item,
+                      deckIndex: deckIndex,
+                      folderIndex: folderIndex,
+                    ),
                 ],
               ),
             ),
@@ -147,14 +152,6 @@ class Helpers {
         // you can return a default alignment or throw an exception, depending on your use case.
         return Alignment.center;
     }
-  }
-
-  static void addNewDeck(BuildContext context, int deckIndex, Deck deck) {
-    final newDeck = deck;
-
-    Provider.of<DeckProvider>(context, listen: false)
-        .addDeck(newDeck, deckIndex);
-    Navigator.pop(context);
   }
 
   static void removeDeck(BuildContext context, int deckIndex, Deck deck) {

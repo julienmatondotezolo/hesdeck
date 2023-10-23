@@ -11,6 +11,7 @@ class DeckWidget extends StatelessWidget {
   final VoidCallback? onPressed;
   final BuildContext homeScreenContext; // Pass the HomeScreen's context
   final int deckIndex; // Index of the deck in the list
+  final int? folderIndex;
 
   const DeckWidget({
     Key? key,
@@ -18,6 +19,7 @@ class DeckWidget extends StatelessWidget {
     this.onPressed,
     required this.homeScreenContext,
     required this.deckIndex,
+    this.folderIndex,
   }) : super(key: key);
 
   @override
@@ -39,6 +41,7 @@ class DeckWidget extends StatelessWidget {
         deck: deck,
         context: context,
         deckIndex: deckIndex,
+        folderIndex: folderIndex,
       );
     } else if (deck!.popupDeck) {
       return PopupDeckWidget(

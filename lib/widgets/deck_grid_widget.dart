@@ -9,10 +9,12 @@ import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 
 class DeckGridWidget extends StatelessWidget {
   final List<Deck>? content;
+  final int? folderIndex;
 
   const DeckGridWidget({
     Key? key,
     this.content,
+    this.folderIndex,
   }) : super(key: key);
 
   @override
@@ -75,6 +77,7 @@ class DeckGridWidget extends StatelessWidget {
               deck: deck,
               homeScreenContext: context, // Pass the HomeScreen's context
               deckIndex: index, // Pass the index to DeckWidget
+              folderIndex: folderIndex,
             );
           },
         );
