@@ -87,6 +87,15 @@ class DeckProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Deck getDeckbyIndex(int index) {
+    if (index >= 0 && index < _decks.length) {
+      // Replace the deck at the specified index with the updatedDeck
+      return _decks[index];
+    } else {
+      throw Exception('ERROR GETTING: Deck with index $index.');
+    }
+  }
+
   void addDeck(Deck deck, int index) {
     print('Position of Deck: ${index + 1}');
 
