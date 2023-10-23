@@ -8,14 +8,17 @@ import 'package:provider/provider.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 
 class DeckGridWidget extends StatelessWidget {
+  final List<Deck>? content;
+
   const DeckGridWidget({
     Key? key,
+    this.content,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Consumer<DeckProvider>(builder: (context, deckProvider, child) {
-      List<Deck> deckList = Provider.of<DeckProvider>(context).decks;
+      List<Deck> deckList = content ?? Provider.of<DeckProvider>(context).decks;
 
       void onReorder(int oldIndex, int newIndex) {
         List<Deck> updatedDeckList = List.from(deckList);
