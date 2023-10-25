@@ -7,12 +7,14 @@ class ClickableDeckWidget extends StatefulWidget {
   final Deck? deck; // Deck can be null
   final BuildContext context; // Pass the HomeScreen's context
   final int deckIndex; // Index of the deck in the list
+  final int? folderIndex;
 
   const ClickableDeckWidget({
     Key? key,
     required this.deck,
     required this.context,
     required this.deckIndex,
+    this.folderIndex,
   }) : super(key: key);
 
   @override
@@ -60,7 +62,8 @@ class ClickableDeckWidgetState extends State<ClickableDeckWidget>
       },
       onDoubleTap: () {
         Helpers.vibration();
-        Helpers.openDeckSettingsScreen(context, widget.deckIndex, widget.deck!);
+        Helpers.openDeckSettingsScreen(
+            context, widget.deckIndex, widget.deck!, widget.folderIndex);
       },
       child: Container(
         padding: const EdgeInsets.all(8.0),

@@ -35,6 +35,7 @@ class DeckWidget extends StatelessWidget {
         deck: deck,
         context: context,
         deckIndex: deckIndex,
+        folderIndex: folderIndex,
       );
     } else if (deck!.defaultDeck) {
       return EmptyDeckWidget(
