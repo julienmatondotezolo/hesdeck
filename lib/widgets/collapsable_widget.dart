@@ -42,6 +42,7 @@ class CollapsableWidget extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 openDeckSettingsScreen(
+                Helpers.openDeckSettingsScreen(
                     context, deckIndex, Deck.fromJson(actionDeck), folderIndex);
               },
               child: Container(
