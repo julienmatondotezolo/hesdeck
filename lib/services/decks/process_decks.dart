@@ -19,13 +19,15 @@ class ProcessDecks {
       Deck currentDeck = Provider.of<DeckProvider>(context, listen: false)
           .getDeckbyIndex(folderIndex);
 
-      List<Deck>? newContent = List.from(currentDeck.content!);
+      List<Deck>? newContent = List.from(currentDeck.content as Iterable);
       newContent[deckIndex] = deck;
 
       newDeck = currentDeck.copyWith(
         content: newContent,
       );
     }
+
+    print('newDeck: ${newDeck.toJson()}');
 
     Provider.of<DeckProvider>(context, listen: false)
         .addDeck(newDeck, folderIndex ?? deckIndex);
