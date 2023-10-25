@@ -20,8 +20,8 @@ class DeckGridWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<DeckProvider>(builder: (context, deckProvider, child) {
-      List<Deck> deckList = content != null
-          ? deckProvider.getDeckbyIndex(folderIndex!).content as List<Deck>
+      List<Deck> deckList = content != null && folderIndex != null
+          ? (deckProvider.getDeckbyIndex(folderIndex!).content ?? [])
           : deckProvider.decks;
 
       void onReorder(int oldIndex, int newIndex) {
