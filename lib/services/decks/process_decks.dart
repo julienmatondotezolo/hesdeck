@@ -5,14 +5,39 @@ import 'package:provider/provider.dart';
 
 class ProcessDecks {
   static Future<void> dragDecks(
-      BuildContext context, List<Deck> newDeckList) async {
-    final deckProvider = Provider.of<DeckProvider>(context, listen: false);
+    BuildContext context,
+    List<Deck> deckList,
+    int? folderIndex,
+  ) async {
+    List<Deck> newDeckList = deckList;
 
+    if (folderIndex != null) {
+      Deck currentDeck = Provider.of<DeckProvider>(context, listen: false)
+          .getDeckbyIndex(folderIndex);
+
+      Deck newDraggedDeck = currentDeck.copyWith(
+        content: deckList,
+      );
+
+      List<Deck> currentDeckList =
+          Provider.of<DeckProvider>(context, listen: false).decks;
+
+      List<Deck>? newCurrentDeckList = List.from(currentDeckList);
+      newCurrentDeckList[folderIndex] = newDraggedDeck;
+
+      newDeckList = newCurrentDeckList;
+    }
+
+    final deckProvider = Provider.of<DeckProvider>(context, listen: false);
     deckProvider.updateDecks(newDeckList);
   }
 
   static void addNewDeck(
-      BuildContext context, int deckIndex, int? folderIndex, Deck deck) {
+    BuildContext context,
+    int deckIndex,
+    int? folderIndex,
+    Deck deck,
+  ) {
     Deck newDeck = deck;
 
     if (folderIndex != null) {
@@ -26,8 +51,6 @@ class ProcessDecks {
         content: newContent,
       );
     }
-
-    print('newDeck: ${newDeck.toJson()}');
 
     Provider.of<DeckProvider>(context, listen: false)
         .addDeck(newDeck, folderIndex ?? deckIndex);

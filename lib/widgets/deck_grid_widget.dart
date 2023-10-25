@@ -20,7 +20,9 @@ class DeckGridWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<DeckProvider>(builder: (context, deckProvider, child) {
-      List<Deck> deckList = content ?? Provider.of<DeckProvider>(context).decks;
+      List<Deck> deckList = content != null
+          ? deckProvider.getDeckbyIndex(folderIndex!).content as List<Deck>
+          : deckProvider.decks;
 
       void onReorder(int oldIndex, int newIndex) {
         List<Deck> updatedDeckList = List.from(deckList);
@@ -31,7 +33,7 @@ class DeckGridWidget extends StatelessWidget {
         // Insert the moved deck at the new index
         updatedDeckList.insert(newIndex, movedDeck);
 
-        ProcessDecks.dragDecks(context, updatedDeckList);
+        ProcessDecks.dragDecks(context, updatedDeckList, folderIndex);
       }
 
       if (deckList.isNotEmpty) {
