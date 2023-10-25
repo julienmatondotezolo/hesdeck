@@ -182,13 +182,18 @@ class Helpers {
   }
 
   static void openDeckSettingsScreen(
-      BuildContext context, int deckIndex, Deck deck) {
+    BuildContext context,
+    int deckIndex,
+    Deck deck,
+    int? folderIndex,
+  ) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => DeckSettingsScreen(
           deck: deck, // Provide a default value for deck
           deckIndex: deckIndex,
+          folderIndex: folderIndex,
         ),
       ),
     );
