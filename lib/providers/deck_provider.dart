@@ -69,7 +69,7 @@ class DeckProvider extends ChangeNotifier {
 
   void _addDefaultDeck(int i, bool remove) {
     // Create and add 15 default decks with default name and icon
-    final defaultDeck = Deck(
+    Deck defaultDeck = Deck(
       // name: 'Deck $i',
       name: 'Add',
       iconData: Icons.add, // Replace this with your desired default icon
@@ -134,7 +134,7 @@ class DeckProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeDeck(Deck deck, int index) {
+  void removeDeck(int index) {
     print('Position of Deck: ${index + 1}');
 
     _decks.removeAt(index);
