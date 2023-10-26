@@ -85,56 +85,11 @@ class OBSConnections {
   }
 
   static Future<SceneListResponse?> getScenes(
-      ObsWebSocket? obsWebSocket) async {
+    ObsWebSocket? obsWebSocket,
+  ) async {
     SceneListResponse? response = await obsWebSocket?.scenes.getSceneList();
     debugPrint('[SCENES]: $response');
     return response;
-  }
-
-  static Future<void> changeScenes(
-      ObsWebSocket? obsWebSocket, String sceneName) async {
-    try {
-      await obsWebSocket?.scenes.setCurrentProgramScene(sceneName);
-      debugPrint('[SCENES CHNAGED TO]: $sceneName');
-    } catch (e) {
-      // Handle any errors that occur while changing the scene
-      throw Exception('Error changing scene: $e');
-      // Show an error message or take appropriate action
-    }
-  }
-
-  static Future<void> startRecord(ObsWebSocket? obsWebSocket) async {
-    try {
-      obsWebSocket?.record.startRecord();
-      debugPrint('[RECORD STATUS]: ${obsWebSocket?.record.getRecordStatus()}');
-    } catch (e) {
-      // Handle any errors that occur while changing the scene
-      throw Exception('Error changing scene: $e');
-      // Show an error message or take appropriate action
-    }
-  }
-
-  static Future<void> stopRecord(ObsWebSocket? obsWebSocket) async {
-    try {
-      obsWebSocket?.record.stopRecord();
-      debugPrint(
-          '[RECORD STATUS]: ${obsWebSocket?.record.getRecordStatus().toString()}');
-    } catch (e) {
-      // Handle any errors that occur while changing the scene
-      throw Exception('Error changing scene: $e');
-      // Show an error message or take appropriate action
-    }
-  }
-
-  static Future<void> stopStream(ObsWebSocket? obsWebSocket) async {
-    try {
-      obsWebSocket?.stream.stopStream();
-      debugPrint('[RECORD STATUS]: ${obsWebSocket?.record.getRecordStatus()}');
-    } catch (e) {
-      // Handle any errors that occur while changing the scene
-      throw Exception('Error changing scene: $e');
-      // Show an error message or take appropriate action
-    }
   }
 
   static Future<void> deleteOBSConnection(
