@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hessdeck/models/connection.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ConnectionProvider extends ChangeNotifier {
@@ -371,4 +372,9 @@ class ConnectionProvider extends ChangeNotifier {
       throw Exception('You are not connected to Spotify.');
     }
   }
+}
+
+// Convenience method to access the connectionProvider instance
+ConnectionProvider connectionProvider(BuildContext context) {
+  return Provider.of<ConnectionProvider>(context, listen: false);
 }
