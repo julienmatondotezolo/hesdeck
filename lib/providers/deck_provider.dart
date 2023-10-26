@@ -69,7 +69,7 @@ class DeckProvider extends ChangeNotifier {
 
   void _addDefaultDeck(int i, bool remove) {
     // Create and add 15 default decks with default name and icon
-    final defaultDeck = Deck(
+    Deck defaultDeck = Deck(
       // name: 'Deck $i',
       name: 'Add',
       iconData: Icons.add, // Replace this with your desired default icon
@@ -85,6 +85,15 @@ class DeckProvider extends ChangeNotifier {
 
     _saveDecks(); // Save the default decks to SharedPreferences
     notifyListeners();
+  }
+
+  Deck getDeckbyIndex(int index) {
+    if (index >= 0 && index < _decks.length) {
+      // Replace the deck at the specified index with the updatedDeck
+      return _decks[index];
+    } else {
+      throw Exception('ERROR GETTING: Deck with index $index.');
+    }
   }
 
   void addDeck(Deck deck, int index) {
@@ -125,7 +134,7 @@ class DeckProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeDeck(Deck deck, int index) {
+  void removeDeck(int index) {
     print('Position of Deck: ${index + 1}');
 
     _decks.removeAt(index);

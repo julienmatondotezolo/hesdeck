@@ -7,12 +7,14 @@ class PopupDeckWidget extends StatelessWidget {
   final Deck? deck; // Deck can be null
   final BuildContext context; // Pass the HomeScreen's context
   final int deckIndex; // Index of the deck in the list
+  final int? folderIndex;
 
   const PopupDeckWidget({
     Key? key,
     required this.deck,
     required this.context,
     required this.deckIndex,
+    this.folderIndex,
   }) : super(key: key);
 
   @override
@@ -22,7 +24,12 @@ class PopupDeckWidget extends StatelessWidget {
         //
       },
       onDoubleTap: () {
-        Helpers.openDeckSettingsScreen(context, deckIndex, deck!);
+        Helpers.openDeckSettingsScreen(
+          context,
+          deckIndex,
+          deck!,
+          folderIndex,
+        );
       },
       child: Container(
         padding: const EdgeInsets.all(8.0),

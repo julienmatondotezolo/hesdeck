@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hessdeck/models/deck.dart';
-import 'package:hessdeck/providers/deck_provider.dart';
 import 'package:hessdeck/screens/home_screen.dart';
+import 'package:hessdeck/services/decks/process_decks.dart';
 import 'package:hessdeck/utils/helpers.dart';
 import 'package:hessdeck/widgets/gradient_color_picker.dart';
 
 class DeckSettingsScreen extends StatefulWidget {
   final Deck deck;
   final int deckIndex; // Index of the deck in the list
+  final int? folderIndex;
 
   const DeckSettingsScreen({
     Key? key,
     required this.deck,
     required this.deckIndex,
+    this.folderIndex,
   }) : super(key: key);
 
   @override
@@ -161,13 +163,21 @@ class DeckSettingsScreenState extends State<DeckSettingsScreen> {
               const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
-                  Deck updatedDeck = widget.deck.copyWith(
+                  Deck? updatedDeck;
+
+                  updatedDeck = widget.deck.copyWith(
                     name: _name,
                     iconColor: _iconColor,
                     activeBackgroundColor: _activeBackgroundColor,
                     backgroundColor: _backgroundColor,
                   );
-                  Helpers.addNewDeck(context, widget.deckIndex, updatedDeck);
+
+                  ProcessDecks.addNewDeck(
+                    context,
+                    widget.deckIndex,
+                    widget.folderIndex,
+                    updatedDeck,
+                  );
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -185,8 +195,11 @@ class DeckSettingsScreenState extends State<DeckSettingsScreen> {
               ElevatedButton(
                 onPressed: () {
                   HapticFeedback.vibrate();
-                  deckProvider(context)
-                      .removeDeck(widget.deck, widget.deckIndex);
+                  ProcessDecks.removeDeck(
+                    context,
+                    widget.deckIndex,
+                    widget.folderIndex,
+                  );
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.red),

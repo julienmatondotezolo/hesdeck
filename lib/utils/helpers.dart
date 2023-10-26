@@ -21,7 +21,8 @@ class Helpers {
   }
 
   // Function to show a dialog
-  static void showAddDeckDialog(BuildContext context, int deckIndex) {
+  static void showAddDeckDialog(
+      BuildContext context, int deckIndex, int? folderIndex) {
     // Get the screen height using MediaQuery
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -87,7 +88,11 @@ class Helpers {
                   ),
                   SizedBox(height: screenHeight * 0.025),
                   for (var item in data)
-                    CollapsableWidget(item: item, deckIndex: deckIndex),
+                    CollapsableWidget(
+                      item: item,
+                      deckIndex: deckIndex,
+                      folderIndex: folderIndex,
+                    ),
                 ],
               ),
             ),
@@ -149,18 +154,6 @@ class Helpers {
     }
   }
 
-  static void addNewDeck(BuildContext context, int deckIndex, Deck deck) {
-    final newDeck = deck;
-
-    Provider.of<DeckProvider>(context, listen: false)
-        .addDeck(newDeck, deckIndex);
-    Navigator.pop(context);
-  }
-
-  static void removeDeck(BuildContext context, int deckIndex, Deck deck) {
-    deckProvider(context).removeDeck(deck, deckIndex);
-  }
-
   static void updateDeck(BuildContext context, int deckIndex, Deck deck) {
     bool deckClickToggle = deck.clickableDeck == true ? false : true;
     final deckProvider = Provider.of<DeckProvider>(context, listen: false);
@@ -185,13 +178,18 @@ class Helpers {
   }
 
   static void openDeckSettingsScreen(
-      BuildContext context, int deckIndex, Deck deck) {
+    BuildContext context,
+    int deckIndex,
+    Deck deck,
+    int? folderIndex,
+  ) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => DeckSettingsScreen(
           deck: deck, // Provide a default value for deck
           deckIndex: deckIndex,
+          folderIndex: folderIndex,
         ),
       ),
     );

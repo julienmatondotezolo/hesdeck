@@ -24,7 +24,7 @@ class DossierDeckWidget extends StatelessWidget {
       },
       onDoubleTap: () {
         Helpers.vibration();
-        Helpers.openDeckSettingsScreen(context, deckIndex, deck!);
+        Helpers.openDeckSettingsScreen(context, deckIndex, deck!, null);
       },
       child: Container(
         padding: const EdgeInsets.all(8.0),

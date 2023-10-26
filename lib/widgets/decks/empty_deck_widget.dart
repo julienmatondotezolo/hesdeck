@@ -7,12 +7,14 @@ class EmptyDeckWidget extends StatelessWidget {
   final Deck? deck; // Deck can be null
   final BuildContext context; // Pass the HomeScreen's context
   final int deckIndex; // Index of the deck in the list
+  final int? folderIndex;
 
   const EmptyDeckWidget({
     Key? key,
     required this.deck,
     required this.context,
     required this.deckIndex,
+    this.folderIndex,
   }) : super(key: key);
 
   @override
@@ -20,7 +22,7 @@ class EmptyDeckWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Helpers.vibration();
-        Helpers.showAddDeckDialog(context, deckIndex);
+        Helpers.showAddDeckDialog(context, deckIndex, folderIndex);
       },
       child: Container(
         padding: const EdgeInsets.all(8.0),
