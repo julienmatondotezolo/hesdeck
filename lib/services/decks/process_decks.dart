@@ -41,8 +41,7 @@ class ProcessDecks {
     Deck newDeck = deck;
 
     if (folderIndex != null) {
-      Deck currentDeck = Provider.of<DeckProvider>(context, listen: false)
-          .getDeckbyIndex(folderIndex);
+      Deck currentDeck = deckProvider(context).getDeckbyIndex(folderIndex);
 
       List<Deck>? newContent = List.from(currentDeck.content as Iterable);
       newContent[deckIndex] = deck;
@@ -52,8 +51,44 @@ class ProcessDecks {
       );
     }
 
-    Provider.of<DeckProvider>(context, listen: false)
-        .addDeck(newDeck, folderIndex ?? deckIndex);
+    deckProvider(context).addDeck(newDeck, folderIndex ?? deckIndex);
     Navigator.pop(context);
+  }
+
+  static void removeDeck(
+    BuildContext context,
+    int deckIndex,
+    int? folderIndex,
+  ) {
+    if (folderIndex != null) {
+      print('folderIndex: $folderIndex');
+      // print('deckIndex: $deckIndex');
+      Deck currentDeck = deckProvider(context).getDeckbyIndex(folderIndex);
+      List<Deck>? newContent = List.from(currentDeck.content as Iterable);
+
+      newContent.removeAt(deckIndex);
+
+      Deck defaultDeck = Deck(
+        name: 'Add',
+        iconData: Icons.add, // Replace this with your desired default icon
+        defaultDeck: true,
+        backgroundColor: const LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Color(0xff2a3245), Color(0xff000000)],
+          tileMode: TileMode.clamp,
+        ),
+      );
+
+      newContent.insert(deckIndex, defaultDeck);
+
+      Deck newDeck = currentDeck.copyWith(
+        content: newContent,
+      );
+
+      deckProvider(context).updateDeck(newDeck, folderIndex);
+    } else {
+      deckProvider(context).removeDeck(deckIndex);
+    }
   }
 }

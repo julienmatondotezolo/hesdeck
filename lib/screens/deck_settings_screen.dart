@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hessdeck/models/deck.dart';
-import 'package:hessdeck/providers/deck_provider.dart';
 import 'package:hessdeck/screens/home_screen.dart';
 import 'package:hessdeck/services/decks/process_decks.dart';
 import 'package:hessdeck/utils/helpers.dart';
@@ -196,8 +195,11 @@ class DeckSettingsScreenState extends State<DeckSettingsScreen> {
               ElevatedButton(
                 onPressed: () {
                   HapticFeedback.vibrate();
-                  deckProvider(context)
-                      .removeDeck(widget.deck, widget.deckIndex);
+                  ProcessDecks.removeDeck(
+                    context,
+                    widget.deckIndex,
+                    widget.folderIndex,
+                  );
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
