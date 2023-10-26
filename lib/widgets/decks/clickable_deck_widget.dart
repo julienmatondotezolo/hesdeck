@@ -63,7 +63,11 @@ class ClickableDeckWidgetState extends State<ClickableDeckWidget>
       onDoubleTap: () {
         Helpers.vibration();
         Helpers.openDeckSettingsScreen(
-            context, widget.deckIndex, widget.deck!, widget.folderIndex);
+          context,
+          widget.deckIndex,
+          widget.deck!,
+          widget.folderIndex,
+        );
       },
       child: Container(
         padding: const EdgeInsets.all(8.0),
