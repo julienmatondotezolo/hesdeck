@@ -40,7 +40,7 @@ dependencies:
   path_provider: ^2.0.15
   http: ^1.1.0
   flutter_colorpicker: ^1.0.3
-  obs_websocket: ^5.1.0+2
+  obs_websocket: ^5.1.0+4
   reorderable_grid_view: ^2.2.7
 
 dev_dependencies:
