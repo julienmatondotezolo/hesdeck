@@ -211,11 +211,8 @@ class ConnectionProvider extends ChangeNotifier {
 
   // Connect to OBS WebSocket server
   Future<void> connectToOBS(OBSConnection obsConnectionObject) async {
-    //4455
-    //EUlDNB8sajXz2chf
     _obsWebSocket = await ObsWebSocket.connect(
       'ws://[${obsConnectionObject.ipAddress}]:${obsConnectionObject.port}',
-      //'ws://[2a02:a03f:eaad:c01:1ce2:2b2e:53b8:82b4]:4455',
       password: obsConnectionObject.password,
       fallbackEventHandler: (Event event) => print(
         'type: ${event.eventType} data: ${event.eventData}',
@@ -242,7 +239,7 @@ class ConnectionProvider extends ChangeNotifier {
   // Disconnect from OBS WebSocket server
   Future<void> disconnectFromOBS() async {
     if (_obsWebSocket != null) {
-      // await _obsWebSocket!.close();
+      await _obsWebSocket!.close();
 
       // Update the connected property of the existing connection object
       final existingConnectionIndex = _connections.indexWhere(

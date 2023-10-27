@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/models/deck.dart';
+import 'package:hessdeck/providers/connection_provider.dart';
 import 'package:hessdeck/services/actions/obs_actions.dart';
 import 'package:hessdeck/themes/colors.dart';
 import 'package:hessdeck/utils/helpers.dart';
@@ -55,7 +56,7 @@ class ClickableDeckWidgetState extends State<ClickableDeckWidget>
 
   @override
   Widget build(BuildContext context) {
-    ObsWebSocket? obsWebSocket;
+    ObsWebSocket? obsWebSocket = connectionProvider(context).obsWebSocket;
     return GestureDetector(
       onTap: () {
         Helpers.vibration();
@@ -63,7 +64,7 @@ class ClickableDeckWidgetState extends State<ClickableDeckWidget>
           isClicked = !isClicked;
         });
         isClicked
-            ? obsMethods['Change scene']!(obsWebSocket, 'scene 1 active')
+            ? obsMethods['Change scene']!(obsWebSocket, widget.deck!.name)
             : obsMethods['Change scene']!(obsWebSocket, 'scene 1 unactive');
       },
       onDoubleTap: () {
