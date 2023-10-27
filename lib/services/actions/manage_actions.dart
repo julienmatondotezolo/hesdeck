@@ -1,10 +1,19 @@
+import 'package:flutter/material.dart';
+import 'package:hessdeck/providers/connection_provider.dart';
 import 'package:hessdeck/services/actions/obs_actions.dart';
+import 'package:obs_websocket/obs_websocket.dart';
 
 class ManageAcions {
-  static Future<void> selectActions(String connectionType) async {
+  static Future<void> selectAction(
+    BuildContext context,
+    String connectionType,
+    String actionName,
+    String? actionParameter,
+  ) async {
     switch (connectionType) {
       case 'OBS':
-        OBSActions;
+        ObsWebSocket? obsWebSocket = connectionProvider(context).obsWebSocket;
+        obsMethods[actionName]!(context, obsWebSocket, actionParameter!);
         break;
       default:
         throw Exception(
