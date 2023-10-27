@@ -61,7 +61,6 @@ class ProcessDecks {
     int? folderIndex,
   ) {
     if (folderIndex != null) {
-      print('folderIndex: $folderIndex');
       // print('deckIndex: $deckIndex');
       Deck currentDeck = deckProvider(context).getDeckbyIndex(folderIndex);
       List<Deck>? newContent = List.from(currentDeck.content as Iterable);

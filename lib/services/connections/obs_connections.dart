@@ -102,4 +102,15 @@ class OBSConnections {
       throw Exception('Error deleting OBS connection: $e');
     }
   }
+
+  static Future<bool> checkIfConnectedToObS(
+    ObsWebSocket? obsWebSocket,
+  ) async {
+    if (obsWebSocket == null) {
+      debugPrint('Not connected to OBS');
+      return false;
+    }
+
+    return true;
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hessdeck/services/connections/obs_connections.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 
 class OBSActions {
@@ -6,13 +7,15 @@ class OBSActions {
     ObsWebSocket? obsWebSocket,
     String sceneName,
   ) async {
-    try {
-      await obsWebSocket?.scenes.setCurrentProgramScene(sceneName);
-      debugPrint('[SCENES CHNAGED TO]: $sceneName');
-    } catch (e) {
-      // Handle any errors that occur while changing the scene
-      throw Exception('Error changing scene: $e');
-      // Show an error message or take appropriate action
+    if (await OBSConnections.checkIfConnectedToObS(obsWebSocket)) {
+      try {
+        await obsWebSocket?.scenes.setCurrentProgramScene(sceneName);
+        debugPrint('[SCENES CHNAGED TO]: $sceneName');
+      } catch (e) {
+        // Handle any errors that occur while changing the scene
+        throw Exception('Error changing scene: $e');
+        // Show an error message or take appropriate action
+      }
     }
   }
 

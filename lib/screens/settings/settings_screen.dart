@@ -198,7 +198,9 @@ class SettingsScreenState extends State<SettingsScreen> {
                               builder: (context) => ConnectionSettingsScreen(
                                 connectionName: connection.type,
                                 fields: Helpers.getConnectionField(
-                                    allConnectionsData, connection.type),
+                                  allConnectionsData,
+                                  connection.type,
+                                ),
                               ),
                             ),
                           );
