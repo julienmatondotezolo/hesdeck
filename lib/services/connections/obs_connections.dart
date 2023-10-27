@@ -104,10 +104,25 @@ class OBSConnections {
   }
 
   static Future<bool> checkIfConnectedToObS(
+    BuildContext context,
     ObsWebSocket? obsWebSocket,
   ) async {
     if (obsWebSocket == null) {
-      debugPrint('Not connected to OBS');
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Connection Error'),
+          content: const Text('Not connected to OBS.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
       return false;
     }
 

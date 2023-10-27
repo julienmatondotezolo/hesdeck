@@ -4,10 +4,11 @@ import 'package:obs_websocket/obs_websocket.dart';
 
 class OBSActions {
   static Future<void> changeScenes(
+    BuildContext context,
     ObsWebSocket? obsWebSocket,
     String sceneName,
   ) async {
-    if (await OBSConnections.checkIfConnectedToObS(obsWebSocket)) {
+    if (await OBSConnections.checkIfConnectedToObS(context, obsWebSocket)) {
       try {
         await obsWebSocket?.scenes.setCurrentProgramScene(sceneName);
         debugPrint('[SCENES CHNAGED TO]: $sceneName');
@@ -54,17 +55,29 @@ class OBSActions {
   }
 }
 
-typedef OBSMethod = Future<void> Function(ObsWebSocket?, String);
+typedef OBSMethod = Future<void> Function(BuildContext, ObsWebSocket?, String);
 
 final Map<String, OBSMethod> obsMethods = {
   'Change scene': OBSActions.changeScenes,
-  'Start record': (ObsWebSocket? obsWebSocket, String sceneName) async {
+  'Start record': (
+    BuildContext context,
+    ObsWebSocket? obsWebSocket,
+    String sceneName,
+  ) async {
     await OBSActions.startRecord(obsWebSocket);
   },
-  'Stop record': (ObsWebSocket? obsWebSocket, String sceneName) async {
+  'Stop record': (
+    BuildContext context,
+    ObsWebSocket? obsWebSocket,
+    String sceneName,
+  ) async {
     await OBSActions.stopRecord(obsWebSocket);
   },
-  'Stop stream': (ObsWebSocket? obsWebSocket, String sceneName) async {
+  'Stop stream': (
+    BuildContext context,
+    ObsWebSocket? obsWebSocket,
+    String sceneName,
+  ) async {
     await OBSActions.stopStream(obsWebSocket);
   },
 };

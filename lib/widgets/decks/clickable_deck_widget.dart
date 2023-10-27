@@ -64,8 +64,16 @@ class ClickableDeckWidgetState extends State<ClickableDeckWidget>
           isClicked = !isClicked;
         });
         isClicked
-            ? obsMethods['Change scene']!(obsWebSocket, widget.deck!.name)
-            : obsMethods['Change scene']!(obsWebSocket, 'scene 1 unactive');
+            ? obsMethods['Change scene']!(
+                context,
+                obsWebSocket,
+                widget.deck!.name,
+              )
+            : obsMethods['Change scene']!(
+                context,
+                obsWebSocket,
+                'scene 1 unactive',
+              );
       },
       onDoubleTap: () {
         Helpers.vibration();
