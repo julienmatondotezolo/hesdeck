@@ -34,7 +34,6 @@ class OBSConnections {
 
     ConnectionProvider connectionProvider =
         Provider.of<ConnectionProvider>(context, listen: false);
-
     try {
       await connectionProvider.connectToOBS(obsObject);
     } catch (e) {

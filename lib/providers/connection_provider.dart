@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hessdeck/models/connection.dart';
+import 'package:obs_websocket/obs_websocket.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,8 +15,8 @@ class ConnectionProvider extends ChangeNotifier {
     port: '4455',
     password: '*********',
   );
-  // ObsWebSocket? _obsWebSocket;
-  Map<String, dynamic>? _obsWebSocket;
+  ObsWebSocket? _obsWebSocket;
+  // Map<String, dynamic>? _obsWebSocket;
   StreamController<dynamic>? _obsEventStreamController;
 
   late TwitchConnection _twitchConnectionObject = TwitchConnection(
@@ -33,8 +34,8 @@ class ConnectionProvider extends ChangeNotifier {
 
   List<Connection> get connections => _connections;
   OBSConnection get obsConnectionObject => _obsConnectionObject;
-  // ObsWebSocket? get obsWebSocket => _obsWebSocket;
-  Map<String, dynamic>? get obsWebSocket => _obsWebSocket;
+  ObsWebSocket? get obsWebSocket => _obsWebSocket;
+  // Map<String, dynamic>? get obsWebSocket => _obsWebSocket;
   Stream<dynamic>? get obsEventStream => _obsEventStreamController?.stream;
 
   TwitchConnection get twitchConnectionObject => _twitchConnectionObject;
@@ -210,14 +211,18 @@ class ConnectionProvider extends ChangeNotifier {
 
   // Connect to OBS WebSocket server
   Future<void> connectToOBS(OBSConnection obsConnectionObject) async {
-    // _obsWebSocket = await ObsWebSocket.connect(
-    //   'ws://${obsConnectionObject.ipAddress}:${obsConnectionObject.port}',
-    //   password: obsConnectionObject.password,
-    //   fallbackEventHandler: (Event event) =>
-    //       print('type: ${event.eventType} data: ${event.eventData}'),
-    // );
+    //4455
+    //EUlDNB8sajXz2chf
+    _obsWebSocket = await ObsWebSocket.connect(
+      'ws://[${obsConnectionObject.ipAddress}]:${obsConnectionObject.port}',
+      //'ws://[2a02:a03f:eaad:c01:1ce2:2b2e:53b8:82b4]:4455',
+      password: obsConnectionObject.password,
+      fallbackEventHandler: (Event event) => print(
+        'type: ${event.eventType} data: ${event.eventData}',
+      ),
+    );
 
-    _obsWebSocket = {"Connected": true};
+    // _obsWebSocket = {"Connected": true};
 
     try {
       if (_obsWebSocket != null) {
