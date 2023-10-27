@@ -101,11 +101,11 @@ class ConnectionProvider extends ChangeNotifier {
     if (existingConnectionIndex != -1) {
       // Replace the existing connection with the new connection
       _connections[existingConnectionIndex] = connection;
-      print('Updating current ${connection.type} connection in list');
+      // print('Updating current ${connection.type} connection in list');
     } else {
       // Add the new connection to the list
       _connections.add(connection);
-      print('Adding new ${connection.type} connection to list');
+      // print('Adding new ${connection.type} connection to list');
     }
 
     notifyListeners();
@@ -132,14 +132,14 @@ class ConnectionProvider extends ChangeNotifier {
     prefs.remove('connections');
     await _saveConnectionSettings();
     notifyListeners();
-    print('Remove connection from SharedPreferences.');
+    // print('Remove connection from SharedPreferences.');
   }
 
   // Load previously saved connection settings from SharedPreferences
   Future<void> _loadConnectionSettings() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String>? connectionStrings = prefs.getStringList('connections');
-    print('SHARED PREFERENCES: $connectionStrings');
+    // print('SHARED PREFERENCES: $connectionStrings');
 
     if (connectionStrings!.isNotEmpty) {
       _connections.clear();
@@ -273,21 +273,6 @@ class ConnectionProvider extends ChangeNotifier {
           print('STREAM: $obsEventStream');
         }
       });
-    }
-  }
-
-  // Send a request to OBS WebSocket server
-  Future<dynamic> sendRequest(
-      String command, Map<String, dynamic> request) async {
-    if (_obsWebSocket == null) {
-      throw Exception('Not connected to OBS WebSocket server.');
-    }
-
-    try {
-      // return await _obsWebSocket!.send(command, request);
-    } catch (e) {
-      print('Error sending request to OBS WebSocket server: $e');
-      throw Exception('Error sending request to OBS WebSocket server: $e');
     }
   }
 
