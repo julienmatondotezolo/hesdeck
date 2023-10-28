@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hessdeck/models/deck.dart';
 import 'package:hessdeck/screens/home_screen.dart';
+import 'package:hessdeck/services/api_services.dart';
 import 'package:hessdeck/services/decks/process_decks.dart';
 import 'package:hessdeck/utils/helpers.dart';
 import 'package:hessdeck/widgets/gradient_color_picker.dart';
@@ -27,14 +28,31 @@ class DeckSettingsScreenState extends State<DeckSettingsScreen> {
   late Color _iconColor;
   late LinearGradient _backgroundColor;
   late LinearGradient _activeBackgroundColor;
+  late String _selectedMethod;
+  late List<dynamic> allConnectionsData;
 
   @override
   void initState() {
     super.initState();
+    fetchConnections();
     _name = widget.deck.name;
     _iconColor = widget.deck.iconColor!;
     _backgroundColor = widget.deck.backgroundColor!;
     _activeBackgroundColor = widget.deck.activeBackgroundColor!;
+  }
+
+  // Function to fetch data from the API
+  Future<void> fetchConnections() async {
+    try {
+      List<dynamic> data =
+          await ApiServices.fetchConnections('connections.json');
+      setState(() {
+        allConnectionsData = data; // Update the data list with the fetched data
+      });
+    } catch (error) {
+      // Handle any errors that occur during the data fetching process
+      throw Exception('Error fetching data: $error');
+    }
   }
 
   void _showGradientPicker(void Function(LinearGradient) onGradientChanged,
@@ -79,6 +97,8 @@ class DeckSettingsScreenState extends State<DeckSettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _selectedMethod = allConnectionsData.last["name"];
+
     return Scaffold(
       appBar: AppBar(
         title: Text(_name),
@@ -103,9 +123,41 @@ class DeckSettingsScreenState extends State<DeckSettingsScreen> {
                 ),
               ),
               const SizedBox(height: 16.0),
+              DropdownButton<String>(
+                value: _selectedMethod,
+                items: allConnectionsData.map((table) {
+                  return DropdownMenuItem<String>(
+                    value: table["name"],
+                    child: Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Image.network(
+                            table["image"],
+                            width: 24,
+                            height: 24,
+                          ),
+                        ),
+                        Text(
+                          table["name"],
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedMethod = newValue!;
+                  });
+                },
+              ),
+              const SizedBox(height: 16.0),
               ListTile(
-                title: const Text('Icon Color',
-                    style: TextStyle(color: Colors.white)),
+                title: const Text(
+                  'Icon Color',
+                  style: TextStyle(color: Colors.white),
+                ),
                 trailing: CircleAvatar(
                   backgroundColor: _iconColor,
                   radius: 18,
