@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:hessdeck/models/deck.dart';
 import 'package:hessdeck/services/actions/manage_actions.dart';
 import 'package:hessdeck/themes/colors.dart';
 
 class AddActionWidget extends StatelessWidget {
   final BuildContext context;
-  final Deck deck;
+  final String action;
+  final void Function(String) onActionChanged;
 
   const AddActionWidget({
     Key? key,
-    required this.deck,
+    required this.onActionChanged,
     required this.context,
+    required this.action,
   }) : super(key: key);
 
   void _showAddActionModal(context) {
@@ -60,7 +61,10 @@ class AddActionWidget extends StatelessWidget {
                   SizedBox(height: screenHeight * 0.025),
                   for (var action in allActions.entries)
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        onActionChanged(action.key);
+                        Navigator.pop(context);
+                      },
                       child: Container(
                         decoration: const BoxDecoration(
                           color: AppColors.darkGrey, // Grey background color
@@ -103,6 +107,73 @@ class AddActionWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (action.isNotEmpty) {
+      return Container(
+        decoration: const BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: Colors.white10,
+              width: 1.0,
+            ), // Thin white border bottom
+          ),
+        ),
+        padding: const EdgeInsets.symmetric(
+          vertical: 16.0,
+        ),
+        child: Row(
+          children: [
+            GestureDetector(
+              onTap: () {
+                _showAddActionModal(context);
+              },
+              child: Row(
+                children: [
+                  const Text(
+                    'Action: ',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  Text(
+                    action,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Spacer(),
+            Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: AppColors.blueGrey,
+                  width: 2,
+                ), // Green border
+                borderRadius: BorderRadius.circular(12.0), // Rounded corners
+              ),
+              child: GestureDetector(
+                onTap: () {
+                  onActionChanged('');
+                },
+                child: const Text(
+                  'Remove action',
+                  style: TextStyle(
+                    color: Colors.red,
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return ElevatedButton(
       onPressed: () {
         _showAddActionModal(context);
