@@ -45,7 +45,9 @@ class SettingsScreenState extends State<SettingsScreen> {
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(30.0)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30.0),
+        ),
       ),
       backgroundColor: const Color(0xFF262626),
       builder: (BuildContext context) {
@@ -123,7 +125,8 @@ class SettingsScreenState extends State<SettingsScreen> {
                             Text(
                               connectionData['name'],
                               style: const TextStyle(
-                                  color: Colors.white), // White text color
+                                color: Colors.white,
+                              ),
                             ),
                           ],
                         ),
