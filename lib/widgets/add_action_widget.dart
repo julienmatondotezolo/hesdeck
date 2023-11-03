@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/services/actions/manage_actions.dart';
+import 'package:hessdeck/services/actions/obs_actions.dart';
 import 'package:hessdeck/themes/colors.dart';
 
 class AddActionWidget extends StatelessWidget {
@@ -108,69 +109,85 @@ class AddActionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (action.isNotEmpty) {
-      return Container(
-        decoration: const BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: Colors.white10,
-              width: 1.0,
-            ), // Thin white border bottom
-          ),
-        ),
-        padding: const EdgeInsets.symmetric(
-          vertical: 16.0,
-        ),
-        child: Row(
-          children: [
-            GestureDetector(
-              onTap: () {
-                _showAddActionModal(context);
-              },
-              child: Row(
-                children: [
-                  const Text(
-                    'Action: ',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                  Text(
-                    action,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+      List<String> actionParameters = OBSActions().getMethodParameters(action);
+      print('Parameters: $actionParameters');
+
+      return Column(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: Colors.white10,
+                  width: 1.0,
+                ), // Thin white border bottom
               ),
             ),
-            const Spacer(),
-            Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: AppColors.blueGrey,
-                  width: 2,
-                ), // Green border
-                borderRadius: BorderRadius.circular(12.0), // Rounded corners
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  onActionChanged('');
-                },
-                child: const Text(
-                  'Remove action',
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.bold,
+            padding: const EdgeInsets.symmetric(
+              vertical: 16.0,
+            ),
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    _showAddActionModal(context);
+                  },
+                  child: Row(
+                    children: [
+                      const Text(
+                        'Action: ',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        action,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
+                const Spacer(),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 8.0, vertical: 5.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: AppColors.blueGrey,
+                      width: 2,
+                    ), // Green border
+                    borderRadius:
+                        BorderRadius.circular(12.0), // Rounded corners
+                  ),
+                  child: GestureDetector(
+                    onTap: () {
+                      onActionChanged('');
+                    },
+                    child: const Text(
+                      'Remove action',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+          if (actionParameters.isNotEmpty)
+            const Text(
+              // 'REQUIRED PARAMETER IS',
+              'REQUIRED PARAMETER IS',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            )
+        ],
       );
     }
 

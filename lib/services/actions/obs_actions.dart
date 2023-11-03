@@ -8,6 +8,12 @@ const stopRecordMethod = 'Stop record';
 const startStreamMethod = 'Start stream';
 const stopStreamMethod = 'Stop stream';
 
+class OBSMethodMetadata {
+  final List<String> parameterNames;
+
+  OBSMethodMetadata(this.parameterNames);
+}
+
 class OBSActions {
   static Future<void> changeScenes(
     BuildContext context,
@@ -71,25 +77,16 @@ class OBSActions {
     }
   }
 
-  static Future<List<Map<String, String>>> getRequiredParameters(
-    String methodName,
-  ) async {
-    switch (methodName) {
-      case changSceneMethod:
-        return [
-          {'name': 'sceneName', 'type': 'String'}
-        ];
-      case startRecordMethod:
-        return [];
-      case stopRecordMethod:
-        return [];
-      case startStreamMethod:
-        return [];
-      case stopStreamMethod:
-        return [];
-      default:
-        throw Exception('Unknown method: $methodName');
-    }
+  static final Map<String, OBSMethodMetadata> obsMethodMetadata = {
+    changSceneMethod: OBSMethodMetadata(['String', 'Int']),
+    startRecordMethod: OBSMethodMetadata([]),
+    stopRecordMethod: OBSMethodMetadata([]),
+    startStreamMethod: OBSMethodMetadata([]),
+    stopStreamMethod: OBSMethodMetadata([]),
+  };
+
+  List<String> getMethodParameters(String methodName) {
+    return obsMethodMetadata[methodName]?.parameterNames ?? [];
   }
 }
 
