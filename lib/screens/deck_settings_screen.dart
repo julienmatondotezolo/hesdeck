@@ -26,6 +26,7 @@ class DeckSettingsScreen extends StatefulWidget {
 class DeckSettingsScreenState extends State<DeckSettingsScreen> {
   late String _name;
   late String _action;
+  late String? _actionParameter;
   late Color _iconColor;
   late LinearGradient _backgroundColor;
   late LinearGradient _activeBackgroundColor;
@@ -35,6 +36,7 @@ class DeckSettingsScreenState extends State<DeckSettingsScreen> {
     super.initState();
     _name = widget.deck.name;
     _action = '';
+    _actionParameter = '';
     _iconColor = widget.deck.iconColor!;
     _backgroundColor = widget.deck.backgroundColor!;
     _activeBackgroundColor = widget.deck.activeBackgroundColor!;
@@ -111,9 +113,11 @@ class DeckSettingsScreenState extends State<DeckSettingsScreen> {
                 child: AddActionWidget(
                   context: context,
                   action: _action,
-                  onActionChanged: (String action) {
+                  actionParameter: _actionParameter,
+                  onActionChanged: (String action, String? actionParameter) {
                     setState(() {
                       _action = action;
+                      _actionParameter = actionParameter;
                     });
                   },
                 ),

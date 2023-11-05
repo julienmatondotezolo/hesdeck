@@ -6,13 +6,15 @@ import 'package:hessdeck/themes/colors.dart';
 class AddActionWidget extends StatelessWidget {
   final BuildContext context;
   final String action;
-  final void Function(String) onActionChanged;
+  final String? actionParameter;
+  final void Function(String, String?) onActionChanged;
 
   const AddActionWidget({
     Key? key,
-    required this.onActionChanged,
     required this.context,
     required this.action,
+    required this.actionParameter,
+    required this.onActionChanged,
   }) : super(key: key);
 
   void _showAddActionModal(context) {
@@ -23,82 +25,80 @@ class AddActionWidget extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       builder: (context) {
-        return SafeArea(
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 30.0),
+          decoration: const BoxDecoration(
+            gradient: AppColors.blueToGreyGradient,
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(25.0),
+            ),
+          ),
           child: SingleChildScrollView(
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 25.0),
-              decoration: const BoxDecoration(
-                gradient: AppColors.blueToGreyGradient,
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(25.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Divider(
+                  color: AppColors.darkGrey,
+                  thickness: 5,
+                  indent: 140,
+                  endIndent: 140,
                 ),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Divider(
-                    color: AppColors.darkGrey,
-                    thickness: 5,
-                    indent: 140,
-                    endIndent: 140,
-                  ),
-                  SizedBox(
-                    height: screenHeight * 0.03, // 3% of the screen height
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 26.0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Add a action",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
+                SizedBox(
+                  height: screenHeight * 0.03, // 3% of the screen height
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 26.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Add a action",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  SizedBox(height: screenHeight * 0.025),
-                  for (var action in allActions.entries)
-                    GestureDetector(
-                      onTap: () {
-                        onActionChanged(action.key);
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: AppColors.darkGrey, // Grey background color
-                          border: Border(
-                            bottom: BorderSide(
-                              color: Colors.white10,
-                              width: 1.0,
-                            ), // Thin white border bottom
+                ),
+                SizedBox(height: screenHeight * 0.025),
+                for (var action in allActions.entries)
+                  GestureDetector(
+                    onTap: () {
+                      onActionChanged(action.key, '');
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: AppColors.darkGrey, // Grey background color
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.white10,
+                            width: 1.0,
+                          ), // Thin white border bottom
+                        ),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 26.0,
+                        vertical: 16.0,
+                      ),
+                      child: Row(
+                        children: [
+                          /*Image.network(
+                            action['image'],
+                            width: 24,
                           ),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 26.0,
-                          vertical: 16.0,
-                        ),
-                        child: Row(
-                          children: [
-                            /*Image.network(
-                              action['image'],
-                              width: 24,
+                          const SizedBox(width: 16.0),*/
+                          Text(
+                            action.key,
+                            style: const TextStyle(
+                              color: Colors.white,
                             ),
-                            const SizedBox(width: 16.0),*/
-                            Text(
-                              action.key,
-                              style: const TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                ],
-              ),
+                  ),
+              ],
             ),
           ),
         );
@@ -164,7 +164,7 @@ class AddActionWidget extends StatelessWidget {
                   ),
                   child: GestureDetector(
                     onTap: () {
-                      onActionChanged('');
+                      onActionChanged('', '');
                     },
                     child: const Text(
                       'Remove action',
@@ -193,9 +193,15 @@ class AddActionWidget extends StatelessWidget {
                 vertical: 16.0,
               ),
               child: GestureDetector(
-                onTap: () {
-                  print('Clicking paramater');
-                  obsMethods[parameter]!(context, '');
+                onTap: () async {
+                  String? selectedScene =
+                      await OBSActions.selectScenes(context);
+
+                  onActionChanged(action, selectedScene ?? '');
+
+                  // String? selectedScene =
+                  //     await obsMethods[parameter]!(context, '');
+                  print('selectedScene: $selectedScene');
                 },
                 child: Row(
                   children: [
@@ -205,9 +211,9 @@ class AddActionWidget extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    const Text(
-                      '',
-                      style: TextStyle(
+                    Text(
+                      actionParameter ?? '',
+                      style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
