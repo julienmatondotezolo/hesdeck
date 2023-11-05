@@ -64,15 +64,10 @@ class ClickableDeckWidgetState extends State<ClickableDeckWidget>
             ? ManageAcions.selectAction(
                 context,
                 'OBS',
-                'Change scene',
-                widget.deck!.name,
+                widget.deck!.action,
+                widget.deck!.actionParameter,
               )
-            : ManageAcions.selectAction(
-                context,
-                'OBS',
-                'Change scene',
-                'scene 1 unactive',
-              );
+            : null;
       },
       onDoubleTap: () {
         Helpers.vibration();

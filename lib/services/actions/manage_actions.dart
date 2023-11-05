@@ -10,7 +10,7 @@ class ManageAcions {
   ) async {
     switch (connectionType) {
       case 'OBS':
-        obsMethods[actionName]!(context, actionParameter!);
+        obsMethods[actionName]!(context, actionParameter ?? '');
         break;
       default:
         throw Exception(
