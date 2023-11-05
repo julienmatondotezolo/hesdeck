@@ -34,17 +34,42 @@ class OBSActions {
     }
   }
 
-  static Future<void> selectScenes(
-    BuildContext context,
-  ) async {
+  static Future<String?> selectScenes(BuildContext context) async {
     ObsWebSocket? obsWebSocket = connectionProvider(context).obsWebSocket;
     if (await OBSConnections.checkIfConnectedToObS(context, obsWebSocket)) {
       try {
-        final scenes = await obsWebSocket?.scenes.getSceneList();
-        print('[SCENES]: $scenes');
+        final sceneList = await obsWebSocket?.scenes.getSceneList();
+
+        if (sceneList?.scenes != null && sceneList!.scenes.isNotEmpty) {
+          return await showModalBottomSheet<String>(
+            context: context,
+            builder: (context) {
+              return ListView.builder(
+                itemCount: sceneList.scenes.length,
+                itemBuilder: (context, int index) {
+                  String sceneName = sceneList.scenes[index].sceneName;
+                  return ListTile(
+                    title: Text(sceneName),
+                    onTap: () {
+                      Navigator.pop(context, sceneName);
+                    },
+                  );
+                },
+              );
+            },
+          );
+        } else {
+          // Handle the case when no scenes are available
+          // You can show an error message or take appropriate action
+          return '';
+        }
       } catch (e) {
         throw Exception('Error getting scene: $e');
       }
+    } else {
+      // Handle the case when not connected to OBS
+      // You can show an error message or take appropriate action
+      return '';
     }
   }
 
@@ -110,16 +135,16 @@ class OBSActions {
   }
 }
 
-typedef OBSMethod = Future<void> Function(BuildContext, String);
+typedef OBSMethod = Function(BuildContext, String);
 
 final Map<String, OBSMethod> obsMethods = {
   changSceneMethod: OBSActions.changeScenes,
-  selectSceneMethod: (
-    BuildContext context,
-    String sceneName,
-  ) async {
-    await OBSActions.selectScenes(context);
-  },
+  // selectSceneMethod: (
+  //   BuildContext context,
+  //   String sceneName,
+  // ) async {
+  //   await OBSActions.selectScenes(context);
+  // },
   startRecordMethod: (
     BuildContext context,
     String sceneName,
