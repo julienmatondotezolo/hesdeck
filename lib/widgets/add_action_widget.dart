@@ -110,7 +110,6 @@ class AddActionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     if (action.isNotEmpty) {
       List<String> actionParameters = OBSActions().getMethodParameters(action);
-      print('Parameters: $actionParameters');
 
       return Column(
         children: [
@@ -153,14 +152,15 @@ class AddActionWidget extends StatelessWidget {
                 const Spacer(),
                 Container(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0, vertical: 5.0),
+                    horizontal: 8.0,
+                    vertical: 5.0,
+                  ),
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: AppColors.blueGrey,
                       width: 2,
-                    ), // Green border
-                    borderRadius:
-                        BorderRadius.circular(12.0), // Rounded corners
+                    ),
+                    borderRadius: BorderRadius.circular(12.0),
                   ),
                   child: GestureDetector(
                     onTap: () {
@@ -179,12 +179,41 @@ class AddActionWidget extends StatelessWidget {
               ],
             ),
           ),
-          if (actionParameters.isNotEmpty)
-            const Text(
-              // 'REQUIRED PARAMETER IS',
-              'REQUIRED PARAMETER IS',
-              style: TextStyle(
-                color: Colors.white,
+          for (var parameter in actionParameters)
+            Container(
+              decoration: const BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(
+                    color: Colors.white10,
+                    width: 1.0,
+                  ), // Thin white border bottom
+                ),
+              ),
+              padding: const EdgeInsets.symmetric(
+                vertical: 16.0,
+              ),
+              child: GestureDetector(
+                onTap: () {
+                  print('Clicking paramater');
+                  obsMethods[parameter]!(context, '');
+                },
+                child: Row(
+                  children: [
+                    Text(
+                      '$parameter: ',
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    const Text(
+                      '',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             )
         ],
