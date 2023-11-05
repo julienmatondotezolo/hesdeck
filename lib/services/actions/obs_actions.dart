@@ -75,50 +75,61 @@ class OBSActions {
 
   static Future<void> startRecord(BuildContext context) async {
     ObsWebSocket? obsWebSocket = connectionProvider(context).obsWebSocket;
-    try {
-      obsWebSocket?.record.startRecord();
-      debugPrint('[RECORD STATUS]: ${obsWebSocket?.record.getRecordStatus()}');
-    } catch (e) {
-      // Handle any errors that occur while changing the scene
-      throw Exception('Error changing scene: $e');
-      // Show an error message or take appropriate action
+    if (await OBSConnections.checkIfConnectedToObS(context, obsWebSocket)) {
+      try {
+        obsWebSocket?.record.startRecord();
+        debugPrint(
+            '[RECORD STATUS]: ${obsWebSocket?.record.getRecordStatus()}');
+      } catch (e) {
+        // Handle any errors that occur while changing the scene
+        throw Exception('Error changing scene: $e');
+        // Show an error message or take appropriate action
+      }
     }
   }
 
   static Future<void> stopRecord(BuildContext context) async {
     ObsWebSocket? obsWebSocket = connectionProvider(context).obsWebSocket;
-    try {
-      obsWebSocket?.record.stopRecord();
-      debugPrint(
-          '[RECORD STATUS]: ${obsWebSocket?.record.getRecordStatus().toString()}');
-    } catch (e) {
-      // Handle any errors that occur while changing the scene
-      throw Exception('Error changing scene: $e');
-      // Show an error message or take appropriate action
+    if (await OBSConnections.checkIfConnectedToObS(context, obsWebSocket)) {
+      try {
+        obsWebSocket?.record.stopRecord();
+        debugPrint(
+            '[RECORD STATUS]: ${obsWebSocket?.record.getRecordStatus().toString()}');
+      } catch (e) {
+        // Handle any errors that occur while changing the scene
+        throw Exception('Error changing scene: $e');
+        // Show an error message or take appropriate action
+      }
     }
   }
 
   static Future<void> startStream(BuildContext context) async {
     ObsWebSocket? obsWebSocket = connectionProvider(context).obsWebSocket;
-    try {
-      obsWebSocket?.stream.startStream();
-      debugPrint('[RECORD STATUS]: ${obsWebSocket?.record.getRecordStatus()}');
-    } catch (e) {
-      // Handle any errors that occur while changing the scene
-      throw Exception('Error changing scene: $e');
-      // Show an error message or take appropriate action
+    if (await OBSConnections.checkIfConnectedToObS(context, obsWebSocket)) {
+      try {
+        obsWebSocket?.stream.startStream();
+        debugPrint(
+            '[RECORD STATUS]: ${obsWebSocket?.record.getRecordStatus()}');
+      } catch (e) {
+        // Handle any errors that occur while changing the scene
+        throw Exception('Error changing scene: $e');
+        // Show an error message or take appropriate action
+      }
     }
   }
 
   static Future<void> stopStream(BuildContext context) async {
     ObsWebSocket? obsWebSocket = connectionProvider(context).obsWebSocket;
-    try {
-      obsWebSocket?.stream.stopStream();
-      debugPrint('[RECORD STATUS]: ${obsWebSocket?.record.getRecordStatus()}');
-    } catch (e) {
-      // Handle any errors that occur while changing the scene
-      throw Exception('Error changing scene: $e');
-      // Show an error message or take appropriate action
+    if (await OBSConnections.checkIfConnectedToObS(context, obsWebSocket)) {
+      try {
+        obsWebSocket?.stream.stopStream();
+        debugPrint(
+            '[RECORD STATUS]: ${obsWebSocket?.record.getRecordStatus()}');
+      } catch (e) {
+        // Handle any errors that occur while changing the scene
+        throw Exception('Error changing scene: $e');
+        // Show an error message or take appropriate action
+      }
     }
   }
 
