@@ -4,6 +4,7 @@
        "actionDecks": [
           {
              "name": "Click me",
+             "action": "",
              "iconData": 58992,
              "backgroundColor": {
                 "colors": [
@@ -21,6 +22,7 @@
           },
           {
              "name": "Pop-up",
+             "action": "",
              "iconData": null,
              "backgroundColor": {
                 "colors": [
@@ -38,6 +40,7 @@
           },
           {
              "name": "Folder",
+             "action": "",
              "iconData": 58019,
              "backgroundColor": {
                "colors": [
@@ -55,76 +58,91 @@
              "content": [
                {
                   "name": "Add",
+                  "action": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
+                  "action": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
+                  "action": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
+                  "action": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
+                  "action": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
+                  "action": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
+                  "action": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
+                  "action": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
+                  "action": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
+                  "action": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
+                  "action": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
+                  "action": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
+                  "action": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
+                  "action": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
+                  "action": "",
                   "iconData": 57415,
                   "defaultDeck": true
                }
@@ -137,6 +155,7 @@
       "actionDecks": [
          {
             "name": "OBS application",
+            "action": "",
             "iconData": 58992,
             "backgroundColor": {
                "colors": [
@@ -154,6 +173,7 @@
          },
          {
             "name": "Start recording",
+            "action": "Start record",
             "iconData": 58992,
             "backgroundColor": {
                "colors": [
@@ -171,6 +191,7 @@
          },
          {
             "name": "Change Scene",
+            "action": "Change scene",
             "iconData": 58992,
             "backgroundColor": {
                "colors": [
@@ -193,6 +214,7 @@
        "actionDecks": [
           {
              "name": "Twitch",
+             "action": "",
              "iconData": null,
              "backgroundColor": {
                 "colors": [

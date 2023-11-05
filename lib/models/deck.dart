@@ -19,7 +19,7 @@ class Deck {
   Deck({
     required this.name,
     required this.action,
-    required this.actionParameter,
+    this.actionParameter,
     required this.iconData,
     this.backgroundColor = AppColors.blueToGreyGradient,
     this.activeBackgroundColor = AppColors.activeBlueToDarkGradient,
