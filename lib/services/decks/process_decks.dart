@@ -69,6 +69,8 @@ class ProcessDecks {
 
       Deck defaultDeck = Deck(
         name: 'Add',
+        action: '',
+        actionParameter: '',
         iconData: Icons.add, // Replace this with your desired default icon
         defaultDeck: true,
         backgroundColor: const LinearGradient(
