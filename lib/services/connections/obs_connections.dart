@@ -6,17 +6,6 @@ import 'package:obs_websocket/obs_websocket.dart';
 import 'package:provider/provider.dart';
 
 class OBSConnections {
-  static Future<void> listenToEvents(BuildContext context,
-      ObsWebSocket? obsWebSocket, int eventSubscription) async {
-    final connectionProvider =
-        Provider.of<ConnectionProvider>(context, listen: false);
-    final obsWebSocket = connectionProvider.obsWebSocket;
-
-    if (obsWebSocket != null) {
-      // return await obsWebSocket.listen(eventSubscription);
-    }
-  }
-
   static Future<void> connectToOBS(
     BuildContext context,
     TextEditingController ipAddressController,
@@ -108,7 +97,11 @@ class OBSConnections {
     BuildContext context,
     ObsWebSocket? obsWebSocket,
   ) async {
-    if (obsWebSocket == null) {
+    try {
+      if (obsWebSocket != null) {
+        obsWebSocket.general.getStats();
+        return true;
+      }
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -136,8 +129,9 @@ class OBSConnections {
         ),
       );
       return false;
+    } catch (e) {
+      print('OBS connection error: $e');
+      return false;
     }
-
-    return true;
   }
 }

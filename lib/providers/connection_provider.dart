@@ -224,6 +224,7 @@ class ConnectionProvider extends ChangeNotifier {
     try {
       if (_obsWebSocket != null) {
         print('Connected to OBS WebSocket server.');
+
         // StatsResponse stats = await _obsWebSocket!.general.getStats();
         obsConnectionObject = obsConnectionObject.copyWith(connected: true);
 
@@ -259,22 +260,6 @@ class ConnectionProvider extends ChangeNotifier {
       notifyListeners();
     } else {
       throw Exception('You are not connected to OBS.');
-    }
-  }
-
-  // LISTEN TO OBS WEBSOCKET
-  void startWebSocketListener() async {
-    if (_obsWebSocket != null) {
-      _obsEventStreamController ??= StreamController<dynamic>.broadcast();
-
-      // Run a loop to periodically check for new events
-      Timer.periodic(const Duration(seconds: 1), (timer) async {
-        if (_obsWebSocket != null) {
-          final event = _obsWebSocket!;
-          _obsEventStreamController?.add(event);
-          print('STREAM: $obsEventStream');
-        }
-      });
     }
   }
 
