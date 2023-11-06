@@ -229,6 +229,8 @@ class ConnectionProvider extends ChangeNotifier {
 
         addConnection(obsConnectionObject);
         _saveConnectionSettings();
+
+        await _obsWebSocket?.listen(EventSubscription.all.code);
       }
     } catch (e) {
       throw Exception('Error connecting to OBS WebSocket server.');
