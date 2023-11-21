@@ -42,3 +42,15 @@ class StreamElements {
     }
   }
 }
+
+String jwtToken = 'your_jwt_token';
+String accountID = 'your_account_id';
+
+StreamElements streamElements = StreamElements(jwtToken, accountID);
+
+Future<Map<String, dynamic>> overlays = streamElements.getAllOverlays();
+
+print(overlays) {
+  // TODO: implement print
+  throw UnimplementedError();
+}
