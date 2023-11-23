@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hessdeck/models/connection.dart';
+import 'package:hessdeck/services/connections/streamelements_connection.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,8 +17,6 @@ class ConnectionProvider extends ChangeNotifier {
     password: '*********',
   );
   ObsWebSocket? _obsWebSocket;
-  // Map<String, dynamic>? _obsWebSocket;
-  StreamController<dynamic>? _obsEventStreamController;
 
   late TwitchConnection _twitchConnectionObject = TwitchConnection(
     clientId: 'xxx.xxx.xxx.x',
@@ -32,17 +31,27 @@ class ConnectionProvider extends ChangeNotifier {
   );
   Map<String, dynamic>? _spotifyClient;
 
+  late final StreamElementsConnection _streamElementsConnectionObject =
+      StreamElementsConnection(
+    jwtToken: '**********',
+    accounId: '************',
+  );
+  StreamElements? _streamElementsClient;
+
   List<Connection> get connections => _connections;
+
   OBSConnection get obsConnectionObject => _obsConnectionObject;
   ObsWebSocket? get obsWebSocket => _obsWebSocket;
-  // Map<String, dynamic>? get obsWebSocket => _obsWebSocket;
-  Stream<dynamic>? get obsEventStream => _obsEventStreamController?.stream;
 
   TwitchConnection get twitchConnectionObject => _twitchConnectionObject;
   Map<String, dynamic>? get twitchClient => _twitchClient;
 
   SpotifyConnection get spotifyConnectionObject => _spotifyConnectionObject;
   Map<String, dynamic>? get spotifyClient => _spotifyClient;
+
+  StreamElementsConnection get streamElementsConnectionObject =>
+      _streamElementsConnectionObject;
+  StreamElements? get streamElementsClient => _streamElementsClient;
 
   ConnectionProvider() {
     // _removeAllConnectionFromSP();
@@ -260,6 +269,24 @@ class ConnectionProvider extends ChangeNotifier {
       notifyListeners();
     } else {
       throw Exception('You are not connected to OBS.');
+    }
+  }
+
+  /* ===================================================
+      =====  STREAMELEMENTS CONNECTION SETTINGS ======
+  *** ================================================= */
+
+  // Connect to StreamElements
+  Future<void> connectToStreamElements(
+      StreamElementsConnection streamElementsConnection) async {
+    _streamElementsClient = StreamElements.connect(
+      streamElementsConnection.jwtToken,
+      streamElementsConnection.accounId,
+    );
+    try {
+      //
+    } catch (e) {
+      throw Exception('Error connecting to StreamElements client: $e');
     }
   }
 
