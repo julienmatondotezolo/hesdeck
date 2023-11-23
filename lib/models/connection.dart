@@ -173,3 +173,49 @@ class SpotifyConnection extends Connection {
     );
   }
 }
+
+class StreamElementsConnection extends Connection {
+  final String jwtToken;
+  final String accounId;
+  StreamElementsConnection({
+    required this.jwtToken,
+    required this.accounId,
+    bool connected = false, // Provide a default value for connected
+  }) : super(
+          'StreamElements',
+          'https://cdn.streamelements.com/static/logo/logo_red.png',
+          connected,
+        );
+
+  @override
+  StreamElementsConnection copyWith({
+    String? jwtToken,
+    String? accounId,
+    required bool connected,
+  }) {
+    return StreamElementsConnection(
+      jwtToken: jwtToken ?? this.jwtToken,
+      accounId: accounId ?? this.accounId,
+      connected: connected, // Update connected property
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type,
+      'image': image,
+      'connected': connected,
+      'jwtToken': jwtToken,
+      'accounId': accounId,
+    };
+  }
+
+  factory StreamElementsConnection.fromJson(Map<String, dynamic> json) {
+    return StreamElementsConnection(
+      jwtToken: json['jwtToken'],
+      accounId: json['accounId'],
+      connected: json['connected'],
+    );
+  }
+}
