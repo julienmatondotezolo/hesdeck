@@ -204,10 +204,10 @@ packages:
     dependency: "direct main"
     description:
       name: obs_websocket
-      sha256: "5654378ddb30b8cff11edf978a472b597e7d3606da3e843c71d68fde76af79b7"
+      sha256: a78ee162a8780636804ce80cf6bfbec0426fed0980002cefcaf77e26b5d38bf9
       url: "https://pub.dev"
     source: hosted
-    version: "5.1.0+2"
+    version: "5.1.0+4"
   path:
     dependency: transitive
     description:
@@ -365,6 +365,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.1"
+  sprintf:
+    dependency: transitive
+    description:
+      name: sprintf
+      sha256: "1fc9ffe69d4df602376b52949af107d8f5703b77cda567c4d7d86a0693120f23"
+      url: "https://pub.dev"
+    source: hosted
+    version: "7.0.0"
   stack_trace:
     dependency: transitive
     description:
@@ -425,10 +433,10 @@ packages:
     dependency: transitive
     description:
       name: uuid
-      sha256: "648e103079f7c64a36dc7d39369cabb358d377078a051d6ae2ad3aa539519313"
+      sha256: b715b8d3858b6fa9f68f87d20d98830283628014750c2b09b6f516c1da4af2a7
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.7"
+    version: "4.1.0"
   validators:
     dependency: transitive
     description:

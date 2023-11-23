@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/models/deck.dart';
+import 'package:hessdeck/services/actions/manage_actions.dart';
 import 'package:hessdeck/themes/colors.dart';
 import 'package:hessdeck/utils/helpers.dart';
 
@@ -59,6 +60,14 @@ class ClickableDeckWidgetState extends State<ClickableDeckWidget>
         setState(() {
           isClicked = !isClicked;
         });
+        isClicked
+            ? ManageAcions.selectAction(
+                context,
+                'OBS',
+                widget.deck!.action,
+                widget.deck!.actionParameter,
+              )
+            : null;
       },
       onDoubleTap: () {
         Helpers.vibration();

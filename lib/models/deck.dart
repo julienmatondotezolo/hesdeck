@@ -4,6 +4,8 @@ import 'package:hessdeck/utils/helpers.dart';
 
 class Deck {
   final String name;
+  final String action;
+  final String? actionParameter;
   final IconData iconData;
   final LinearGradient? backgroundColor; // Optional background color
   final LinearGradient? activeBackgroundColor; //
@@ -16,6 +18,8 @@ class Deck {
 
   Deck({
     required this.name,
+    required this.action,
+    this.actionParameter,
     required this.iconData,
     this.backgroundColor = AppColors.blueToGreyGradient,
     this.activeBackgroundColor = AppColors.activeBlueToDarkGradient,
@@ -37,6 +41,8 @@ class Deck {
 
   Deck copyWith({
     String? name,
+    String? action,
+    String? actionParameter,
     IconData? iconData,
     LinearGradient? backgroundColor,
     LinearGradient? activeBackgroundColor,
@@ -49,6 +55,8 @@ class Deck {
   }) {
     return Deck(
       name: name ?? this.name,
+      action: action ?? this.action,
+      actionParameter: actionParameter ?? this.actionParameter,
       iconData: iconData ?? this.iconData,
       backgroundColor: backgroundColor ?? this.backgroundColor,
       activeBackgroundColor:
@@ -66,6 +74,8 @@ class Deck {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
+      'action': action,
+      'actionParameter': actionParameter,
       'iconData': iconData.codePoint, // Save the icon data (int)
       'backgroundColor': backgroundColor != null
           ? {
@@ -101,6 +111,8 @@ class Deck {
   factory Deck.fromJson(Map<String, dynamic> json) {
     return Deck(
       name: json['name'],
+      action: json['action'],
+      actionParameter: json['actionParameter'],
       iconData: json['iconData'] != null
           ? IconData(json['iconData'], fontFamily: 'MaterialIcons')
           : Icons.widgets, // Replace with the default icon you want to use

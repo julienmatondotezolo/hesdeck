@@ -17,6 +17,14 @@
         ]
     },
     {
+        "name": "StreamElements",
+        "image": "https://cdn.streamelements.com/static/logo/logo_red.png",
+        "fields": [
+            "JWT Token",
+            "Account ID"
+        ]
+    },
+    {
         "name": "Twitch",
         "image": "https://cdn-icons-png.flaticon.com/512/2111/2111668.png",
         "fields": [

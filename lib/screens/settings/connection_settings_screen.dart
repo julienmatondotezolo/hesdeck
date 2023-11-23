@@ -84,6 +84,7 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
                               labelStyle: const TextStyle(color: Colors.white),
                               border: const OutlineInputBorder(),
                             ),
+                            enableInteractiveSelection: true,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 HapticFeedback.vibrate();

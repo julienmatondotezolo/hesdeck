@@ -3,6 +3,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hessdeck/models/connection.dart';
+import 'package:hessdeck/services/connections/streamelements_connection.dart';
+import 'package:obs_websocket/obs_websocket.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ConnectionProvider extends ChangeNotifier {
@@ -13,9 +16,7 @@ class ConnectionProvider extends ChangeNotifier {
     port: '4455',
     password: '*********',
   );
-  // ObsWebSocket? _obsWebSocket;
-  Map<String, dynamic>? _obsWebSocket;
-  StreamController<dynamic>? _obsEventStreamController;
+  ObsWebSocket? _obsWebSocket;
 
   late TwitchConnection _twitchConnectionObject = TwitchConnection(
     clientId: 'xxx.xxx.xxx.x',
@@ -30,17 +31,27 @@ class ConnectionProvider extends ChangeNotifier {
   );
   Map<String, dynamic>? _spotifyClient;
 
+  late final StreamElementsConnection _streamElementsConnectionObject =
+      StreamElementsConnection(
+    jwtToken: '**********',
+    accounId: '************',
+  );
+  StreamElements? _streamElementsClient;
+
   List<Connection> get connections => _connections;
+
   OBSConnection get obsConnectionObject => _obsConnectionObject;
-  // ObsWebSocket? get obsWebSocket => _obsWebSocket;
-  Map<String, dynamic>? get obsWebSocket => _obsWebSocket;
-  Stream<dynamic>? get obsEventStream => _obsEventStreamController?.stream;
+  ObsWebSocket? get obsWebSocket => _obsWebSocket;
 
   TwitchConnection get twitchConnectionObject => _twitchConnectionObject;
   Map<String, dynamic>? get twitchClient => _twitchClient;
 
   SpotifyConnection get spotifyConnectionObject => _spotifyConnectionObject;
   Map<String, dynamic>? get spotifyClient => _spotifyClient;
+
+  StreamElementsConnection get streamElementsConnectionObject =>
+      _streamElementsConnectionObject;
+  StreamElements? get streamElementsClient => _streamElementsClient;
 
   ConnectionProvider() {
     // _removeAllConnectionFromSP();
@@ -99,11 +110,11 @@ class ConnectionProvider extends ChangeNotifier {
     if (existingConnectionIndex != -1) {
       // Replace the existing connection with the new connection
       _connections[existingConnectionIndex] = connection;
-      print('Updating current ${connection.type} connection in list');
+      // print('Updating current ${connection.type} connection in list');
     } else {
       // Add the new connection to the list
       _connections.add(connection);
-      print('Adding new ${connection.type} connection to list');
+      // print('Adding new ${connection.type} connection to list');
     }
 
     notifyListeners();
@@ -130,14 +141,14 @@ class ConnectionProvider extends ChangeNotifier {
     prefs.remove('connections');
     await _saveConnectionSettings();
     notifyListeners();
-    print('Remove connection from SharedPreferences.');
+    // print('Remove connection from SharedPreferences.');
   }
 
   // Load previously saved connection settings from SharedPreferences
   Future<void> _loadConnectionSettings() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String>? connectionStrings = prefs.getStringList('connections');
-    print('SHARED PREFERENCES: $connectionStrings');
+    // print('SHARED PREFERENCES: $connectionStrings');
 
     if (connectionStrings!.isNotEmpty) {
       _connections.clear();
@@ -209,23 +220,27 @@ class ConnectionProvider extends ChangeNotifier {
 
   // Connect to OBS WebSocket server
   Future<void> connectToOBS(OBSConnection obsConnectionObject) async {
-    // _obsWebSocket = await ObsWebSocket.connect(
-    //   'ws://${obsConnectionObject.ipAddress}:${obsConnectionObject.port}',
-    //   password: obsConnectionObject.password,
-    //   fallbackEventHandler: (Event event) =>
-    //       print('type: ${event.eventType} data: ${event.eventData}'),
-    // );
+    _obsWebSocket = await ObsWebSocket.connect(
+      'ws://[${obsConnectionObject.ipAddress}]:${obsConnectionObject.port}',
+      password: obsConnectionObject.password,
+      fallbackEventHandler: (Event event) => print(
+        'type: ${event.eventType} data: ${event.eventData}',
+      ),
+    );
 
-    _obsWebSocket = {"Connected": true};
+    // _obsWebSocket = {"Connected": true};
 
     try {
       if (_obsWebSocket != null) {
         print('Connected to OBS WebSocket server.');
+
         // StatsResponse stats = await _obsWebSocket!.general.getStats();
         obsConnectionObject = obsConnectionObject.copyWith(connected: true);
 
         addConnection(obsConnectionObject);
         _saveConnectionSettings();
+
+        await _obsWebSocket?.listen(EventSubscription.all.code);
       }
     } catch (e) {
       throw Exception('Error connecting to OBS WebSocket server.');
@@ -236,7 +251,7 @@ class ConnectionProvider extends ChangeNotifier {
   // Disconnect from OBS WebSocket server
   Future<void> disconnectFromOBS() async {
     if (_obsWebSocket != null) {
-      // await _obsWebSocket!.close();
+      await _obsWebSocket!.close();
 
       // Update the connected property of the existing connection object
       final existingConnectionIndex = _connections.indexWhere(
@@ -257,34 +272,21 @@ class ConnectionProvider extends ChangeNotifier {
     }
   }
 
-  // LISTEN TO OBS WEBSOCKET
-  void startWebSocketListener() async {
-    if (_obsWebSocket != null) {
-      _obsEventStreamController ??= StreamController<dynamic>.broadcast();
+  /* ===================================================
+      =====  STREAMELEMENTS CONNECTION SETTINGS ======
+  *** ================================================= */
 
-      // Run a loop to periodically check for new events
-      Timer.periodic(const Duration(seconds: 1), (timer) async {
-        if (_obsWebSocket != null) {
-          final event = _obsWebSocket!;
-          _obsEventStreamController?.add(event);
-          print('STREAM: $obsEventStream');
-        }
-      });
-    }
-  }
-
-  // Send a request to OBS WebSocket server
-  Future<dynamic> sendRequest(
-      String command, Map<String, dynamic> request) async {
-    if (_obsWebSocket == null) {
-      throw Exception('Not connected to OBS WebSocket server.');
-    }
-
+  // Connect to StreamElements
+  Future<void> connectToStreamElements(
+      StreamElementsConnection streamElementsConnection) async {
+    _streamElementsClient = StreamElements.connect(
+      streamElementsConnection.jwtToken,
+      streamElementsConnection.accounId,
+    );
     try {
-      // return await _obsWebSocket!.send(command, request);
+      //
     } catch (e) {
-      print('Error sending request to OBS WebSocket server: $e');
-      throw Exception('Error sending request to OBS WebSocket server: $e');
+      throw Exception('Error connecting to StreamElements client: $e');
     }
   }
 
@@ -371,4 +373,9 @@ class ConnectionProvider extends ChangeNotifier {
       throw Exception('You are not connected to Spotify.');
     }
   }
+}
+
+// Convenience method to access the connectionProvider instance
+ConnectionProvider connectionProvider(BuildContext context) {
+  return Provider.of<ConnectionProvider>(context, listen: false);
 }

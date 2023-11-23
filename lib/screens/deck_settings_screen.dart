@@ -4,6 +4,7 @@ import 'package:hessdeck/models/deck.dart';
 import 'package:hessdeck/screens/home_screen.dart';
 import 'package:hessdeck/services/decks/process_decks.dart';
 import 'package:hessdeck/utils/helpers.dart';
+import 'package:hessdeck/widgets/add_action_widget.dart';
 import 'package:hessdeck/widgets/gradient_color_picker.dart';
 
 class DeckSettingsScreen extends StatefulWidget {
@@ -24,6 +25,8 @@ class DeckSettingsScreen extends StatefulWidget {
 
 class DeckSettingsScreenState extends State<DeckSettingsScreen> {
   late String _name;
+  late String _action;
+  late String? _actionParameter;
   late Color _iconColor;
   late LinearGradient _backgroundColor;
   late LinearGradient _activeBackgroundColor;
@@ -32,6 +35,8 @@ class DeckSettingsScreenState extends State<DeckSettingsScreen> {
   void initState() {
     super.initState();
     _name = widget.deck.name;
+    _action = widget.deck.action;
+    _actionParameter = widget.deck.actionParameter;
     _iconColor = widget.deck.iconColor!;
     _backgroundColor = widget.deck.backgroundColor!;
     _activeBackgroundColor = widget.deck.activeBackgroundColor!;
@@ -103,9 +108,26 @@ class DeckSettingsScreenState extends State<DeckSettingsScreen> {
                 ),
               ),
               const SizedBox(height: 16.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: AddActionWidget(
+                  context: context,
+                  action: _action,
+                  actionParameter: _actionParameter,
+                  onActionChanged: (String action, String? actionParameter) {
+                    setState(() {
+                      _action = action;
+                      _actionParameter = actionParameter;
+                    });
+                  },
+                ),
+              ),
+              const SizedBox(height: 16.0),
               ListTile(
-                title: const Text('Icon Color',
-                    style: TextStyle(color: Colors.white)),
+                title: const Text(
+                  'Icon Color',
+                  style: TextStyle(color: Colors.white),
+                ),
                 trailing: CircleAvatar(
                   backgroundColor: _iconColor,
                   radius: 18,
@@ -167,6 +189,8 @@ class DeckSettingsScreenState extends State<DeckSettingsScreen> {
 
                   updatedDeck = widget.deck.copyWith(
                     name: _name,
+                    action: _action,
+                    actionParameter: _actionParameter,
                     iconColor: _iconColor,
                     activeBackgroundColor: _activeBackgroundColor,
                     backgroundColor: _backgroundColor,
