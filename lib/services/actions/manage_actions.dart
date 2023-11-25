@@ -42,19 +42,3 @@ class ManageAcions {
     return allActions;
   }
 }
-
-  // static Future<Iterable<String>> getActions(
-  //   BuildContext context,
-  //   String connectionType,
-  // ) async {
-  //   switch (connectionType) {
-  //     case 'OBS':
-  //       ObsWebSocket? obsWebSocket = connectionProvider(context).obsWebSocket;
-  //       return obsMethods.keys;
-  //       break;
-  //     default:
-  //       throw Exception(
-  //         'No ACTIONS for [$connectionType] exists in this services.',
-  //       );
-  //   }
-  // }

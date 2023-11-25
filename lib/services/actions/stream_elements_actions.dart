@@ -16,7 +16,7 @@ class StreamElementsActions {
     try {
       StreamElements? streamElements =
           connectionProvider(context).streamElementsClient;
-      final overlays = streamElements!.getAllOverlays;
+      Map<String, dynamic> overlays = await streamElements!.getAllOverlays();
 
       debugPrint('[STREAM ELEMENTS OVERLAYS]: $overlays');
     } catch (e) {

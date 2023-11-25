@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/models/deck.dart';
+import 'package:hessdeck/services/actions/manage_actions.dart';
 import 'package:hessdeck/themes/colors.dart';
 import 'package:hessdeck/utils/helpers.dart';
 
@@ -21,7 +22,14 @@ class PopupDeckWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        //
+        deck!.action.isNotEmpty
+            ? ManageAcions.selectAction(
+                context,
+                'StreamElements',
+                deck!.action,
+                deck!.actionParameter,
+              )
+            : null;
       },
       onDoubleTap: () {
         Helpers.openDeckSettingsScreen(
