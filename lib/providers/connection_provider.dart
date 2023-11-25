@@ -228,8 +228,6 @@ class ConnectionProvider extends ChangeNotifier {
       ),
     );
 
-    // _obsWebSocket = {"Connected": true};
-
     try {
       if (_obsWebSocket != null) {
         print('Connected to OBS WebSocket server.');
@@ -278,13 +276,21 @@ class ConnectionProvider extends ChangeNotifier {
 
   // Connect to StreamElements
   Future<void> connectToStreamElements(
-      StreamElementsConnection streamElementsConnection) async {
+      StreamElementsConnection streamElementsConnectionObject) async {
     _streamElementsClient = StreamElements.connect(
-      streamElementsConnection.jwtToken,
-      streamElementsConnection.accounId,
-    );
+      streamElementsConnectionObject.jwtToken,
+      streamElementsConnectionObject.accounId,
+    ) as StreamElements?;
     try {
-      //
+      if (_streamElementsClient != null) {
+        print('Connected to StreamElements server.');
+
+        streamElementsConnectionObject =
+            streamElementsConnectionObject.copyWith(connected: true);
+
+        addConnection(streamElementsConnectionObject);
+        _saveConnectionSettings();
+      }
     } catch (e) {
       throw Exception('Error connecting to StreamElements client: $e');
     }
