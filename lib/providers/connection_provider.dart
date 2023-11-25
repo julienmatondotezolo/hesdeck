@@ -31,7 +31,7 @@ class ConnectionProvider extends ChangeNotifier {
   );
   Map<String, dynamic>? _spotifyClient;
 
-  late final StreamElementsConnection _streamElementsConnectionObject =
+  late StreamElementsConnection _streamElementsConnectionObject =
       StreamElementsConnection(
     jwtToken: '**********',
     accounId: '************',
@@ -110,11 +110,11 @@ class ConnectionProvider extends ChangeNotifier {
     if (existingConnectionIndex != -1) {
       // Replace the existing connection with the new connection
       _connections[existingConnectionIndex] = connection;
-      // print('Updating current ${connection.type} connection in list');
+      print('Updating current ${connection.type} connection in list');
     } else {
       // Add the new connection to the list
       _connections.add(connection);
-      // print('Adding new ${connection.type} connection to list');
+      print('Adding new ${connection.type} connection to list');
     }
 
     notifyListeners();
@@ -185,6 +185,16 @@ class ConnectionProvider extends ChangeNotifier {
               : spotifyConnectionObject;
           addConnection(spotifyConnectionObject);
           _spotifyConnectionObject = spotifyConnectionObject;
+        } else if (connJson["type"] == 'StreamElements') {
+          StreamElementsConnection streamElementsConnectionObject =
+              StreamElementsConnection.fromJson(connJson);
+          // If StreamElements is null put connected to false
+          _streamElementsClient == null
+              ? streamElementsConnectionObject =
+                  streamElementsConnectionObject.copyWith(connected: false)
+              : streamElementsConnectionObject;
+          addConnection(streamElementsConnectionObject);
+          _streamElementsConnectionObject = streamElementsConnectionObject;
         }
       }
     }
@@ -199,6 +209,8 @@ class ConnectionProvider extends ChangeNotifier {
       // Convert each Connection object to JSON string
       return jsonEncode(conn);
     }).toList();
+
+    // print('connectionStrings: $connectionStrings');
 
     prefs.setStringList('connections', connectionStrings);
     notifyListeners();
@@ -294,6 +306,7 @@ class ConnectionProvider extends ChangeNotifier {
     } catch (e) {
       throw Exception('Error connecting to StreamElements client: $e');
     }
+    notifyListeners();
   }
 
   // Disconnect from OBS StreamElements
