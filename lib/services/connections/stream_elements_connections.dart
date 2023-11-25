@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hessdeck/models/connection.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:stream_elements_package/stream_elements.dart';
 
 class StreamElementsConnections {
   static Future<void> connectToStreamElements(
@@ -41,6 +42,13 @@ class StreamElementsConnections {
       );
       throw Exception('Error connecting to StreamElements: $e');
     }
+  }
+
+  static Future<Map<String, dynamic>> getOverlays(
+      StreamElements? streamElementsClient) async {
+    final response = await streamElementsClient!.getAllOverlays();
+    debugPrint('[OVERLAYS]: $response');
+    return response;
   }
 
   static Future<void> disconnectStreamElements(
