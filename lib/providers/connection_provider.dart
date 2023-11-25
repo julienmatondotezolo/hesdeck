@@ -3,10 +3,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hessdeck/models/connection.dart';
-import 'package:hessdeck/services/connections/streamelements_connection.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stream_elements_package/stream_elements.dart';
 
 class ConnectionProvider extends ChangeNotifier {
   final List<Connection> _connections = [];
@@ -31,7 +31,7 @@ class ConnectionProvider extends ChangeNotifier {
   );
   Map<String, dynamic>? _spotifyClient;
 
-  late final StreamElementsConnection _streamElementsConnectionObject =
+  late StreamElementsConnection _streamElementsConnectionObject =
       StreamElementsConnection(
     jwtToken: '**********',
     accounId: '************',
@@ -110,11 +110,11 @@ class ConnectionProvider extends ChangeNotifier {
     if (existingConnectionIndex != -1) {
       // Replace the existing connection with the new connection
       _connections[existingConnectionIndex] = connection;
-      // print('Updating current ${connection.type} connection in list');
+      print('Updating current ${connection.type} connection in list');
     } else {
       // Add the new connection to the list
       _connections.add(connection);
-      // print('Adding new ${connection.type} connection to list');
+      print('Adding new ${connection.type} connection to list');
     }
 
     notifyListeners();
@@ -185,6 +185,16 @@ class ConnectionProvider extends ChangeNotifier {
               : spotifyConnectionObject;
           addConnection(spotifyConnectionObject);
           _spotifyConnectionObject = spotifyConnectionObject;
+        } else if (connJson["type"] == 'StreamElements') {
+          StreamElementsConnection streamElementsConnectionObject =
+              StreamElementsConnection.fromJson(connJson);
+          // If StreamElements is null put connected to false
+          _streamElementsClient == null
+              ? streamElementsConnectionObject =
+                  streamElementsConnectionObject.copyWith(connected: false)
+              : streamElementsConnectionObject;
+          addConnection(streamElementsConnectionObject);
+          _streamElementsConnectionObject = streamElementsConnectionObject;
         }
       }
     }
@@ -199,6 +209,8 @@ class ConnectionProvider extends ChangeNotifier {
       // Convert each Connection object to JSON string
       return jsonEncode(conn);
     }).toList();
+
+    // print('connectionStrings: $connectionStrings');
 
     prefs.setStringList('connections', connectionStrings);
     notifyListeners();
@@ -227,8 +239,6 @@ class ConnectionProvider extends ChangeNotifier {
         'type: ${event.eventType} data: ${event.eventData}',
       ),
     );
-
-    // _obsWebSocket = {"Connected": true};
 
     try {
       if (_obsWebSocket != null) {
@@ -278,15 +288,47 @@ class ConnectionProvider extends ChangeNotifier {
 
   // Connect to StreamElements
   Future<void> connectToStreamElements(
-      StreamElementsConnection streamElementsConnection) async {
-    _streamElementsClient = StreamElements.connect(
-      streamElementsConnection.jwtToken,
-      streamElementsConnection.accounId,
+      StreamElementsConnection streamElementsConnectionObject) async {
+    _streamElementsClient = await StreamElements.connect(
+      streamElementsConnectionObject.jwtToken,
+      streamElementsConnectionObject.accounId,
     );
     try {
-      //
+      if (_streamElementsClient != null) {
+        print('Connected to StreamElements server.');
+
+        streamElementsConnectionObject =
+            streamElementsConnectionObject.copyWith(connected: true);
+
+        addConnection(streamElementsConnectionObject);
+        _saveConnectionSettings();
+      }
     } catch (e) {
       throw Exception('Error connecting to StreamElements client: $e');
+    }
+    notifyListeners();
+  }
+
+  // Disconnect from OBS StreamElements
+  Future<void> disconnectFromStreamElements() async {
+    if (_streamElementsClient != null) {
+      _streamElementsClient = _streamElementsClient!.disconnect();
+
+      // Update the connected property of the existing connection object
+      final existingConnectionIndex = _connections.indexWhere((existingConn) =>
+          existingConn.type == _streamElementsConnectionObject.type);
+
+      if (existingConnectionIndex != -1) {
+        _connections[existingConnectionIndex] =
+            _streamElementsConnectionObject.copyWith(connected: false);
+        print('Disconnected from StreamElements.');
+      } else {
+        print('StreamElements connection not found in the list.');
+      }
+
+      notifyListeners();
+    } else {
+      throw Exception('You are not connected to StreamElements.');
     }
   }
 

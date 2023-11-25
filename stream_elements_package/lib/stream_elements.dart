@@ -1,10 +1,12 @@
+library stream_elements;
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class StreamElements {
   final String? jwtToken;
   final String? accountID;
-  static String baseUrl = "https://api.streamelements.com/kappa/v2/";
+  static String baseUrl = "https://api.streamelements.com/kappa/v2";
   static Map<String, String> headers = {
     'Content-Type': 'application/json',
     'Authorization': 'Bearer '
@@ -15,7 +17,9 @@ class StreamElements {
   }
 
   static Future<StreamElements> connect(
-      String jwtToken, String accountID) async {
+    String jwtToken,
+    String accountID,
+  ) async {
     headers['Authorization'] = 'Bearer $jwtToken';
     final Uri uri = Uri.parse('$baseUrl/users/current');
     final response = await http.get(uri, headers: headers);
@@ -24,8 +28,14 @@ class StreamElements {
       final streamElementsObject = StreamElements(jwtToken, accountID);
       return streamElementsObject;
     } else {
+      print('Authentication error: ${response.body}');
       throw Exception('Authentication error wrong credentials');
     }
+  }
+
+  StreamElements disconnect() {
+    headers['Authorization'] = ''; // Reset authorization token
+    return StreamElements(null, null);
   }
 
   Future<Map<String, dynamic>> getAllOverlays() async {
