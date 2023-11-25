@@ -3,10 +3,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hessdeck/models/connection.dart';
-import 'package:hessdeck/services/connections/streamelements_connection.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stream_elements_package/stream_elements.dart';
 
 class ConnectionProvider extends ChangeNotifier {
   final List<Connection> _connections = [];
