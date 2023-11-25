@@ -296,6 +296,29 @@ class ConnectionProvider extends ChangeNotifier {
     }
   }
 
+  // Disconnect from OBS StreamElements
+  Future<void> disconnectFromStreamElements() async {
+    if (_streamElementsClient != null) {
+      _streamElementsClient = _streamElementsClient!.disconnect();
+
+      // Update the connected property of the existing connection object
+      final existingConnectionIndex = _connections.indexWhere((existingConn) =>
+          existingConn.type == _streamElementsConnectionObject.type);
+
+      if (existingConnectionIndex != -1) {
+        _connections[existingConnectionIndex] =
+            _streamElementsConnectionObject.copyWith(connected: false);
+        print('Disconnected from StreamElements.');
+      } else {
+        print('StreamElements connection not found in the list.');
+      }
+
+      notifyListeners();
+    } else {
+      throw Exception('You are not connected to StreamElements.');
+    }
+  }
+
   /* ===================================================
           ===== TWITCH CONNECTION SETTINGS ======
   *** ================================================= */

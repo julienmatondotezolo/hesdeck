@@ -28,6 +28,11 @@ class StreamElements {
     }
   }
 
+  StreamElements disconnect() {
+    headers['Authorization'] = ''; // Reset authorization token
+    return StreamElements(null, null);
+  }
+
   Future<Map<String, dynamic>> getAllOverlays() async {
     final Uri uri =
         Uri.parse('$baseUrl/overlays/$accountID/?search=a&type=regular');
