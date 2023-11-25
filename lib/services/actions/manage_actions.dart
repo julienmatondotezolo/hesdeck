@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/services/actions/obs_actions.dart';
+import 'package:hessdeck/services/actions/stream_elements_actions.dart';
 
 class ManageAcions {
   static Future<void> selectAction(
@@ -12,6 +13,9 @@ class ManageAcions {
       case 'OBS':
         obsMethods[actionName]!(context, actionParameter ?? '');
         break;
+      case 'StreamElements':
+        streamElementsMethods[actionName]!(context, actionParameter ?? '');
+        break;
       default:
         throw Exception(
           'No ACTIONS for [$connectionType] exists in this services.',
@@ -19,9 +23,25 @@ class ManageAcions {
     }
   }
 
-  static Map<String, OBSMethod> getAllActions() {
-    return obsMethods;
+  // static Map<String, dynamic> getAllActions() {
+  //   return {
+  //     'OBS': obsMethods,
+  //     'StreamElements': streamElementsMethods,
+  //   };
+  // }
+
+  static Map<String, Function(BuildContext, String)> getAllActions() {
+    Map<String, Function(BuildContext, String)> allActions = {};
+
+    // Add OBS methods
+    allActions.addAll(obsMethods);
+
+    // Add StreamElements methods
+    allActions.addAll(streamElementsMethods);
+
+    return allActions;
   }
+}
 
   // static Future<Iterable<String>> getActions(
   //   BuildContext context,
@@ -38,4 +58,3 @@ class ManageAcions {
   //       );
   //   }
   // }
-}
