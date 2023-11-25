@@ -277,10 +277,10 @@ class ConnectionProvider extends ChangeNotifier {
   // Connect to StreamElements
   Future<void> connectToStreamElements(
       StreamElementsConnection streamElementsConnectionObject) async {
-    _streamElementsClient = StreamElements.connect(
+    _streamElementsClient = await StreamElements.connect(
       streamElementsConnectionObject.jwtToken,
       streamElementsConnectionObject.accounId,
-    ) as StreamElements?;
+    );
     try {
       if (_streamElementsClient != null) {
         print('Connected to StreamElements server.');

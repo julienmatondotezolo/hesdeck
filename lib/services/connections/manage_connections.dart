@@ -3,6 +3,7 @@ import 'package:hessdeck/models/connection.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
 import 'package:hessdeck/services/connections/obs_connections.dart';
 import 'package:hessdeck/services/connections/spotify_connections.dart';
+import 'package:hessdeck/services/connections/stream_elements_connections.dart';
 import 'package:hessdeck/services/connections/twitch_connections.dart';
 
 class ManageConnections {
@@ -31,6 +32,12 @@ class ManageConnections {
         controllers[0],
         controllers[1],
       );
+    } else if (connectionType == 'StreamElements') {
+      await StreamElementsConnections.connectToStreamElements(
+        context,
+        controllers[0],
+        controllers[1],
+      );
     } else {
       throw Exception(
           'No CONNECTION for [$connectionType] exists in this services.');
@@ -48,6 +55,9 @@ class ManageConnections {
       await TwitchConnections.disconnectTwitch(connectionProvider);
     } else if (connectionType == 'Spotify') {
       await SpotifyConnections.disconnectSpotify(connectionProvider);
+    } else if (connectionType == 'StreamElements') {
+      await StreamElementsConnections.disconnectStreamElements(
+          context, connectionProvider);
     }
   }
 
@@ -68,6 +78,11 @@ class ManageConnections {
       );
     } else if (connectionType == 'Spotify') {
       await SpotifyConnections.deleteSpotifyConnection(
+        connectionProvider,
+        connectionObject,
+      );
+    } else if (connectionType == 'StreamElements') {
+      await StreamElementsConnections.deleteStreamElementsConnection(
         connectionProvider,
         connectionObject,
       );
