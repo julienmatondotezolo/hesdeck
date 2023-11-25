@@ -29,14 +29,15 @@ class StreamElementsActions {
     getAllOverlaysMethod: StreamElementsMethodMetadata([]),
     updateOverlayMethod: StreamElementsMethodMetadata([]),
   };
-
-  List<String> getMethodParameters(String methodName) {
-    return StreamElementsMethodMetadata[methodName]?.parameterNames ?? [];
-  }
 }
 
 typedef StreamElementsMethod = Function(BuildContext, String);
 
 final Map<String, StreamElementsMethod> streamElementsMethods = {
-  //
+  getAllOverlaysMethod: (
+    BuildContext context,
+    String sceneName,
+  ) async {
+    StreamElementsActions.getAllOverlays(context);
+  }
 };
