@@ -1,6 +1,7 @@
 library stream_elements;
 
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class StreamElements {
@@ -28,7 +29,7 @@ class StreamElements {
       final streamElementsObject = StreamElements(jwtToken, accountID);
       return streamElementsObject;
     } else {
-      print('Authentication error: ${response.body}');
+      debugPrint('[STREAM ELEMENTS] Authentication error: ${response.body}');
       throw Exception('Authentication error wrong credentials');
     }
   }
