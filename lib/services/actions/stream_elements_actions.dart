@@ -19,9 +19,16 @@ class StreamElementsActions {
     if (await StreamElementsConnections.checkIfConnectedToStreamElements(
         context, streamElements)) {
       try {
-        Map<String, dynamic> overlays = await streamElements!.getAllOverlays();
+        Map<String, dynamic> response = await streamElements!.getAllOverlays();
+        final data = response['docs']
+            .map<Map<String, dynamic>>((overlay) => {
+                  '_id': overlay['_id'],
+                  'type': overlay['type'],
+                  'name': overlay['name'],
+                })
+            .toList();
 
-        debugPrint('[STREAM ELEMENTS OVERLAYS]: $overlays');
+        print('data: $data');
       } catch (e) {
         throw Exception('Error getting overlays: $e');
       }

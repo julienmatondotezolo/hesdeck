@@ -49,7 +49,8 @@ class StreamElementsConnections {
     StreamElements? streamElementsClient,
   ) async {
     final response = await streamElementsClient!.getAllOverlays();
-    debugPrint('[OVERLAYS]: $response');
+
+    print('[OVERLAYS]: $response');
     return response;
   }
 
@@ -126,7 +127,7 @@ class StreamElementsConnections {
       );
       return false;
     } catch (e) {
-      print('StreamElements connection error: $e');
+      debugPrint('StreamElements connection error: $e');
       return false;
     }
   }
