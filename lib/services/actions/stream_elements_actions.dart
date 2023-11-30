@@ -3,7 +3,7 @@ import 'package:hessdeck/providers/connection_provider.dart';
 import 'package:hessdeck/services/connections/stream_elements_connections.dart';
 import 'package:stream_elements_package/stream_elements.dart';
 
-const getAllOverlaysMethod = 'Get all overlays';
+const selectOverlayMethod = 'Select overlay';
 const updateOverlayMethod = 'Update overlay';
 
 class StreamElementsMethodMetadata {
@@ -13,6 +13,22 @@ class StreamElementsMethodMetadata {
 }
 
 class StreamElementsActions {
+  static Future<void> updateOverlay(
+      BuildContext context, String overlayId, Object body) async {
+    StreamElements? streamElements =
+        connectionProvider(context).streamElementsClient;
+    if (await StreamElementsConnections.checkIfConnectedToStreamElements(
+        context, streamElements)) {
+      try {
+        final response =
+            await streamElements!.updateOverlayByID(overlayId, body);
+        print('UPDATE OVERLLAY: $response');
+      } catch (e) {
+        throw Exception('Error updating overlays: $e');
+      }
+    }
+  }
+
   static Future<void> getAllOverlays(BuildContext context) async {
     StreamElements? streamElements =
         connectionProvider(context).streamElementsClient;
@@ -37,18 +53,17 @@ class StreamElementsActions {
 
   static final Map<String, StreamElementsMethodMetadata>
       streamElementsMethodMetadata = {
-    getAllOverlaysMethod: StreamElementsMethodMetadata([]),
-    updateOverlayMethod: StreamElementsMethodMetadata([]),
+    updateOverlayMethod: StreamElementsMethodMetadata([selectOverlayMethod]),
   };
 }
 
 typedef StreamElementsMethod = Function(BuildContext, String);
 
 final Map<String, StreamElementsMethod> streamElementsMethods = {
-  getAllOverlaysMethod: (
+  updateOverlayMethod: (
     BuildContext context,
-    String sceneName,
+    String overlayId,
   ) async {
-    StreamElementsActions.getAllOverlays(context);
-  }
+    StreamElementsActions.updateOverlay(context, overlayId, "");
+  },
 };

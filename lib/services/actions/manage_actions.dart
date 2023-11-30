@@ -41,4 +41,22 @@ class ManageAcions {
 
     return allActions;
   }
+
+  List<String> getMethodParameters(String methodName) {
+    Map<String, dynamic> methodMetadataList = {};
+    Map<String, OBSMethodMetadata> obsMethodMetadata =
+        OBSActions.obsMethodMetadata;
+    Map<String, StreamElementsMethodMetadata> streamElementsMethodMetadata =
+        StreamElementsActions.streamElementsMethodMetadata;
+
+    methodMetadataList.addAll(obsMethodMetadata);
+    methodMetadataList.addAll(streamElementsMethodMetadata);
+
+    List<String> methodParameter =
+        methodMetadataList[methodName]?.parameterNames ?? [];
+
+    print('methodParameter: $methodParameter');
+
+    return methodParameter;
+  }
 }

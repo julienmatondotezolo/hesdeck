@@ -109,7 +109,8 @@ class AddActionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (action.isNotEmpty) {
-      List<String> actionParameters = OBSActions().getMethodParameters(action);
+      List<String> actionParameters =
+          ManageAcions().getMethodParameters(action);
 
       return Column(
         children: [

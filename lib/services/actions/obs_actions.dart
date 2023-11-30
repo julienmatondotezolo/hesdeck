@@ -141,7 +141,7 @@ class OBSActions {
     stopStreamMethod: OBSMethodMetadata([]),
   };
 
-  List<String> getMethodParameters(String methodName) {
+  getMethodParameters(String methodName) {
     return obsMethodMetadata[methodName]?.parameterNames ?? [];
   }
 }
