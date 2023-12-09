@@ -197,22 +197,18 @@ class AddActionWidget extends StatelessWidget {
               ),
               child: GestureDetector(
                 onTap: () async {
-                  ManageAcions.selectAction(
+                  final selectedScene = await ManageAcions.selectAction(
                     context,
                     actionConnectionType,
                     parameter,
                     actionParameter,
                   );
 
-                  // String? selectedScene =
-                  //     await OBSActions.selectScenes(context);
-
-                  // onActionChanged(
-                  //     action, actionConnectionType, actionParameter ?? '');
-
-                  // String? selectedScene =
-                  //     await obsMethods[parameter]!(context, '');
-                  print('parameter: $parameter');
+                  onActionChanged(
+                    action,
+                    actionConnectionType,
+                    selectedScene,
+                  );
                 },
                 child: Row(
                   children: [

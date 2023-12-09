@@ -3,23 +3,23 @@ import 'package:hessdeck/services/actions/obs_actions.dart';
 import 'package:hessdeck/services/actions/stream_elements_actions.dart';
 
 class ManageAcions {
-  static Future<void> selectAction(
+  static Future<dynamic> selectAction(
     BuildContext context,
     String connectionType,
     String actionName,
     String? actionParameter,
   ) async {
-    print('connectionType: $connectionType');
-    print('actionName: $actionName');
-    print('actionParameter: $actionParameter');
     switch (connectionType) {
       case 'OBS':
-        obsMethodParameters[actionName]!(context, actionParameter ?? '');
-        break;
+        return await obsMethodParameters[actionName]!(
+          context,
+          actionParameter ?? '',
+        );
       case 'StreamElements':
-        streamElementsMethodParameters[actionName]!(
-            context, actionParameter ?? '');
-        break;
+        return await streamElementsMethodParameters[actionName]!(
+          context,
+          actionParameter ?? '',
+        );
       default:
         throw Exception(
           'No ACTIONS for [$connectionType] exists in this services.',
