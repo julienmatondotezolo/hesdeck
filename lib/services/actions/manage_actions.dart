@@ -9,12 +9,16 @@ class ManageAcions {
     String actionName,
     String? actionParameter,
   ) async {
+    print('connectionType: $connectionType');
+    print('actionName: $actionName');
+    print('actionParameter: $actionParameter');
     switch (connectionType) {
       case 'OBS':
-        obsMethods[actionName]!(context, actionParameter ?? '');
+        obsMethodParameters[actionName]!(context, actionParameter ?? '');
         break;
       case 'StreamElements':
-        streamElementsMethods[actionName]!(context, actionParameter ?? '');
+        streamElementsMethodParameters[actionName]!(
+            context, actionParameter ?? '');
         break;
       default:
         throw Exception(
@@ -23,24 +27,24 @@ class ManageAcions {
     }
   }
 
-  // static Map<String, dynamic> getAllActions() {
-  //   return {
-  //     'OBS': obsMethods,
-  //     'StreamElements': streamElementsMethods,
-  //   };
-  // }
-
-  static Map<String, Function(BuildContext, String)> getAllActions() {
-    Map<String, Function(BuildContext, String)> allActions = {};
-
-    // Add OBS methods
-    allActions.addAll(obsMethods);
-
-    // Add StreamElements methods
-    allActions.addAll(streamElementsMethods);
-
-    return allActions;
+  static Map<String, dynamic> getAllActions() {
+    return {
+      'OBS': obsMethods,
+      'StreamElements': streamElementsMethods,
+    };
   }
+
+  // static Map<String, Function(BuildContext, String)> getAllActions() {
+  //   Map<String, Function(BuildContext, String)> allActions = {};
+
+  //   // Add OBS methods
+  //   allActions.addAll(obsMethods);
+
+  //   // Add StreamElements methods
+  //   allActions.addAll(streamElementsMethods);
+
+  //   return allActions;
+  // }
 
   List<String> getMethodParameters(String methodName) {
     Map<String, dynamic> methodMetadataList = {};
@@ -54,8 +58,6 @@ class ManageAcions {
 
     List<String> methodParameter =
         methodMetadataList[methodName]?.parameterNames ?? [];
-
-    print('methodParameter: $methodParameter');
 
     return methodParameter;
   }
