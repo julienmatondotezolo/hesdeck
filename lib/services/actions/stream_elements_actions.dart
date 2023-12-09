@@ -13,6 +13,48 @@ class StreamElementsMethodMetadata {
 }
 
 class StreamElementsActions {
+  static Future<String?> selectOverlay(BuildContext context) async {
+    StreamElements? streamElements =
+        connectionProvider(context).streamElementsClient;
+
+    if (await StreamElementsConnections.checkIfConnectedToStreamElements(
+        context, streamElements)) {
+      try {
+        Map<String, dynamic> response = await streamElements!.getAllOverlays();
+        final overlayList = response['docs']
+            .map<Map<String, dynamic>>((overlay) => {
+                  '_id': overlay['_id'],
+                  'type': overlay['type'],
+                  'name': overlay['name'],
+                })
+            .toList();
+
+        if (overlayList != null && overlayList.isNotEmpty) {
+          return await showModalBottomSheet<String>(
+            context: context,
+            builder: (context) {
+              return ListView.builder(
+                itemCount: overlayList.length,
+                itemBuilder: (context, int index) {
+                  String name = overlayList[index]['name'];
+                  return ListTile(
+                    title: Text(name),
+                    onTap: () {
+                      Navigator.pop(context, name);
+                    },
+                  );
+                },
+              );
+            },
+          ).then((selectedValue) => selectedValue); // Return selectedValue
+        }
+      } catch (e) {
+        throw Exception('Error getting overlays: $e');
+      }
+    }
+    return null;
+  }
+
   static Future<void> updateOverlay(
       BuildContext context, String overlayId, Object body) async {
     StreamElements? streamElements =
@@ -53,6 +95,7 @@ class StreamElementsActions {
 
   static final Map<String, StreamElementsMethodMetadata>
       streamElementsMethodMetadata = {
+    selectOverlayMethod: StreamElementsMethodMetadata([]),
     updateOverlayMethod: StreamElementsMethodMetadata([selectOverlayMethod]),
   };
 }
@@ -64,6 +107,15 @@ final Map<String, StreamElementsMethod> streamElementsMethods = {
     BuildContext context,
     String overlayId,
   ) async {
-    StreamElementsActions.updateOverlay(context, overlayId, "");
+    return await StreamElementsActions.updateOverlay(context, overlayId, "");
   },
+};
+
+final Map<String, StreamElementsMethod> streamElementsMethodParameters = {
+  selectOverlayMethod: (
+    BuildContext context,
+    String overlayId,
+  ) async {
+    return await StreamElementsActions.selectOverlay(context);
+  }
 };
