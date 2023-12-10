@@ -197,7 +197,8 @@ class AddActionWidget extends StatelessWidget {
               ),
               child: GestureDetector(
                 onTap: () async {
-                  final selectedScene = await ManageAcions.selectAction(
+                  final selectedScene =
+                      await ManageAcions.selectActionParameter(
                     context,
                     actionConnectionType,
                     parameter,

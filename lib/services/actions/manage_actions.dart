@@ -11,6 +11,30 @@ class ManageAcions {
   ) async {
     switch (connectionType) {
       case 'OBS':
+        return await obsMethods[actionName]!(
+          context,
+          actionParameter ?? '',
+        );
+      case 'StreamElements':
+        return await streamElementsMethods[actionName]!(
+          context,
+          actionParameter!,
+        );
+      default:
+        throw Exception(
+          'No ACTIONS for [$connectionType] exists in this services.',
+        );
+    }
+  }
+
+  static Future<dynamic> selectActionParameter(
+    BuildContext context,
+    String connectionType,
+    String actionName,
+    String? actionParameter,
+  ) async {
+    switch (connectionType) {
+      case 'OBS':
         return await obsMethodParameters[actionName]!(
           context,
           actionParameter ?? '',
