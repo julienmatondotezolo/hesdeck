@@ -61,11 +61,14 @@ class StreamElementsActions {
     StreamElements? streamElements =
         connectionProvider(context).streamElementsClient;
     if (await StreamElementsConnections.checkIfConnectedToStreamElements(
-        context, streamElements)) {
+      context,
+      streamElements,
+    )) {
       try {
-        final response =
-            await streamElements!.updateOverlayByID(overlayId, body);
-        print('UPDATE OVERLLAY: $response');
+        // final response =
+        //     await streamElements!.updateOverlayByID(overlayId, body);
+        // print('UPDATE OVERLLAY: $response');
+        print('OVERLAY ID: $overlayId');
       } catch (e) {
         throw Exception('Error updating overlays: $e');
       }

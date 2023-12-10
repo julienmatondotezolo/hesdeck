@@ -22,7 +22,6 @@ class PopupDeckWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print(deck!.toJson());
         Helpers.vibration();
         deck!.action.isNotEmpty
             ? ManageAcions.selectAction(
