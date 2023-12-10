@@ -37,16 +37,17 @@ class StreamElementsActions {
                 itemCount: overlayList.length,
                 itemBuilder: (context, int index) {
                   String name = overlayList[index]['name'];
+                  String id = overlayList[index]['_id'];
                   return ListTile(
                     title: Text(name),
                     onTap: () {
-                      Navigator.pop(context, name);
+                      Navigator.pop(context, id);
                     },
                   );
                 },
               );
             },
-          ).then((selectedValue) => selectedValue); // Return selectedValue
+          );
         }
       } catch (e) {
         throw Exception('Error getting overlays: $e');
