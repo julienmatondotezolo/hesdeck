@@ -5,6 +5,7 @@
          {
             "name": "Click me",
             "action": "",
+            "actionConnectionType": "",
             "iconData": 58992,
             "backgroundColor": {
                "colors": [
@@ -23,6 +24,7 @@
          {
             "name": "Pop-up",
             "action": "",
+            "actionConnectionType": "",
             "iconData": null,
             "backgroundColor": {
                "colors": [
@@ -41,6 +43,7 @@
          {
             "name": "Folder",
             "action": "",
+            "actionConnectionType": "",
             "iconData": 58019,
             "backgroundColor": {
                "colors": [
@@ -59,90 +62,105 @@
                {
                   "name": "Add",
                   "action": "",
+                  "actionConnectionType": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
                   "action": "",
+                  "actionConnectionType": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
                   "action": "",
+                  "actionConnectionType": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
                   "action": "",
+                  "actionConnectionType": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
                   "action": "",
+                  "actionConnectionType": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
                   "action": "",
+                  "actionConnectionType": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
                   "action": "",
+                  "actionConnectionType": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
                   "action": "",
+                  "actionConnectionType": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
                   "action": "",
+                  "actionConnectionType": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
                   "action": "",
+                  "actionConnectionType": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
                   "action": "",
+                  "actionConnectionType": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
                   "action": "",
+                  "actionConnectionType": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
                   "action": "",
+                  "actionConnectionType": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
                   "action": "",
+                  "actionConnectionType": "",
                   "iconData": 57415,
                   "defaultDeck": true
                },
                {
                   "name": "Add",
                   "action": "",
+                  "actionConnectionType": "",
                   "iconData": 57415,
                   "defaultDeck": true
                }
@@ -156,6 +174,7 @@
          {
             "name": "Change Scene",
             "action": "Change scene",
+            "actionConnectionType": "OBS",
             "iconData": 58992,
             "backgroundColor": {
                "colors": [
@@ -174,6 +193,7 @@
          {
             "name": "Start recording",
             "action": "Start record",
+            "actionConnectionType": "OBS",
             "iconData": 58992,
             "backgroundColor": {
                "colors": [
@@ -192,6 +212,7 @@
          {
             "name": "Stop recording",
             "action": "Stop record",
+            "actionConnectionType": "OBS",
             "iconData": 58992,
             "backgroundColor": {
                "colors": [
@@ -210,6 +231,7 @@
          {
             "name": "Start stream",
             "action": "Start stream",
+            "actionConnectionType": "OBS",
             "iconData": 58992,
             "backgroundColor": {
                "colors": [
@@ -228,6 +250,7 @@
          {
             "name": "Stop stream",
             "action": "Stop stream",
+            "actionConnectionType": "OBS",
             "iconData": 58992,
             "backgroundColor": {
                "colors": [
@@ -251,6 +274,7 @@
          {
             "name": "Change Scene",
             "action": "Change scene",
+            "actionConnectionType": "",
             "iconData": 58992,
             "backgroundColor": {
                "colors": [
@@ -269,6 +293,7 @@
          {
             "name": "Start recording",
             "action": "Start record",
+            "actionConnectionType": "",
             "iconData": 58992,
             "backgroundColor": {
                "colors": [
@@ -287,6 +312,7 @@
          {
             "name": "Stop recording",
             "action": "Stop record",
+            "actionConnectionType": "",
             "iconData": 58992,
             "backgroundColor": {
                "colors": [
@@ -305,6 +331,7 @@
          {
             "name": "Start stream",
             "action": "Start stream",
+            "actionConnectionType": "",
             "iconData": 58992,
             "backgroundColor": {
                "colors": [
@@ -323,6 +350,7 @@
          {
             "name": "Stop stream",
             "action": "Stop stream",
+            "actionConnectionType": "",
             "iconData": 58992,
             "backgroundColor": {
                "colors": [
@@ -346,6 +374,7 @@
          {
             "name": "OBS",
             "action": "",
+            "actionConnectionType": "",
             "iconData": 58992,
             "backgroundColor": {
                "colors": [
@@ -364,6 +393,7 @@
                {
                   "name": "Change Scene",
                   "action": "Change scene",
+                  "actionConnectionType": "",
                   "iconData": 58992,
                   "backgroundColor": {
                      "colors": [
@@ -382,6 +412,7 @@
                {
                   "name": "Start recording",
                   "action": "Start record",
+                  "actionConnectionType": "",
                   "iconData": 58992,
                   "backgroundColor": {
                      "colors": [
@@ -400,6 +431,7 @@
                {
                   "name": "Stop recording",
                   "action": "Stop record",
+                  "actionConnectionType": "",
                   "iconData": 58992,
                   "backgroundColor": {
                      "colors": [
@@ -418,6 +450,7 @@
                {
                   "name": "Start stream",
                   "action": "Start stream",
+                  "actionConnectionType": "",
                   "iconData": 58992,
                   "backgroundColor": {
                      "colors": [
@@ -436,6 +469,7 @@
                {
                   "name": "Stop stream",
                   "action": "Stop stream",
+                  "actionConnectionType": "",
                   "iconData": 58992,
                   "backgroundColor": {
                      "colors": [
@@ -456,6 +490,7 @@
          {
             "name": "Twitch",
             "action": "",
+            "actionConnectionType": "",
             "iconData": null,
             "backgroundColor": {
                "colors": [
@@ -474,6 +509,7 @@
          {
             "name": "Spotify",
             "iconData": null,
+            "actionConnectionType": "",
             "backgroundColor": {
                "colors": [
                   4281719177,

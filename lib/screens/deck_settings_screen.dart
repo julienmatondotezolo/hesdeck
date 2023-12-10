@@ -37,7 +37,7 @@ class DeckSettingsScreenState extends State<DeckSettingsScreen> {
     super.initState();
     _name = widget.deck.name;
     _action = widget.deck.action;
-    _actionConnectionType = "";
+    _actionConnectionType = widget.deck.actionConnectionType;
     _actionParameter = widget.deck.actionParameter;
     _iconColor = widget.deck.iconColor!;
     _backgroundColor = widget.deck.backgroundColor!;
@@ -195,6 +195,7 @@ class DeckSettingsScreenState extends State<DeckSettingsScreen> {
                   updatedDeck = widget.deck.copyWith(
                     name: _name,
                     action: _action,
+                    actionConnectionType: _actionConnectionType,
                     actionParameter: _actionParameter,
                     iconColor: _iconColor,
                     activeBackgroundColor: _activeBackgroundColor,
