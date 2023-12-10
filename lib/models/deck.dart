@@ -5,6 +5,7 @@ import 'package:hessdeck/utils/helpers.dart';
 class Deck {
   final String name;
   final String action;
+  final String actionConnectionType;
   final String? actionParameter;
   final IconData iconData;
   final LinearGradient? backgroundColor; // Optional background color
@@ -19,6 +20,7 @@ class Deck {
   Deck({
     required this.name,
     required this.action,
+    required this.actionConnectionType,
     this.actionParameter,
     required this.iconData,
     this.backgroundColor = AppColors.blueToGreyGradient,
@@ -36,12 +38,13 @@ class Deck {
             popupDeck,
             clickableDeck,
           ),
-          "A deck can be only one type.",
+          "A deck can only be type.",
         );
 
   Deck copyWith({
     String? name,
     String? action,
+    String? actionConnectionType,
     String? actionParameter,
     IconData? iconData,
     LinearGradient? backgroundColor,
@@ -56,6 +59,7 @@ class Deck {
     return Deck(
       name: name ?? this.name,
       action: action ?? this.action,
+      actionConnectionType: actionConnectionType ?? this.actionConnectionType,
       actionParameter: actionParameter ?? this.actionParameter,
       iconData: iconData ?? this.iconData,
       backgroundColor: backgroundColor ?? this.backgroundColor,
@@ -75,6 +79,7 @@ class Deck {
     return {
       'name': name,
       'action': action,
+      'actionConnectionType': actionConnectionType,
       'actionParameter': actionParameter,
       'iconData': iconData.codePoint, // Save the icon data (int)
       'backgroundColor': backgroundColor != null
@@ -112,6 +117,7 @@ class Deck {
     return Deck(
       name: json['name'],
       action: json['action'],
+      actionConnectionType: json['actionConnectionType'],
       actionParameter: json['actionParameter'],
       iconData: json['iconData'] != null
           ? IconData(json['iconData'], fontFamily: 'MaterialIcons')

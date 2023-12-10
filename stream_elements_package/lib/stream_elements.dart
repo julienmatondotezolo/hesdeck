@@ -1,6 +1,7 @@
 library stream_elements;
 
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class StreamElements {
@@ -28,7 +29,7 @@ class StreamElements {
       final streamElementsObject = StreamElements(jwtToken, accountID);
       return streamElementsObject;
     } else {
-      print('Authentication error: ${response.body}');
+      debugPrint('[STREAM ELEMENTS] Authentication error: ${response.body}');
       throw Exception('Authentication error wrong credentials');
     }
   }
@@ -48,6 +49,33 @@ class StreamElements {
       return json.decode(response.body);
     } else {
       throw Exception('Failed to get overlays data');
+    }
+  }
+
+  Future<Map<String, dynamic>> getOverlayByID(String overlayId) async {
+    final Uri uri = Uri.parse('$baseUrl/overlays/$accountID/$overlayId');
+
+    final response = await http.get(uri, headers: headers);
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to get overlay data');
+    }
+  }
+
+  Future<Map<String, dynamic>> updateOverlayByID(
+    String overlayId,
+    Object body,
+  ) async {
+    final Uri uri = Uri.parse('$baseUrl/overlays/$accountID/$overlayId');
+
+    final response = await http.put(uri, headers: headers, body: body);
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to get overlay data');
     }
   }
 }

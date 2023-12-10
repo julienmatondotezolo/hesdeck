@@ -25,7 +25,7 @@ class OBSActions {
     if (await OBSConnections.checkIfConnectedToObS(context, obsWebSocket)) {
       try {
         await obsWebSocket?.scenes.setCurrentProgramScene(sceneName);
-        debugPrint('[SCENES CHNAGED TO]: $sceneName');
+        debugPrint('[SCENES CHANGED TO]: $sceneName');
       } catch (e) {
         // Handle any errors that occur while changing the scene
         throw Exception('Error changing scene: $e');
@@ -141,7 +141,7 @@ class OBSActions {
     stopStreamMethod: OBSMethodMetadata([]),
   };
 
-  List<String> getMethodParameters(String methodName) {
+  getMethodParameters(String methodName) {
     return obsMethodMetadata[methodName]?.parameterNames ?? [];
   }
 }
@@ -150,34 +150,37 @@ typedef OBSMethod = Function(BuildContext, String);
 
 final Map<String, OBSMethod> obsMethods = {
   changSceneMethod: OBSActions.changeScenes,
-  // selectSceneMethod: (
-  //   BuildContext context,
-  //   String sceneName,
-  // ) async {
-  //   await OBSActions.selectScenes(context);
-  // },
   startRecordMethod: (
     BuildContext context,
     String sceneName,
   ) async {
-    OBSActions.startRecord(context);
+    return await OBSActions.startRecord(context);
   },
   stopRecordMethod: (
     BuildContext context,
     String sceneName,
   ) async {
-    OBSActions.stopRecord(context);
+    return await OBSActions.stopRecord(context);
   },
   startStreamMethod: (
     BuildContext context,
     String sceneName,
   ) async {
-    OBSActions.startStream(context);
+    return await OBSActions.startStream(context);
   },
   stopStreamMethod: (
     BuildContext context,
     String sceneName,
   ) async {
-    OBSActions.stopStream(context);
+    return await OBSActions.stopStream(context);
+  },
+};
+
+final Map<String, OBSMethod> obsMethodParameters = {
+  selectSceneMethod: (
+    BuildContext context,
+    String sceneName,
+  ) async {
+    return await OBSActions.selectScenes(context);
   },
 };

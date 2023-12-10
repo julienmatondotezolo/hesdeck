@@ -63,7 +63,7 @@ class ClickableDeckWidgetState extends State<ClickableDeckWidget>
         isClicked
             ? ManageAcions.selectAction(
                 context,
-                'OBS',
+                widget.deck!.actionConnectionType,
                 widget.deck!.action,
                 widget.deck!.actionParameter,
               )

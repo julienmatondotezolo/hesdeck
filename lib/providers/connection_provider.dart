@@ -95,7 +95,7 @@ class ConnectionProvider extends ChangeNotifier {
     if (existingConnectionIndex != -1) {
       return _connections[existingConnectionIndex];
     } else {
-      print('No connection found for type: $type');
+      debugPrint('[CONNECTION PROVIDER]: No connection found for type: $type');
       return null;
     }
   }
@@ -110,11 +110,11 @@ class ConnectionProvider extends ChangeNotifier {
     if (existingConnectionIndex != -1) {
       // Replace the existing connection with the new connection
       _connections[existingConnectionIndex] = connection;
-      print('Updating current ${connection.type} connection in list');
+      // print('Updating current ${connection.type} connection in list');
     } else {
       // Add the new connection to the list
       _connections.add(connection);
-      print('Adding new ${connection.type} connection to list');
+      // print('Adding new ${connection.type} connection to list');
     }
 
     notifyListeners();
@@ -126,7 +126,7 @@ class ConnectionProvider extends ChangeNotifier {
       final existingConnectionIndex = _connections.indexWhere(
         (existingConn) => existingConn.type == connection.type,
       );
-      print(
+      debugPrint(
           '${_connections[existingConnectionIndex].type} connection is deleted.');
       _connections.removeAt(existingConnectionIndex);
       await _saveConnectionSettings();
@@ -235,14 +235,14 @@ class ConnectionProvider extends ChangeNotifier {
     _obsWebSocket = await ObsWebSocket.connect(
       'ws://[${obsConnectionObject.ipAddress}]:${obsConnectionObject.port}',
       password: obsConnectionObject.password,
-      fallbackEventHandler: (Event event) => print(
-        'type: ${event.eventType} data: ${event.eventData}',
+      fallbackEventHandler: (Event event) => debugPrint(
+        '[OBS LISTENER]: type: ${event.eventType} data: ${event.eventData}',
       ),
     );
 
     try {
       if (_obsWebSocket != null) {
-        print('Connected to OBS WebSocket server.');
+        debugPrint('Connected to OBS WebSocket server.');
 
         // StatsResponse stats = await _obsWebSocket!.general.getStats();
         obsConnectionObject = obsConnectionObject.copyWith(connected: true);
@@ -270,9 +270,9 @@ class ConnectionProvider extends ChangeNotifier {
       if (existingConnectionIndex != -1) {
         _connections[existingConnectionIndex] =
             _obsConnectionObject.copyWith(connected: false);
-        print('Disconnected from OBS WebSocket server.');
+        debugPrint('Disconnected from OBS WebSocket server.');
       } else {
-        print('OBS connection not found in the list.');
+        debugPrint('OBS connection not found in the list.');
       }
 
       _obsWebSocket = null;
@@ -295,7 +295,7 @@ class ConnectionProvider extends ChangeNotifier {
     );
     try {
       if (_streamElementsClient != null) {
-        print('Connected to StreamElements server.');
+        debugPrint('Connected to StreamElements server.');
 
         streamElementsConnectionObject =
             streamElementsConnectionObject.copyWith(connected: true);
@@ -321,9 +321,9 @@ class ConnectionProvider extends ChangeNotifier {
       if (existingConnectionIndex != -1) {
         _connections[existingConnectionIndex] =
             _streamElementsConnectionObject.copyWith(connected: false);
-        print('Disconnected from StreamElements.');
+        debugPrint('Disconnected from StreamElements.');
       } else {
-        print('StreamElements connection not found in the list.');
+        debugPrint('StreamElements connection not found in the list.');
       }
 
       notifyListeners();
@@ -341,7 +341,7 @@ class ConnectionProvider extends ChangeNotifier {
     _twitchClient = {"Connected": true};
 
     try {
-      print('Connected to Twitch client.');
+      debugPrint('Connected to Twitch client.');
       twitchConnectionObject = twitchConnectionObject.copyWith(connected: true);
 
       addConnection(twitchConnectionObject);
@@ -361,9 +361,9 @@ class ConnectionProvider extends ChangeNotifier {
       if (existingConnectionIndex != -1) {
         _connections[existingConnectionIndex] =
             _twitchConnectionObject.copyWith(connected: false);
-        print('Disconnected from Twitch WebSocket server.');
+        debugPrint('Disconnected from Twitch WebSocket server.');
       } else {
-        print('Twitch connection not found in the list.');
+        debugPrint('Twitch connection not found in the list.');
       }
 
       _twitchClient = null;
@@ -383,7 +383,7 @@ class ConnectionProvider extends ChangeNotifier {
     _spotifyClient = {"Connected": true};
 
     try {
-      print('Connected to Spotify client.');
+      debugPrint('Connected to Spotify client.');
       spotifyConnectionObject =
           spotifyConnectionObject.copyWith(connected: true);
 
@@ -404,9 +404,9 @@ class ConnectionProvider extends ChangeNotifier {
       if (existingConnectionIndex != -1) {
         _connections[existingConnectionIndex] =
             _spotifyConnectionObject.copyWith(connected: false);
-        print('Disconnected from Spotify WebSocket server.');
+        debugPrint('Disconnected from Spotify WebSocket server.');
       } else {
-        print('Spotify connection not found in the list.');
+        debugPrint('Spotify connection not found in the list.');
       }
 
       _spotifyClient = null;

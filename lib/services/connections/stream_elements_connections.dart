@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/models/connection.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
+import 'package:hessdeck/screens/settings/settings_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:stream_elements_package/stream_elements.dart';
 
 class StreamElementsConnections {
   static Future<void> connectToStreamElements(
@@ -43,6 +45,15 @@ class StreamElementsConnections {
     }
   }
 
+  static Future<Map<String, dynamic>> getOverlays(
+    StreamElements? streamElementsClient,
+  ) async {
+    final response = await streamElementsClient!.getAllOverlays();
+
+    print('[OVERLAYS]: $response');
+    return response;
+  }
+
   static Future<void> disconnectStreamElements(
     BuildContext context,
     ConnectionProvider connectionProvider,
@@ -77,6 +88,47 @@ class StreamElementsConnections {
     } catch (e) {
       // Handle any errors that occur while changing the scene
       throw Exception('Error deleting StreamElements connection: $e');
+    }
+  }
+
+  static Future<bool> checkIfConnectedToStreamElements(
+    BuildContext context,
+    StreamElements? streamElementsClient,
+  ) async {
+    try {
+      if (streamElementsClient != null) {
+        return true;
+      }
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Connection Error'),
+          content: const Text('Not connected to StreamElements.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Go back'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SettingsScreen(),
+                  ),
+                );
+              },
+              child: const Text('Connect to StreamElements'),
+            ),
+          ],
+        ),
+      );
+      return false;
+    } catch (e) {
+      debugPrint('StreamElements connection error: $e');
+      return false;
     }
   }
 }

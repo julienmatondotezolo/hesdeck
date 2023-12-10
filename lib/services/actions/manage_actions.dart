@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/services/actions/obs_actions.dart';
+import 'package:hessdeck/services/actions/stream_elements_actions.dart';
 
 class ManageAcions {
-  static Future<void> selectAction(
+  static Future<dynamic> selectAction(
     BuildContext context,
     String connectionType,
     String actionName,
@@ -10,8 +11,15 @@ class ManageAcions {
   ) async {
     switch (connectionType) {
       case 'OBS':
-        obsMethods[actionName]!(context, actionParameter ?? '');
-        break;
+        return await obsMethods[actionName]!(
+          context,
+          actionParameter ?? '',
+        );
+      case 'StreamElements':
+        return await streamElementsMethods[actionName]!(
+          context,
+          actionParameter!,
+        );
       default:
         throw Exception(
           'No ACTIONS for [$connectionType] exists in this services.',
@@ -19,23 +27,62 @@ class ManageAcions {
     }
   }
 
-  static Map<String, OBSMethod> getAllActions() {
-    return obsMethods;
+  static Future<dynamic> selectActionParameter(
+    BuildContext context,
+    String connectionType,
+    String actionName,
+    String? actionParameter,
+  ) async {
+    switch (connectionType) {
+      case 'OBS':
+        return await obsMethodParameters[actionName]!(
+          context,
+          actionParameter ?? '',
+        );
+      case 'StreamElements':
+        return await streamElementsMethodParameters[actionName]!(
+          context,
+          actionParameter ?? '',
+        );
+      default:
+        throw Exception(
+          'No ACTIONS for [$connectionType] exists in this services.',
+        );
+    }
   }
 
-  // static Future<Iterable<String>> getActions(
-  //   BuildContext context,
-  //   String connectionType,
-  // ) async {
-  //   switch (connectionType) {
-  //     case 'OBS':
-  //       ObsWebSocket? obsWebSocket = connectionProvider(context).obsWebSocket;
-  //       return obsMethods.keys;
-  //       break;
-  //     default:
-  //       throw Exception(
-  //         'No ACTIONS for [$connectionType] exists in this services.',
-  //       );
-  //   }
+  static Map<String, dynamic> getAllActions() {
+    return {
+      'OBS': obsMethods,
+      'StreamElements': streamElementsMethods,
+    };
+  }
+
+  // static Map<String, Function(BuildContext, String)> getAllActions() {
+  //   Map<String, Function(BuildContext, String)> allActions = {};
+
+  //   // Add OBS methods
+  //   allActions.addAll(obsMethods);
+
+  //   // Add StreamElements methods
+  //   allActions.addAll(streamElementsMethods);
+
+  //   return allActions;
   // }
+
+  List<String> getMethodParameters(String methodName) {
+    Map<String, dynamic> methodMetadataList = {};
+    Map<String, OBSMethodMetadata> obsMethodMetadata =
+        OBSActions.obsMethodMetadata;
+    Map<String, StreamElementsMethodMetadata> streamElementsMethodMetadata =
+        StreamElementsActions.streamElementsMethodMetadata;
+
+    methodMetadataList.addAll(obsMethodMetadata);
+    methodMetadataList.addAll(streamElementsMethodMetadata);
+
+    List<String> methodParameter =
+        methodMetadataList[methodName]?.parameterNames ?? [];
+
+    return methodParameter;
+  }
 }

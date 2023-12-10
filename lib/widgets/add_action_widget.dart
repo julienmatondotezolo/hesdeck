@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/services/actions/manage_actions.dart';
-import 'package:hessdeck/services/actions/obs_actions.dart';
 import 'package:hessdeck/themes/colors.dart';
 
 class AddActionWidget extends StatelessWidget {
   final BuildContext context;
   final String action;
+  final String actionConnectionType;
   final String? actionParameter;
-  final void Function(String, String?) onActionChanged;
+  final void Function(String, String, String?) onActionChanged;
 
   const AddActionWidget({
     Key? key,
     required this.context,
     required this.action,
+    required this.actionConnectionType,
     required this.actionParameter,
     required this.onActionChanged,
   }) : super(key: key);
@@ -61,43 +62,44 @@ class AddActionWidget extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.025),
-                for (var action in allActions.entries)
-                  GestureDetector(
-                    onTap: () {
-                      onActionChanged(action.key, '');
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: AppColors.darkGrey, // Grey background color
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Colors.white10,
-                            width: 1.0,
-                          ), // Thin white border bottom
+                for (var actionType in allActions.entries)
+                  for (var action in actionType.value.entries)
+                    GestureDetector(
+                      onTap: () {
+                        onActionChanged(action.key, actionType.key, '');
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          color: AppColors.darkGrey, // Grey background color
+                          border: Border(
+                            bottom: BorderSide(
+                              color: Colors.white10,
+                              width: 1.0,
+                            ), // Thin white border bottom
+                          ),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 26.0,
+                          vertical: 16.0,
+                        ),
+                        child: Row(
+                          children: [
+                            /*Image.network(
+                              action['image'],
+                              width: 24,
+                            ),
+                            const SizedBox(width: 16.0),*/
+                            Text(
+                              action.key,
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 26.0,
-                        vertical: 16.0,
-                      ),
-                      child: Row(
-                        children: [
-                          /*Image.network(
-                            action['image'],
-                            width: 24,
-                          ),
-                          const SizedBox(width: 16.0),*/
-                          Text(
-                            action.key,
-                            style: const TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
                     ),
-                  ),
               ],
             ),
           ),
@@ -109,7 +111,8 @@ class AddActionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (action.isNotEmpty) {
-      List<String> actionParameters = OBSActions().getMethodParameters(action);
+      List<String> actionParameters =
+          ManageAcions().getMethodParameters(action);
 
       return Column(
         children: [
@@ -164,7 +167,7 @@ class AddActionWidget extends StatelessWidget {
                   ),
                   child: GestureDetector(
                     onTap: () {
-                      onActionChanged('', '');
+                      onActionChanged('', '', '');
                     },
                     child: const Text(
                       'Remove action',
@@ -194,14 +197,19 @@ class AddActionWidget extends StatelessWidget {
               ),
               child: GestureDetector(
                 onTap: () async {
-                  String? selectedScene =
-                      await OBSActions.selectScenes(context);
+                  final selectedScene =
+                      await ManageAcions.selectActionParameter(
+                    context,
+                    actionConnectionType,
+                    parameter,
+                    actionParameter,
+                  );
 
-                  onActionChanged(action, selectedScene ?? '');
-
-                  // String? selectedScene =
-                  //     await obsMethods[parameter]!(context, '');
-                  print('selectedScene: $selectedScene');
+                  onActionChanged(
+                    action,
+                    actionConnectionType,
+                    selectedScene,
+                  );
                 },
                 child: Row(
                   children: [
