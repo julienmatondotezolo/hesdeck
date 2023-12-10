@@ -57,7 +57,9 @@ class StreamElementsActions {
   }
 
   static Future<void> updateOverlay(
-      BuildContext context, String overlayId, Object body) async {
+    BuildContext context,
+    String overlayId,
+  ) async {
     StreamElements? streamElements =
         connectionProvider(context).streamElementsClient;
     if (await StreamElementsConnections.checkIfConnectedToStreamElements(
@@ -65,10 +67,55 @@ class StreamElementsActions {
       streamElements,
     )) {
       try {
+        final body = await streamElements?.getOverlayByID(overlayId);
+        final listeners = body?["widgets"][0]["listeners"];
+        final variables = body?["widgets"][0]["variables"];
+        Map<String, dynamic>? allAlerts = {};
+
+        listeners.forEach(
+          (key, value) {
+            if (value == true) {
+              final alertName = key.substring(0, key.length - 7);
+              Map<String, dynamic>? alertMap = {
+                // alertName: variables[alertName]
+                alertName: {}
+              };
+
+              allAlerts.addAll(alertMap);
+            }
+          },
+        );
+
+        print('allAlerts length: ${allAlerts.length}');
+        print('allAlerts: $allAlerts');
+
+        if (allAlerts.isNotEmpty) {
+          showModalBottomSheet<String>(
+            context: context,
+            builder: (context) {
+              return ListView.builder(
+                itemCount: allAlerts.length,
+                itemBuilder: (context, int index) {
+                  for (var key in allAlerts.keys) {
+                    String alertName = key;
+
+                    return ListTile(
+                      title: Text(alertName),
+                      onTap: () {
+                        print('alertName $alertName');
+                        // Navigator.pop(context, id);
+                      },
+                    );
+                  }
+                  return null;
+                },
+              );
+            },
+          );
+        }
+
         // final response =
         //     await streamElements!.updateOverlayByID(overlayId, body);
-        // print('UPDATE OVERLLAY: $response');
-        print('OVERLAY ID: $overlayId');
       } catch (e) {
         throw Exception('Error updating overlays: $e');
       }
@@ -111,7 +158,7 @@ final Map<String, StreamElementsMethod> streamElementsMethods = {
     BuildContext context,
     String overlayId,
   ) async {
-    return await StreamElementsActions.updateOverlay(context, overlayId, "");
+    return await StreamElementsActions.updateOverlay(context, overlayId);
   },
 };
 
