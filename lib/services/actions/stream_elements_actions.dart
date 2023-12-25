@@ -1,3 +1,5 @@
+import 'dart:js_interop';
+
 import 'package:flutter/material.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
 import 'package:hessdeck/services/connections/stream_elements_connections.dart';
@@ -6,6 +8,10 @@ import 'package:stream_elements_package/stream_elements.dart';
 
 const selectOverlayMethod = 'Select overlay';
 const updateOverlayMethod = 'Update overlay';
+
+class SliderValueNotifier {
+  static late final ValueNotifier<double> sliderValue;
+}
 
 class StreamElementsMethodMetadata {
   final List<String> parameterNames;
@@ -142,24 +148,27 @@ class StreamElementsActions {
         final overlayName = body?["name"];
         final listeners = body?["widgets"][0]["listeners"];
         final variables = body?["widgets"][0]["variables"];
-        Map<String, dynamic>? allAlerts = {};
+
+        List<Map<String, dynamic>>? allAlerts = [];
+
+        dynamic sliderValue;
 
         listeners.forEach((key, value) {
           if (value == true) {
             final alertName = key.substring(0, key.length - 7);
+            final alertObject = variables[alertName]["audio"];
+
             Map<String, dynamic>? alertMap = {
-              // alertName: variables[alertName]
-              alertName: {}
+              alertName: alertObject,
             };
 
-            allAlerts.addAll(alertMap);
+            allAlerts.add(alertMap);
           }
         });
 
-        print('allAlerts length: ${allAlerts.length}');
         print('allAlerts: $allAlerts');
 
-        if (allAlerts.isNotEmpty) {
+        if (overlayName.isNotEmpty) {
           // ignore: use_build_context_synchronously
           showModalBottomSheet<String>(
             context: context,
@@ -193,7 +202,7 @@ class StreamElementsActions {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            "Update",
+                            "Update overlay",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 24,
@@ -203,50 +212,94 @@ class StreamElementsActions {
                         ),
                       ),
                       SizedBox(height: screenHeight * 0.025),
-                      TextFormField(
-                        initialValue: overlayName,
-                        onChanged: (newValue) {
-                          print('NEW NAME: $newValue');
-                        },
-                        style: const TextStyle(color: Colors.white),
-                        decoration: const InputDecoration(
-                          labelText: 'Name',
-                          labelStyle: TextStyle(color: Colors.white),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 26.0),
+                        child: TextFormField(
+                          initialValue: overlayName,
+                          onChanged: (newValue) {
+                            print('NEW NAME: $newValue');
+                          },
+                          style: const TextStyle(color: Colors.white),
+                          decoration: const InputDecoration(
+                            labelText: 'Name',
+                            labelStyle: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ),
-                      // for (final overlay in allAlerts)
-                      //   GestureDetector(
-                      //     onTap: () {
-                      //       String id = overlay['_id'];
-                      //       Navigator.pop(context, id);
-                      //     },
-                      //     child: Container(
-                      //       decoration: const BoxDecoration(
-                      //         color:
-                      //             AppColors.darkGrey, // Grey background color
-                      //         border: Border(
-                      //           bottom: BorderSide(
-                      //             color: Colors.white10,
-                      //             width: 1.0,
-                      //           ), // Thin white border bottom
-                      //         ),
-                      //       ),
-                      //       padding: const EdgeInsets.symmetric(
-                      //         horizontal: 26.0,
-                      //         vertical: 16.0,
-                      //       ),
-                      //       child: Row(
-                      //         children: [
-                      //           Text(
-                      //             overlay['name'],
-                      //             style: const TextStyle(
-                      //               color: Colors.white,
-                      //             ),
-                      //           ),
-                      //         ],
-                      //       ),
-                      //     ),
-                      //   )
+                      SizedBox(height: screenHeight * 0.025),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 26.0,
+                          vertical: 26.0,
+                        ),
+                        child: Column(
+                          children: [
+                            for (final alert in allAlerts)
+                              Container(
+                                width: double.infinity,
+                                margin: const EdgeInsets.only(bottom: 10.0),
+                                padding: const EdgeInsets.fromLTRB(
+                                  25.0,
+                                  25.0,
+                                  25.0,
+                                  5.0,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.blueGrey,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  shape: BoxShape.rectangle,
+                                ),
+                                child: Column(
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          alert[alert.keys.first]['name'],
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          alert.keys.first.toUpperCase(),
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    // Replace the Slider widget in your code with the following:
+                                    ValueListenableBuilder<double>(
+                                      valueListenable:
+                                          SliderValueNotifier.sliderValue,
+                                      builder: (context, value, child) {
+                                        return Slider.adaptive(
+                                          min: 0.0,
+                                          max: 100.0,
+                                          value: SliderValueNotifier.sliderValue
+                                                  .value.isUndefinedOrNull
+                                              ? (alert[alert.keys.first]
+                                                      ['volume'] *
+                                                  100)
+                                              : SliderValueNotifier
+                                                  .sliderValue.value,
+                                          activeColor: AppColors.lightGrey,
+                                          inactiveColor: AppColors.darkGrey,
+                                          onChanged: (newValue) {
+                                            SliderValueNotifier
+                                                .sliderValue.value = newValue;
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
