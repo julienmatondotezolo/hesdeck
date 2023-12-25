@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
 import 'package:hessdeck/services/connections/stream_elements_connections.dart';
@@ -169,6 +170,9 @@ class StreamElementsActions {
 
         SliderValueNotifier.sliderValue.value = initialVolume;
 
+        // Play sound
+        final audioPlayer = AudioPlayer();
+
         // print('allAlerts: $allAlerts');
 
         if (overlayName.isNotEmpty) {
@@ -245,10 +249,19 @@ class StreamElementsActions {
                                 children: [
                                   Row(
                                     children: [
-                                      const Icon(
-                                        Icons.music_note_outlined,
-                                        color: Colors.white,
-                                        size: 36,
+                                      GestureDetector(
+                                        onTap: () async {
+                                          await audioPlayer.play(
+                                            UrlSource(
+                                              alert[alert.keys.first]['src'],
+                                            ),
+                                          );
+                                        },
+                                        child: const Icon(
+                                          Icons.play_arrow,
+                                          color: Colors.white,
+                                          size: 36,
+                                        ),
                                       ),
                                       SizedBox(width: screenHeight * 0.025),
                                       Column(
@@ -302,6 +315,7 @@ class StreamElementsActions {
                             ),
                         ],
                       ),
+                      SizedBox(height: screenHeight * 0.025),
                       ElevatedButton(
                         onPressed: () {
                           print(
