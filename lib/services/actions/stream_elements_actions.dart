@@ -1,5 +1,3 @@
-import 'dart:js_interop';
-
 import 'package:flutter/material.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
 import 'package:hessdeck/services/connections/stream_elements_connections.dart';
@@ -10,7 +8,7 @@ const selectOverlayMethod = 'Select overlay';
 const updateOverlayMethod = 'Update overlay';
 
 class SliderValueNotifier {
-  static late final ValueNotifier<double> sliderValue;
+  static final ValueNotifier<double> sliderValue = ValueNotifier<double>(0.0);
 }
 
 class StreamElementsMethodMetadata {
@@ -145,13 +143,11 @@ class StreamElementsActions {
       try {
         final body = await streamElements?.getOverlayByID(overlayId);
 
-        final overlayName = body?["name"];
+        String overlayName = body?["name"];
         final listeners = body?["widgets"][0]["listeners"];
         final variables = body?["widgets"][0]["variables"];
 
         List<Map<String, dynamic>>? allAlerts = [];
-
-        dynamic sliderValue;
 
         listeners.forEach((key, value) {
           if (value == true) {
@@ -166,7 +162,14 @@ class StreamElementsActions {
           }
         });
 
-        print('allAlerts: $allAlerts');
+        // Initialize SliderValueNotifier.sliderValue after populating allAlerts
+        final initialVolume = allAlerts.isNotEmpty
+            ? allAlerts[0][allAlerts[0].keys.first]['volume'] * 100
+            : 0.0;
+
+        SliderValueNotifier.sliderValue.value = initialVolume;
+
+        // print('allAlerts: $allAlerts');
 
         if (overlayName.isNotEmpty) {
           // ignore: use_build_context_synchronously
@@ -185,7 +188,9 @@ class StreamElementsActions {
                   gradient: AppColors.blueToGreyGradient,
                 ),
                 child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(16.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const Divider(
@@ -194,110 +199,121 @@ class StreamElementsActions {
                         indent: 140,
                         endIndent: 140,
                       ),
-                      SizedBox(
-                        height: screenHeight * 0.03, // 3% of the screen height
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 26.0),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "Update overlay",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
+                      SizedBox(height: screenHeight * 0.03),
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Update overlay",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
                       SizedBox(height: screenHeight * 0.025),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 26.0),
-                        child: TextFormField(
-                          initialValue: overlayName,
-                          onChanged: (newValue) {
-                            print('NEW NAME: $newValue');
-                          },
-                          style: const TextStyle(color: Colors.white),
-                          decoration: const InputDecoration(
-                            labelText: 'Name',
-                            labelStyle: TextStyle(color: Colors.white),
-                          ),
+                      TextFormField(
+                        initialValue: overlayName,
+                        onChanged: (newValue) {
+                          overlayName = newValue;
+                        },
+                        style: const TextStyle(color: Colors.white),
+                        decoration: const InputDecoration(
+                          labelText: 'Name',
+                          labelStyle: TextStyle(color: Colors.white),
                         ),
                       ),
                       SizedBox(height: screenHeight * 0.025),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 26.0,
-                          vertical: 26.0,
-                        ),
-                        child: Column(
-                          children: [
-                            for (final alert in allAlerts)
-                              Container(
-                                width: double.infinity,
-                                margin: const EdgeInsets.only(bottom: 10.0),
-                                padding: const EdgeInsets.fromLTRB(
-                                  25.0,
-                                  25.0,
-                                  25.0,
-                                  5.0,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: AppColors.blueGrey,
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  shape: BoxShape.rectangle,
-                                ),
-                                child: Column(
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          alert[alert.keys.first]['name'],
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Text(
-                                          alert.keys.first.toUpperCase(),
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    // Replace the Slider widget in your code with the following:
-                                    ValueListenableBuilder<double>(
-                                      valueListenable:
-                                          SliderValueNotifier.sliderValue,
-                                      builder: (context, value, child) {
-                                        return Slider.adaptive(
-                                          min: 0.0,
-                                          max: 100.0,
-                                          value: SliderValueNotifier.sliderValue
-                                                  .value.isUndefinedOrNull
-                                              ? (alert[alert.keys.first]
-                                                      ['volume'] *
-                                                  100)
-                                              : SliderValueNotifier
-                                                  .sliderValue.value,
-                                          activeColor: AppColors.lightGrey,
-                                          inactiveColor: AppColors.darkGrey,
-                                          onChanged: (newValue) {
-                                            SliderValueNotifier
-                                                .sliderValue.value = newValue;
-                                          },
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
+                      Column(
+                        children: [
+                          for (final alert in allAlerts)
+                            Container(
+                              width: double.infinity,
+                              margin: const EdgeInsets.only(bottom: 10.0),
+                              padding: const EdgeInsets.fromLTRB(
+                                25.0,
+                                25.0,
+                                25.0,
+                                5.0,
                               ),
-                          ],
+                              decoration: BoxDecoration(
+                                color: AppColors.blueGrey,
+                                borderRadius: BorderRadius.circular(10.0),
+                                shape: BoxShape.rectangle,
+                              ),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.music_note_outlined,
+                                        color: Colors.white,
+                                        size: 36,
+                                      ),
+                                      SizedBox(width: screenHeight * 0.025),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            alert[alert.keys.first]['name'],
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          Text(
+                                            alert.keys.first.toUpperCase(),
+                                            style: const TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  // Replace the Slider widget in your code with the following:
+                                  ValueListenableBuilder<double>(
+                                    valueListenable:
+                                        SliderValueNotifier.sliderValue,
+                                    builder: (context, value, child) {
+                                      return Slider.adaptive(
+                                        min: 0.0,
+                                        max: 100.0,
+                                        value: SliderValueNotifier
+                                                    .sliderValue.value ==
+                                                0.0
+                                            ? (alert[alert.keys.first]
+                                                    ['volume'] *
+                                                100)
+                                            : SliderValueNotifier
+                                                .sliderValue.value,
+                                        activeColor: AppColors.lightGrey,
+                                        inactiveColor: AppColors.darkGrey,
+                                        onChanged: (newValue) {
+                                          SliderValueNotifier
+                                              .sliderValue.value = newValue;
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                        ],
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          print(
+                              "overlayAudioValue: ${SliderValueNotifier.sliderValue.value}");
+                          print("overlayName: $overlayName");
+                          // Navigator.pop(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue),
+                        child: const Text(
+                          'Update overlay',
+                          style: TextStyle(color: Colors.white),
                         ),
                       ),
                     ],
