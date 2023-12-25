@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
 import 'package:hessdeck/services/connections/stream_elements_connections.dart';
+import 'package:hessdeck/themes/colors.dart';
 import 'package:stream_elements_package/stream_elements.dart';
 
 const selectOverlayMethod = 'Select overlay';
@@ -17,6 +18,8 @@ class StreamElementsActions {
     StreamElements? streamElements =
         connectionProvider(context).streamElementsClient;
 
+    final screenHeight = MediaQuery.of(context).size.height;
+
     if (await StreamElementsConnections.checkIfConnectedToStreamElements(
         context, streamElements)) {
       try {
@@ -30,21 +33,85 @@ class StreamElementsActions {
             .toList();
 
         if (overlayList != null && overlayList.isNotEmpty) {
+          // ignore: use_build_context_synchronously
           return await showModalBottomSheet<String>(
             context: context,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(25),
+              ),
+            ),
+            clipBehavior: Clip.antiAliasWithSaveLayer,
             builder: (context) {
-              return ListView.builder(
-                itemCount: overlayList.length,
-                itemBuilder: (context, int index) {
-                  String name = overlayList[index]['name'];
-                  String id = overlayList[index]['_id'];
-                  return ListTile(
-                    title: Text(name),
-                    onTap: () {
-                      Navigator.pop(context, id);
-                    },
-                  );
-                },
+              return Container(
+                padding: const EdgeInsets.symmetric(vertical: 30.0),
+                decoration: const BoxDecoration(
+                  gradient: AppColors.blueToGreyGradient,
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Divider(
+                        color: AppColors.darkGrey,
+                        thickness: 5,
+                        indent: 140,
+                        endIndent: 140,
+                      ),
+                      SizedBox(
+                        height: screenHeight * 0.03, // 3% of the screen height
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 26.0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Select overlay",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: screenHeight * 0.025),
+                      for (final overlay in overlayList)
+                        GestureDetector(
+                          onTap: () {
+                            String id = overlay['_id'];
+                            Navigator.pop(context, id);
+                          },
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              color:
+                                  AppColors.darkGrey, // Grey background color
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: Colors.white10,
+                                  width: 1.0,
+                                ), // Thin white border bottom
+                              ),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 26.0,
+                              vertical: 16.0,
+                            ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  overlay['name'],
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                    ],
+                  ),
+                ),
               );
             },
           );
@@ -62,53 +129,127 @@ class StreamElementsActions {
   ) async {
     StreamElements? streamElements =
         connectionProvider(context).streamElementsClient;
+
+    final screenHeight = MediaQuery.of(context).size.height;
+
     if (await StreamElementsConnections.checkIfConnectedToStreamElements(
       context,
       streamElements,
     )) {
       try {
         final body = await streamElements?.getOverlayByID(overlayId);
+
+        final overlayName = body?["name"];
         final listeners = body?["widgets"][0]["listeners"];
         final variables = body?["widgets"][0]["variables"];
         Map<String, dynamic>? allAlerts = {};
 
-        listeners.forEach(
-          (key, value) {
-            if (value == true) {
-              final alertName = key.substring(0, key.length - 7);
-              Map<String, dynamic>? alertMap = {
-                // alertName: variables[alertName]
-                alertName: {}
-              };
+        listeners.forEach((key, value) {
+          if (value == true) {
+            final alertName = key.substring(0, key.length - 7);
+            Map<String, dynamic>? alertMap = {
+              // alertName: variables[alertName]
+              alertName: {}
+            };
 
-              allAlerts.addAll(alertMap);
-            }
-          },
-        );
+            allAlerts.addAll(alertMap);
+          }
+        });
 
         print('allAlerts length: ${allAlerts.length}');
         print('allAlerts: $allAlerts');
 
         if (allAlerts.isNotEmpty) {
+          // ignore: use_build_context_synchronously
           showModalBottomSheet<String>(
             context: context,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(25),
+              ),
+            ),
+            clipBehavior: Clip.antiAliasWithSaveLayer,
             builder: (context) {
-              return ListView.builder(
-                itemCount: allAlerts.length,
-                itemBuilder: (context, int index) {
-                  for (var key in allAlerts.keys) {
-                    String alertName = key;
-
-                    return ListTile(
-                      title: Text(alertName),
-                      onTap: () {
-                        print('alertName $alertName');
-                        // Navigator.pop(context, id);
-                      },
-                    );
-                  }
-                  return null;
-                },
+              return Container(
+                padding: const EdgeInsets.symmetric(vertical: 30.0),
+                decoration: const BoxDecoration(
+                  gradient: AppColors.blueToGreyGradient,
+                ),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Divider(
+                        color: AppColors.darkGrey,
+                        thickness: 5,
+                        indent: 140,
+                        endIndent: 140,
+                      ),
+                      SizedBox(
+                        height: screenHeight * 0.03, // 3% of the screen height
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 26.0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Update",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: screenHeight * 0.025),
+                      TextFormField(
+                        initialValue: overlayName,
+                        onChanged: (newValue) {
+                          print('NEW NAME: $newValue');
+                        },
+                        style: const TextStyle(color: Colors.white),
+                        decoration: const InputDecoration(
+                          labelText: 'Name',
+                          labelStyle: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      // for (final overlay in allAlerts)
+                      //   GestureDetector(
+                      //     onTap: () {
+                      //       String id = overlay['_id'];
+                      //       Navigator.pop(context, id);
+                      //     },
+                      //     child: Container(
+                      //       decoration: const BoxDecoration(
+                      //         color:
+                      //             AppColors.darkGrey, // Grey background color
+                      //         border: Border(
+                      //           bottom: BorderSide(
+                      //             color: Colors.white10,
+                      //             width: 1.0,
+                      //           ), // Thin white border bottom
+                      //         ),
+                      //       ),
+                      //       padding: const EdgeInsets.symmetric(
+                      //         horizontal: 26.0,
+                      //         vertical: 16.0,
+                      //       ),
+                      //       child: Row(
+                      //         children: [
+                      //           Text(
+                      //             overlay['name'],
+                      //             style: const TextStyle(
+                      //               color: Colors.white,
+                      //             ),
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //   )
+                    ],
+                  ),
+                ),
               );
             },
           );
