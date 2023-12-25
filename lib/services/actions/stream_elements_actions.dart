@@ -223,7 +223,7 @@ class StreamElementsActions {
                         },
                         style: const TextStyle(color: Colors.white),
                         decoration: const InputDecoration(
-                          labelText: 'Name',
+                          labelText: 'Overlay name',
                           labelStyle: TextStyle(color: Colors.white),
                         ),
                       ),
@@ -318,10 +318,22 @@ class StreamElementsActions {
                       SizedBox(height: screenHeight * 0.025),
                       ElevatedButton(
                         onPressed: () {
-                          print(
-                              "overlayAudioValue: ${SliderValueNotifier.sliderValue.value}");
-                          print("overlayName: $overlayName");
-                          // Navigator.pop(context);
+                          // Update overlayName in the body
+                          body?["name"] = overlayName;
+
+                          // Update audio volume in variables
+                          for (int i = 0; i < allAlerts.length; i++) {
+                            final alert = allAlerts[i];
+                            final alertName = alert.keys.first;
+                            final newVolume =
+                                SliderValueNotifier.sliderValue.value / 100;
+
+                            body?["widgets"][0]["variables"][alertName]["audio"]
+                                ["volume"] = newVolume;
+                          }
+
+                          streamElements?.updateOverlayByID(overlayId, body);
+                          Navigator.pop(context);
                         },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue),

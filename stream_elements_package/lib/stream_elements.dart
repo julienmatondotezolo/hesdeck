@@ -40,8 +40,7 @@ class StreamElements {
   }
 
   Future<Map<String, dynamic>> getAllOverlays() async {
-    final Uri uri =
-        Uri.parse('$baseUrl/overlays/$accountID/?search=a&type=regular');
+    final Uri uri = Uri.parse('$baseUrl/overlays/$accountID/?type=regular');
 
     final response = await http.get(uri, headers: headers);
 
@@ -66,13 +65,15 @@ class StreamElements {
 
   Future<Map<String, dynamic>> updateOverlayByID(
     String overlayId,
-    Object body,
+    Map<String, dynamic>? body,
   ) async {
     final Uri uri = Uri.parse('$baseUrl/overlays/$accountID/$overlayId');
 
-    final response = await http.put(uri, headers: headers, body: body);
+    final response =
+        await http.put(uri, headers: headers, body: json.encode(body));
 
     if (response.statusCode == 200) {
+      print("${body?["name"]} overlay succefully updated.");
       return json.decode(response.body);
     } else {
       throw Exception('Failed to get overlay data');
