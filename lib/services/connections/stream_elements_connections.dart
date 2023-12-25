@@ -118,7 +118,7 @@ class StreamElementsConnections {
                   MaterialPageRoute(
                     builder: (context) => const SettingsScreen(),
                   ),
-                );
+                ).then((_) => Navigator.pop(context));
               },
               child: const Text('Connect to StreamElements'),
             ),
