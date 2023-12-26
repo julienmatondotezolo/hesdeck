@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
 import 'package:hessdeck/services/connections/obs_connections.dart';
+import 'package:hessdeck/themes/colors.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 
 const changSceneMethod = 'Change scene';
@@ -39,25 +40,91 @@ class OBSActions {
     if (await OBSConnections.checkIfConnectedToObS(context, obsWebSocket)) {
       try {
         final sceneList = await obsWebSocket?.scenes.getSceneList();
+        final screenHeight = MediaQuery.of(context).size.height;
 
         if (sceneList?.scenes != null && sceneList!.scenes.isNotEmpty) {
+          // ignore: use_build_context_synchronously
           return await showModalBottomSheet<String>(
-            context: context,
-            builder: (context) {
-              return ListView.builder(
-                itemCount: sceneList.scenes.length,
-                itemBuilder: (context, int index) {
-                  String sceneName = sceneList.scenes[index].sceneName;
-                  return ListTile(
-                    title: Text(sceneName),
-                    onTap: () {
-                      Navigator.pop(context, sceneName);
-                    },
-                  );
-                },
-              );
-            },
-          );
+              context: context,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(25),
+                ),
+              ),
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              builder: (context) {
+                return Container(
+                  padding: const EdgeInsets.symmetric(vertical: 30.0),
+                  decoration: const BoxDecoration(
+                    gradient: AppColors.blueToGreyGradient,
+                  ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Divider(
+                          color: AppColors.darkGrey,
+                          thickness: 5,
+                          indent: 140,
+                          endIndent: 140,
+                        ),
+                        SizedBox(
+                          height:
+                              screenHeight * 0.03, // 3% of the screen height
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 26.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Select scene",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: screenHeight * 0.025),
+                        for (final scene in sceneList.scenes)
+                          GestureDetector(
+                            onTap: () {
+                              String sceneName = scene.sceneName;
+                              Navigator.pop(context, sceneName);
+                            },
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                color:
+                                    AppColors.darkGrey, // Grey background color
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.white10,
+                                    width: 1.0,
+                                  ), // Thin white border bottom
+                                ),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 26.0,
+                                vertical: 16.0,
+                              ),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    scene.sceneName,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                      ],
+                    ),
+                  ),
+                );
+              });
         } else {
           // Handle the case when no scenes are available
           // You can show an error message or take appropriate action

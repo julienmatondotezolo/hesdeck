@@ -269,13 +269,13 @@
       ]
    },
    {
-      "actionName": "Twitch",
+      "actionName": "StreamElements",
       "actionDecks": [
          {
-            "name": "Change Scene",
-            "action": "Change scene",
-            "actionConnectionType": "",
-            "iconData": 58992,
+            "name": "Update overlay",
+            "action": "Update overlay",
+            "actionConnectionType": "StreamElements",
+            "iconData": 59110,
             "backgroundColor": {
                "colors": [
                   4282598211,
@@ -284,87 +284,11 @@
                "begin": "Alignment.topLeft",
                "end": "Alignment.bottomRight"
             },
-            "iconColor": 4294967295,
+            "iconColor": 4294909952,
             "defaultDeck": false,
             "dossierDeck": false,
-            "popupDeck": false,
-            "clickableDeck": true
-         },
-         {
-            "name": "Start recording",
-            "action": "Start record",
-            "actionConnectionType": "",
-            "iconData": 58992,
-            "backgroundColor": {
-               "colors": [
-                  4282598211,
-                  4278190080
-               ],
-               "begin": "Alignment.topLeft",
-               "end": "Alignment.bottomRight"
-            },
-            "iconColor": 4294967295,
-            "defaultDeck": false,
-            "dossierDeck": false,
-            "popupDeck": false,
-            "clickableDeck": true
-         },
-         {
-            "name": "Stop recording",
-            "action": "Stop record",
-            "actionConnectionType": "",
-            "iconData": 58992,
-            "backgroundColor": {
-               "colors": [
-                  4282598211,
-                  4278190080
-               ],
-               "begin": "Alignment.topLeft",
-               "end": "Alignment.bottomRight"
-            },
-            "iconColor": 4294967295,
-            "defaultDeck": false,
-            "dossierDeck": false,
-            "popupDeck": false,
-            "clickableDeck": true
-         },
-         {
-            "name": "Start stream",
-            "action": "Start stream",
-            "actionConnectionType": "",
-            "iconData": 58992,
-            "backgroundColor": {
-               "colors": [
-                  4282598211,
-                  4278190080
-               ],
-               "begin": "Alignment.topLeft",
-               "end": "Alignment.bottomRight"
-            },
-            "iconColor": 4294967295,
-            "defaultDeck": false,
-            "dossierDeck": false,
-            "popupDeck": false,
-            "clickableDeck": true
-         },
-         {
-            "name": "Stop stream",
-            "action": "Stop stream",
-            "actionConnectionType": "",
-            "iconData": 58992,
-            "backgroundColor": {
-               "colors": [
-                  4282598211,
-                  4278190080
-               ],
-               "begin": "Alignment.topLeft",
-               "end": "Alignment.bottomRight"
-            },
-            "iconColor": 4294967295,
-            "defaultDeck": false,
-            "dossierDeck": false,
-            "popupDeck": false,
-            "clickableDeck": true
+            "popupDeck": true,
+            "clickableDeck": false
          }
       ]
    },

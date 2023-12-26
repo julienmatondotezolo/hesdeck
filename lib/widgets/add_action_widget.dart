@@ -25,14 +25,17 @@ class AddActionWidget extends StatelessWidget {
 
     showModalBottomSheet(
       context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(25),
+        ),
+      ),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
       builder: (context) {
         return Container(
           padding: const EdgeInsets.symmetric(vertical: 30.0),
           decoration: const BoxDecoration(
             gradient: AppColors.blueToGreyGradient,
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(25.0),
-            ),
           ),
           child: SingleChildScrollView(
             child: Column(
