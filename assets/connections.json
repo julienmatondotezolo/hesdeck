@@ -1,11 +1,10 @@
 [
     {
-        "name": "Apple music",
+        "name": "Apple Music",
         "image": "https://music.apple.com/assets/favicon/favicon-180.png",
         "fields": [
-            "ipAddress",
-            "port",
-            "password"
+            "clientId",
+            "clientSecret"
         ]
     },
     {
