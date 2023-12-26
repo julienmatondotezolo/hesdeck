@@ -187,7 +187,7 @@ class StreamElementsActions {
             clipBehavior: Clip.antiAliasWithSaveLayer,
             builder: (context) {
               return Container(
-                padding: const EdgeInsets.symmetric(vertical: 30.0),
+                padding: const EdgeInsets.symmetric(vertical: 20.0),
                 decoration: const BoxDecoration(
                   gradient: AppColors.blueToGreyGradient,
                 ),
