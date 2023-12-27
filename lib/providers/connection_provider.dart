@@ -11,6 +11,12 @@ import 'package:stream_elements_package/stream_elements.dart';
 class ConnectionProvider extends ChangeNotifier {
   final List<Connection> _connections = [];
 
+  late AppleMusicConnection _appleMusicConnectionObject = AppleMusicConnection(
+    clientId: '**********',
+    clientSecret: '************',
+  );
+  Map<String, dynamic>? _appleMusicClient;
+
   late OBSConnection _obsConnectionObject = OBSConnection(
     ipAddress: 'xxx.xxx.xxx.x',
     port: '4455',
@@ -39,6 +45,10 @@ class ConnectionProvider extends ChangeNotifier {
   StreamElements? _streamElementsClient;
 
   List<Connection> get connections => _connections;
+
+  AppleMusicConnection get appleMusicConnectionObject =>
+      _appleMusicConnectionObject;
+  Map<String, dynamic>? get appleMusicClient => _appleMusicClient;
 
   OBSConnection get obsConnectionObject => _obsConnectionObject;
   ObsWebSocket? get obsWebSocket => _obsWebSocket;
@@ -156,7 +166,17 @@ class ConnectionProvider extends ChangeNotifier {
         // Convert JSON string to Connection object
         final Map<String, dynamic> connJson = jsonDecode(connString);
 
-        if (connJson["type"] == 'OBS') {
+        if (connJson["type"] == 'Apple Music') {
+          AppleMusicConnection appleMusicConnectionObject =
+              AppleMusicConnection.fromJson(connJson);
+          // If OBS WebSocket is null put connected to false
+          _appleMusicClient == null
+              ? appleMusicConnectionObject =
+                  appleMusicConnectionObject.copyWith(connected: false)
+              : appleMusicConnectionObject;
+          addConnection(spotifyConnectionObject);
+          _appleMusicConnectionObject = appleMusicConnectionObject;
+        } else if (connJson["type"] == 'OBS') {
           OBSConnection obsConnectionObject = OBSConnection.fromJson(connJson);
           // If OBS WebSocket is null put connected to false
           _obsWebSocket == null
@@ -225,6 +245,49 @@ class ConnectionProvider extends ChangeNotifier {
   //   await _saveConnectionSettings();
   //   notifyListeners();
   // }
+
+  /* ===================================================
+          =====  APPLE MUSIC CONNECTION SETTINGS ======
+  *** ================================================= */
+
+  // Connect to Apple Music
+  Future<void> connectToAppleMusic(
+      AppleMusicConnection appleMusicConnectionObject) async {
+    _spotifyClient = {"Connected": true};
+
+    try {
+      debugPrint('Connected to Apple Music client.');
+      appleMusicConnectionObject =
+          appleMusicConnectionObject.copyWith(connected: true);
+
+      addConnection(appleMusicConnectionObject);
+      _saveConnectionSettings();
+    } catch (e) {
+      throw Exception('Error connecting to Apple Music client: $e');
+    }
+  }
+
+  // Disconnect from Apple Music WebSocket server
+  Future<void> disconnectFromAppleMusic() async {
+    if (_spotifyClient != null) {
+      // Update the connected property of the existing connection object
+      final existingConnectionIndex = _connections.indexWhere((existingConn) =>
+          existingConn.type == _appleMusicConnectionObject.type);
+
+      if (existingConnectionIndex != -1) {
+        _connections[existingConnectionIndex] =
+            _appleMusicConnectionObject.copyWith(connected: false);
+        debugPrint('Disconnected from Apple Music WebSocket server.');
+      } else {
+        debugPrint('Apple Music connection not found in the list.');
+      }
+
+      _spotifyClient = null;
+      notifyListeners();
+    } else {
+      throw Exception('You are not connected to Apple Music.');
+    }
+  }
 
   /* ===================================================
            ===== OBS CONNECTION SETTINGS ======

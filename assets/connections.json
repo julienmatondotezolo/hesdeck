@@ -1,5 +1,13 @@
 [
     {
+        "name": "Apple Music",
+        "image": "https://music.apple.com/assets/favicon/favicon-180.png",
+        "fields": [
+            "clientId",
+            "clientSecret"
+        ]
+    },
+    {
         "name": "OBS",
         "image": "https://obsproject.com/assets/images/new_icon_small-r.png",
         "fields": [

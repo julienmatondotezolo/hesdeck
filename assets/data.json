@@ -175,7 +175,8 @@
             "name": "Change Scene",
             "action": "Change scene",
             "actionConnectionType": "OBS",
-            "iconData": 58992,
+            "iconData": null,
+            "customIconData": 59393,
             "backgroundColor": {
                "colors": [
                   4282598211,
@@ -194,7 +195,8 @@
             "name": "Start recording",
             "action": "Start record",
             "actionConnectionType": "OBS",
-            "iconData": 58992,
+            "iconData": null,
+            "customIconData": 59393,
             "backgroundColor": {
                "colors": [
                   4282598211,
@@ -213,7 +215,8 @@
             "name": "Stop recording",
             "action": "Stop record",
             "actionConnectionType": "OBS",
-            "iconData": 58992,
+            "iconData": null,
+            "customIconData": 59393,
             "backgroundColor": {
                "colors": [
                   4282598211,
@@ -232,7 +235,8 @@
             "name": "Start stream",
             "action": "Start stream",
             "actionConnectionType": "OBS",
-            "iconData": 58992,
+            "iconData": null,
+            "customIconData": 59393,
             "backgroundColor": {
                "colors": [
                   4282598211,
@@ -251,7 +255,8 @@
             "name": "Stop stream",
             "action": "Stop stream",
             "actionConnectionType": "OBS",
-            "iconData": 58992,
+            "iconData": null,
+            "customIconData": 59393,
             "backgroundColor": {
                "colors": [
                   4282598211,
@@ -275,16 +280,17 @@
             "name": "Update overlay",
             "action": "Update overlay",
             "actionConnectionType": "StreamElements",
-            "iconData": 59110,
+            "iconData": null,
+            "customIconData": 59395,
             "backgroundColor": {
                "colors": [
-                  4282598211,
-                  4278190080
+                  4279336959,
+                  4278215167
                ],
                "begin": "Alignment.topLeft",
                "end": "Alignment.bottomRight"
             },
-            "iconColor": 4294909952,
+            "iconColor": 4294953216,
             "defaultDeck": false,
             "dossierDeck": false,
             "popupDeck": true,
@@ -296,14 +302,15 @@
       "actionName": "Add application",
       "actionDecks": [
          {
-            "name": "OBS",
+            "name": "Apple Music",
             "action": "",
             "actionConnectionType": "",
-            "iconData": 58992,
+            "iconData": null,
+            "customIconData": 59392,
             "backgroundColor": {
                "colors": [
-                  4282598211,
-                  4278190080
+                  4294794386,
+                  4294901866
                ],
                "begin": "Alignment.topLeft",
                "end": "Alignment.bottomRight"
@@ -315,125 +322,20 @@
             "clickableDeck": false,
             "content": [
                {
-                  "name": "Change Scene",
-                  "action": "Change scene",
+                  "name": "Add",
+                  "action": "",
                   "actionConnectionType": "",
-                  "iconData": 58992,
-                  "backgroundColor": {
-                     "colors": [
-                        4282598211,
-                        4278190080
-                     ],
-                     "begin": "Alignment.topLeft",
-                     "end": "Alignment.bottomRight"
-                  },
-                  "iconColor": 4294967295,
-                  "defaultDeck": false,
-                  "dossierDeck": false,
-                  "popupDeck": false,
-                  "clickableDeck": true
-               },
-               {
-                  "name": "Start recording",
-                  "action": "Start record",
-                  "actionConnectionType": "",
-                  "iconData": 58992,
-                  "backgroundColor": {
-                     "colors": [
-                        4282598211,
-                        4278190080
-                     ],
-                     "begin": "Alignment.topLeft",
-                     "end": "Alignment.bottomRight"
-                  },
-                  "iconColor": 4294967295,
-                  "defaultDeck": false,
-                  "dossierDeck": false,
-                  "popupDeck": false,
-                  "clickableDeck": true
-               },
-               {
-                  "name": "Stop recording",
-                  "action": "Stop record",
-                  "actionConnectionType": "",
-                  "iconData": 58992,
-                  "backgroundColor": {
-                     "colors": [
-                        4282598211,
-                        4278190080
-                     ],
-                     "begin": "Alignment.topLeft",
-                     "end": "Alignment.bottomRight"
-                  },
-                  "iconColor": 4294967295,
-                  "defaultDeck": false,
-                  "dossierDeck": false,
-                  "popupDeck": false,
-                  "clickableDeck": true
-               },
-               {
-                  "name": "Start stream",
-                  "action": "Start stream",
-                  "actionConnectionType": "",
-                  "iconData": 58992,
-                  "backgroundColor": {
-                     "colors": [
-                        4282598211,
-                        4278190080
-                     ],
-                     "begin": "Alignment.topLeft",
-                     "end": "Alignment.bottomRight"
-                  },
-                  "iconColor": 4294967295,
-                  "defaultDeck": false,
-                  "dossierDeck": false,
-                  "popupDeck": false,
-                  "clickableDeck": true
-               },
-               {
-                  "name": "Stop stream",
-                  "action": "Stop stream",
-                  "actionConnectionType": "",
-                  "iconData": 58992,
-                  "backgroundColor": {
-                     "colors": [
-                        4282598211,
-                        4278190080
-                     ],
-                     "begin": "Alignment.topLeft",
-                     "end": "Alignment.bottomRight"
-                  },
-                  "iconColor": 4294967295,
-                  "defaultDeck": false,
-                  "dossierDeck": false,
-                  "popupDeck": false,
-                  "clickableDeck": true
+                  "iconData": 57415,
+                  "defaultDeck": true
                }
             ]
          },
          {
-            "name": "Twitch",
+            "name": "Spotify",
             "action": "",
             "actionConnectionType": "",
             "iconData": null,
-            "backgroundColor": {
-               "colors": [
-                  4293329146,
-                  4287824127
-               ],
-               "begin": "Alignment.topLeft",
-               "end": "Alignment.bottomRight"
-            },
-            "iconColor": 4294967295,
-            "defaultDeck": false,
-            "dossierDeck": true,
-            "popupDeck": false,
-            "clickableDeck": false
-         },
-         {
-            "name": "Spotify",
-            "iconData": null,
-            "actionConnectionType": "",
+            "customIconData": 59394,
             "backgroundColor": {
                "colors": [
                   4281719177,
@@ -446,7 +348,45 @@
             "defaultDeck": false,
             "dossierDeck": true,
             "popupDeck": false,
-            "clickableDeck": false
+            "clickableDeck": false,
+            "content": [
+               {
+                  "name": "Add",
+                  "action": "",
+                  "actionConnectionType": "",
+                  "iconData": 57415,
+                  "defaultDeck": true
+               }
+            ]
+         },
+         {
+            "name": "Twitch",
+            "action": "",
+            "actionConnectionType": "",
+            "iconData": null,
+            "customIconData": 59396,
+            "backgroundColor": {
+               "colors": [
+                  4293329146,
+                  4287824127
+               ],
+               "begin": "Alignment.topLeft",
+               "end": "Alignment.bottomRight"
+            },
+            "iconColor": 4294967295,
+            "defaultDeck": false,
+            "dossierDeck": true,
+            "popupDeck": false,
+            "clickableDeck": false,
+            "content": [
+               {
+                  "name": "Add",
+                  "action": "",
+                  "actionConnectionType": "",
+                  "iconData": 57415,
+                  "defaultDeck": true
+               }
+            ]
          }
       ]
    }

@@ -75,7 +75,7 @@ class DeckProvider extends ChangeNotifier {
       action: '',
       actionConnectionType: '',
       actionParameter: '',
-      iconData: Icons.add, // Replace this with your desired default icon
+      iconData: Icons.add,
       defaultDeck: true,
     );
 

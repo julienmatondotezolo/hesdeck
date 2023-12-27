@@ -22,6 +22,52 @@ class Connection {
   }
 }
 
+class AppleMusicConnection extends Connection {
+  final String clientId;
+  final String clientSecret;
+  AppleMusicConnection({
+    required this.clientId,
+    required this.clientSecret,
+    bool connected = false, // Provide a default value for connected
+  }) : super(
+          'Apple Music',
+          'https://music.apple.com/assets/favicon/favicon-180.png',
+          connected,
+        );
+
+  @override
+  AppleMusicConnection copyWith({
+    String? clientId,
+    String? clientSecret,
+    required bool connected,
+  }) {
+    return AppleMusicConnection(
+      clientId: clientId ?? this.clientId,
+      clientSecret: clientSecret ?? this.clientSecret,
+      connected: connected, // Update connected property
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type,
+      'image': image,
+      'connected': connected,
+      'clientId': clientId,
+      'clientSecret': clientSecret,
+    };
+  }
+
+  factory AppleMusicConnection.fromJson(Map<String, dynamic> json) {
+    return AppleMusicConnection(
+      clientId: json['clientId'],
+      clientSecret: json['clientSecret'],
+      connected: json['connected'],
+    );
+  }
+}
+
 class OBSConnection extends Connection {
   final String ipAddress;
   final String port;

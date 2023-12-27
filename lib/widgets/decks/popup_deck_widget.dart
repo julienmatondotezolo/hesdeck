@@ -55,7 +55,7 @@ class PopupDeckWidget extends StatelessWidget {
           children: [
             Center(
               child: Icon(
-                deck!.iconData,
+                deck!.customIconData ?? deck!.iconData,
                 color: Colors.white,
                 size: 36.0,
               ),

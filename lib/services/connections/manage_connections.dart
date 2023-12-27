@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/models/connection.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
+import 'package:hessdeck/services/connections/apple_music_connections.dart';
 import 'package:hessdeck/services/connections/obs_connections.dart';
 import 'package:hessdeck/services/connections/spotify_connections.dart';
 import 'package:hessdeck/services/connections/stream_elements_connections.dart';
@@ -12,7 +13,13 @@ class ManageConnections {
     String connectionType,
     List<TextEditingController> controllers,
   ) async {
-    if (connectionType == 'OBS') {
+    if (connectionType == 'Apple Music') {
+      await AppleMusicConnections.connectToAppleMusic(
+        context,
+        controllers[0],
+        controllers[1],
+      );
+    } else if (connectionType == 'OBS') {
       await OBSConnections.connectToOBS(
         context,
         controllers[0],
@@ -49,7 +56,9 @@ class ManageConnections {
     String connectionType,
     ConnectionProvider connectionProvider,
   ) async {
-    if (connectionType == 'OBS') {
+    if (connectionType == 'Apple Music') {
+      await AppleMusicConnections.disconnectAppleMusic(connectionProvider);
+    } else if (connectionType == 'OBS') {
       await OBSConnections.disconnectOBS(context, connectionProvider);
     } else if (connectionType == 'Twitch') {
       await TwitchConnections.disconnectTwitch(connectionProvider);
@@ -66,7 +75,12 @@ class ManageConnections {
     ConnectionProvider connectionProvider,
     Connection connectionObject,
   ) async {
-    if (connectionType == 'OBS') {
+    if (connectionType == 'Apple Music') {
+      await AppleMusicConnections.deleteAppleMusicConnection(
+        connectionProvider,
+        connectionObject,
+      );
+    } else if (connectionType == 'OBS') {
       await OBSConnections.deleteOBSConnection(
         connectionProvider,
         connectionObject,

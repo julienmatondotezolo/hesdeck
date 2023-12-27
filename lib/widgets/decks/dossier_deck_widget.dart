@@ -41,7 +41,7 @@ class DossierDeckWidget extends StatelessWidget {
           children: [
             Center(
               child: Icon(
-                deck!.iconData,
+                deck!.customIconData ?? deck!.iconData,
                 color: deck!.iconColor,
                 size: 36.0,
               ),

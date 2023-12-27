@@ -18,7 +18,7 @@ class ManageAcions {
       case 'StreamElements':
         return await streamElementsMethods[actionName]!(
           context,
-          actionParameter!,
+          actionParameter ?? '',
         );
       default:
         throw Exception(

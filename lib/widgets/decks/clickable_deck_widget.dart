@@ -100,7 +100,7 @@ class ClickableDeckWidgetState extends State<ClickableDeckWidget>
           children: [
             Center(
               child: Icon(
-                widget.deck!.iconData,
+                widget.deck!.customIconData ?? widget.deck!.iconData,
                 color: widget.deck!.iconColor,
                 size: 36.0,
               ),
