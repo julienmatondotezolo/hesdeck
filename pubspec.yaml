@@ -45,7 +45,7 @@ dependencies:
   obs_websocket: ^5.1.0+4
   reorderable_grid_view: ^2.2.7
   audioplayers: ^5.2.1
-  music_kit: ^1.1.0
+  fluttericon: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -87,10 +87,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+    - family: HessDeck
+      fonts:
+        - asset: fonts/HessDeck.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

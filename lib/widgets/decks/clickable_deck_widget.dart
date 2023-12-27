@@ -56,6 +56,7 @@ class ClickableDeckWidgetState extends State<ClickableDeckWidget>
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        print('deck ${widget.deck!.toJson()}');
         Helpers.vibration();
         setState(() {
           isClicked = !isClicked;

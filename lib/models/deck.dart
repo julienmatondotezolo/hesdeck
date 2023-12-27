@@ -8,6 +8,7 @@ class Deck {
   final String actionConnectionType;
   final String? actionParameter;
   final IconData iconData;
+  final IconData? customIconData;
   final LinearGradient? backgroundColor; // Optional background color
   final LinearGradient? activeBackgroundColor; //
   final Color? iconColor; // Optional icon color
@@ -23,6 +24,7 @@ class Deck {
     required this.actionConnectionType,
     this.actionParameter,
     required this.iconData,
+    this.customIconData,
     this.backgroundColor = AppColors.blueToGreyGradient,
     this.activeBackgroundColor = AppColors.activeBlueToDarkGradient,
     this.iconColor = AppColors.lightGrey,
@@ -47,6 +49,7 @@ class Deck {
     String? actionConnectionType,
     String? actionParameter,
     IconData? iconData,
+    IconData? customIconData,
     LinearGradient? backgroundColor,
     LinearGradient? activeBackgroundColor,
     Color? iconColor,
@@ -62,6 +65,7 @@ class Deck {
       actionConnectionType: actionConnectionType ?? this.actionConnectionType,
       actionParameter: actionParameter ?? this.actionParameter,
       iconData: iconData ?? this.iconData,
+      customIconData: customIconData ?? this.customIconData,
       backgroundColor: backgroundColor ?? this.backgroundColor,
       activeBackgroundColor:
           activeBackgroundColor ?? this.activeBackgroundColor,
@@ -82,6 +86,7 @@ class Deck {
       'actionConnectionType': actionConnectionType,
       'actionParameter': actionParameter,
       'iconData': iconData.codePoint, // Save the icon data (int)
+      'customIconData': customIconData!.codePoint,
       'backgroundColor': backgroundColor != null
           ? {
               'colors':
@@ -122,6 +127,9 @@ class Deck {
       iconData: json['iconData'] != null
           ? IconData(json['iconData'], fontFamily: 'MaterialIcons')
           : Icons.widgets, // Replace with the default icon you want to use
+      customIconData: json['customIconData'] != null
+          ? IconData(json['iconData'], fontFamily: 'HessDeck')
+          : Icons.widgets,
       backgroundColor: json['backgroundColor'] != null
           ? LinearGradient(
               colors: (json['backgroundColor']['colors'] as List<dynamic>)
