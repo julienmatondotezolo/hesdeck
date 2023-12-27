@@ -86,7 +86,8 @@ class Deck {
       'actionConnectionType': actionConnectionType,
       'actionParameter': actionParameter,
       'iconData': iconData.codePoint, // Save the icon data (int)
-      'customIconData': customIconData!.codePoint,
+      'customIconData':
+          customIconData != null ? customIconData!.codePoint : null,
       'backgroundColor': backgroundColor != null
           ? {
               'colors':
@@ -128,8 +129,8 @@ class Deck {
           ? IconData(json['iconData'], fontFamily: 'MaterialIcons')
           : Icons.widgets, // Replace with the default icon you want to use
       customIconData: json['customIconData'] != null
-          ? IconData(json['iconData'], fontFamily: 'HessDeck')
-          : Icons.widgets,
+          ? IconData(json['customIconData'], fontFamily: 'HessDeck')
+          : null,
       backgroundColor: json['backgroundColor'] != null
           ? LinearGradient(
               colors: (json['backgroundColor']['colors'] as List<dynamic>)
