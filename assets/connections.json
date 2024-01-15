@@ -10,6 +10,7 @@
     {
         "name": "OBS",
         "image": "https://obsproject.com/assets/images/new_icon_small-r.png",
+        "scan": true,
         "fields": [
             "ipAddress",
             "port",

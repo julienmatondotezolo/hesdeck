@@ -160,7 +160,7 @@ class ConnectionProvider extends ChangeNotifier {
     List<String>? connectionStrings = prefs.getStringList('connections');
     // print('SHARED PREFERENCES: $connectionStrings');
 
-    if (connectionStrings!.isNotEmpty) {
+    if (connectionStrings != null && connectionStrings.isNotEmpty) {
       _connections.clear();
       for (final connString in connectionStrings) {
         // Convert JSON string to Connection object
