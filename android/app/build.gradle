@@ -52,6 +52,10 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        manifestPlaceholders = [
+           "appAuthRedirectScheme": "com.hessdeck.tv.hessdeck"
+           // Add this also using your application ID URI as the base for all your derived URIs
+       ]
     }
 
     buildTypes {

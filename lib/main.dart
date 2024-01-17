@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
 import 'package:hessdeck/providers/deck_provider.dart';
-import 'package:hessdeck/screens/music_kit_screen.dart';
+import 'package:hessdeck/screens/spotify_screen.dart';
 import 'package:hessdeck/themes/app_theme.dart';
 import 'package:hessdeck/utils/constants.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +25,8 @@ class MyApp extends StatelessWidget {
         theme: AppTheme.lightTheme, // Set light theme
         darkTheme: AppTheme.darkTheme, // Set dark theme
         // home: const HomeScreen(), // Replace with the initial screen of your app
-        home: const MusicKitScreen(),
+        // home: const MusicKitScreen(),
+        home: const SpotifyScreen(),
         debugShowCheckedModeBanner: false,
       ),
     );
