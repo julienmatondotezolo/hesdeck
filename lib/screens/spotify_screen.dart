@@ -52,36 +52,45 @@ class SpotifyScreen extends StatelessWidget {
     );
 
     final accessToken = await SpotifySdk.getAccessToken(
-      clientId: clientId,
-      redirectUrl: redirectURI,
-      scope:
-          "app-remote-control,user-modify-playback-state,playlist-read-private",
-    );
+        clientId: clientId,
+        redirectUrl: redirectURI,
+        scope: "streaming,user-modify-playback-state,playlist-read-privat"
+        // scope:
+        //     "app-remote-control,user-modify-playback-state,playlist-read-private",
+        );
 
+    SpotifySdk.subscribePlayerState();
+    SpotifySdk.subscribePlayerContext();
+
+    debugPrint('access token: $accessToken');
     print('access token: $accessToken');
   }
 
   void _playerState() async {
     final playerState = await SpotifySdk.getPlayerState();
 
+    debugPrint('player state: $playerState');
     print('player state: $playerState');
   }
 
   void _pauseSong() async {
     final pause = await SpotifySdk.pause();
 
+    debugPrint('pause: $pause');
     print('pause: $pause');
   }
 
   void _resumeSong() async {
     final resume = await SpotifySdk.resume();
 
+    debugPrint('resume: $resume');
     print('resume: $resume');
   }
 
   void _nextSong() async {
     final next = await SpotifySdk.skipNext();
 
+    debugPrint('next: $next');
     print('next: $next');
   }
 }

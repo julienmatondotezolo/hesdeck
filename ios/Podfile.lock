@@ -2,8 +2,6 @@ PODS:
   - audioplayers_darwin (0.0.1):
     - Flutter
   - Flutter (1.0.0)
-  - music_kit (0.0.1):
-    - Flutter
   - path_provider_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -16,7 +14,6 @@ PODS:
 DEPENDENCIES:
   - audioplayers_darwin (from `.symlinks/plugins/audioplayers_darwin/ios`)
   - Flutter (from `Flutter`)
-  - music_kit (from `.symlinks/plugins/music_kit/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - spotify_sdk (from `.symlinks/plugins/spotify_sdk/ios`)
@@ -26,8 +23,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/audioplayers_darwin/ios"
   Flutter:
     :path: Flutter
-  music_kit:
-    :path: ".symlinks/plugins/music_kit/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   shared_preferences_foundation:
@@ -38,11 +33,10 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   audioplayers_darwin: 877d9a4d06331c5c374595e46e16453ac7eafa40
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  music_kit: defb969f1be323eb85c9707d7446e563408830d4
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
   spotify_sdk: 63cc13896c9ff93c4d023e03bb4b9b516602f355
 
-PODFILE CHECKSUM: e4117a704e09def4e037874805d688706c152708
+PODFILE CHECKSUM: 70d9d25280d0dd177a5f637cdb0f0b0b12c6a189
 
 COCOAPODS: 1.12.1
