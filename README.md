@@ -44,6 +44,12 @@ flutter pub get
 flutter run
 ```
 
+5. Build IOS release:
+
+```bash
+flutter build ipa --release --no-tree-shake-icons
+```
+
 ## Dependencies
 
 - Flutter: [Flutter SDK](https://flutter.dev/)

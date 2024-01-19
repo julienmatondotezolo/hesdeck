@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:hessdeck/models/connection.dart';
 import 'package:hessdeck/models/deck.dart';
 import 'package:hessdeck/providers/deck_provider.dart';
 import 'package:hessdeck/screens/deck_screen.dart';
@@ -13,6 +14,31 @@ import 'package:hessdeck/widgets/collapsable_widget.dart';
 import 'package:provider/provider.dart';
 
 class Helpers {
+  // readScanners
+  static OBSConnection? getScanResults(String? qrCodeString) {
+    if (qrCodeString!.contains('obsws')) {
+      List<String> parts = qrCodeString.split('://');
+      String protocolAndAddress = parts[1];
+
+      List<String> ipPortAndPassword = protocolAndAddress.split('/');
+      String ipPort = ipPortAndPassword[0];
+      String password = ipPortAndPassword[1];
+
+      String port = ipPort.split(':').last;
+      String ipAddress = ipPort.split(':$port').first;
+
+      OBSConnection obsConnectionObject = OBSConnection(
+        ipAddress: ipAddress,
+        port: port,
+        password: password,
+      );
+
+      return obsConnectionObject;
+    }
+
+    return null;
+  }
+
   // Vibrations
   static void vibration() {
     if (Platform.isAndroid || Platform.isIOS) {
