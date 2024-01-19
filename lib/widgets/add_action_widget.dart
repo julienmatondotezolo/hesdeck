@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/services/actions/manage_actions.dart';
 import 'package:hessdeck/themes/colors.dart';
+import 'package:hessdeck/utils/helpers.dart';
 
 class AddActionWidget extends StatelessWidget {
   final BuildContext context;
@@ -69,6 +70,7 @@ class AddActionWidget extends StatelessWidget {
                   for (var action in actionType.value.entries)
                     GestureDetector(
                       onTap: () {
+                        Helpers.vibration();
                         onActionChanged(action.key, actionType.key, '');
                         Navigator.pop(context);
                       },
@@ -170,6 +172,7 @@ class AddActionWidget extends StatelessWidget {
                   ),
                   child: GestureDetector(
                     onTap: () {
+                      Helpers.vibration();
                       onActionChanged('', '', '');
                     },
                     child: const Text(
@@ -200,6 +203,7 @@ class AddActionWidget extends StatelessWidget {
               ),
               child: GestureDetector(
                 onTap: () async {
+                  Helpers.vibration();
                   final selectedScene =
                       await ManageAcions.selectActionParameter(
                     context,
@@ -239,6 +243,7 @@ class AddActionWidget extends StatelessWidget {
 
     return ElevatedButton(
       onPressed: () {
+        Helpers.vibration();
         _showAddActionModal(context);
       },
       style: ElevatedButton.styleFrom(

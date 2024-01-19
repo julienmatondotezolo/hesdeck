@@ -91,6 +91,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                   for (var connectionData in allConnectionsData)
                     GestureDetector(
                       onTap: () {
+                        Helpers.vibration();
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -99,7 +100,9 @@ class SettingsScreenState extends State<SettingsScreen> {
                               fields: connectionData['fields'],
                             ),
                           ),
-                        );
+                        ).then((_) {
+                          Navigator.pop(context);
+                        });
                       },
                       child: Container(
                         decoration: const BoxDecoration(

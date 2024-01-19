@@ -87,6 +87,7 @@ class OBSConnections {
   ) async {
     try {
       connectionProvider.removeConnectionFromSP(connectionObject);
+      connectionProvider.disconnectFromOBS();
     } catch (e) {
       // Handle any errors that occur while changing the scene
       throw Exception('Error deleting OBS connection: $e');

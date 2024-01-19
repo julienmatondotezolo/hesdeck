@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hessdeck/models/connection.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
+import 'package:hessdeck/screens/settings/mobile_scanner_screen.dart';
 import 'package:hessdeck/services/connections/manage_connections.dart';
 import 'package:hessdeck/utils/helpers.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 
 class ConnectionSettingsScreen extends StatefulWidget {
@@ -26,6 +28,12 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
 
   late List<TextEditingController> controllers;
 
+  MobileScannerController scannerController = MobileScannerController(
+    detectionSpeed: DetectionSpeed.normal,
+    facing: CameraFacing.back,
+    torchEnabled: false,
+  );
+
   @override
   void initState() {
     super.initState();
@@ -44,6 +52,7 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
   void dispose() {
     for (var controller in controllers) {
       controller.dispose();
+      scannerController.stop();
     }
     super.dispose();
   }
@@ -96,6 +105,43 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
                           const SizedBox(height: 16),
                         ],
                       ),
+                    widget.connectionName == 'OBS' && !isConnected
+                        ? ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MobileScannerScreen(
+                                    scannerController: scannerController,
+                                    connectionType: widget.connectionName,
+                                  ),
+                                ),
+                              ).then((barcodeRawValue) {
+                                controllers[0].value =
+                                    TextEditingValue(text: barcodeRawValue[0]);
+
+                                controllers[1].value =
+                                    TextEditingValue(text: barcodeRawValue[1]);
+
+                                controllers[2].value =
+                                    TextEditingValue(text: barcodeRawValue[2]);
+
+                                Helpers.vibration();
+                                ManageConnections.selectConnection(
+                                  context,
+                                  widget.connectionName,
+                                  controllers,
+                                );
+                              });
+                            },
+                            child: const Text(
+                              'Scan to Connect',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        : const SizedBox(),
                     const Spacer(),
                     !isConnected
                         ? ElevatedButton(
