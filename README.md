@@ -36,7 +36,14 @@ cd hessdeck
 
 ```bash
 flutter pub get
+
+flutter clean
+flutter pub get
+cd ios
+pod install
+cd ..
 ```
+
 
 4. Run the app:
 
