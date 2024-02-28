@@ -158,7 +158,13 @@ class SettingsScreenState extends State<SettingsScreen> {
 
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Settings'),
+          iconTheme: const IconThemeData(
+            color: Colors.white, //change your color here
+          ),
+          title: const Text(
+            'Settings',
+            style: TextStyle(color: Colors.white),
+          ),
         ),
         body: SafeArea(
           child: Container(
@@ -300,7 +306,10 @@ class SettingsScreenState extends State<SettingsScreen> {
                       children: [
                         Icon(Icons.add, color: Colors.white), // + icon
                         SizedBox(width: 8), // Spacing
-                        Text('Add Connection'), // Text
+                        Text(
+                          'Add Connection',
+                          style: TextStyle(color: Colors.white),
+                        ), // Text
                       ],
                     ),
                   ),
@@ -312,6 +321,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                     ),
                     child: const Text(
                       'Logout',
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ],

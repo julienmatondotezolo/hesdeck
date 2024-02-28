@@ -72,7 +72,13 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
 
       return Scaffold(
         appBar: AppBar(
-          title: Text('${widget.connectionName} settings'),
+          iconTheme: const IconThemeData(
+            color: Colors.white, //change your color here
+          ),
+          title: Text(
+            '${widget.connectionName} settings',
+            style: const TextStyle(color: Colors.white),
+          ),
         ),
         body: SafeArea(
           child: Container(
@@ -134,6 +140,10 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
                                 );
                               });
                             },
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.blue,
+                            ),
                             child: const Text(
                               'Scan to Connect',
                               style: TextStyle(
@@ -157,11 +167,12 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
                                 Navigator.pop(context);
                               }
                             },
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.blue,
+                            ),
                             child: const Text(
                               'Connect',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
                             ),
                           )
                         : ElevatedButton(

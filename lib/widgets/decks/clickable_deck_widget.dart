@@ -79,7 +79,6 @@ class ClickableDeckWidgetState extends State<ClickableDeckWidget>
         );
       },
       child: Container(
-        padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           gradient: isClicked
               ? widget.deck!.activeBackgroundColor

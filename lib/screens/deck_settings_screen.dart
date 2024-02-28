@@ -88,7 +88,13 @@ class DeckSettingsScreenState extends State<DeckSettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_name),
+        iconTheme: const IconThemeData(
+          color: Colors.white, //change your color here
+        ),
+        title: Text(
+          _name,
+          style: const TextStyle(color: Colors.white),
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
