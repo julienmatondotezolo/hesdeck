@@ -296,7 +296,7 @@ class ConnectionProvider extends ChangeNotifier {
   // Connect to OBS WebSocket server
   Future<void> connectToOBS(OBSConnection obsConnectionObject) async {
     _obsWebSocket = await ObsWebSocket.connect(
-      'ws://[${obsConnectionObject.ipAddress}]:${obsConnectionObject.port}',
+      'ws://${obsConnectionObject.ipAddress}:${obsConnectionObject.port}',
       password: obsConnectionObject.password,
       fallbackEventHandler: (Event event) => debugPrint(
         '[OBS LISTENER]: type: ${event.eventType} data: ${event.eventData}',
