@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hessdeck/models/connection.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
 import 'package:hessdeck/services/connections/apple_music_connections.dart';
+import 'package:hessdeck/services/connections/light_connection.dart';
 import 'package:hessdeck/services/connections/obs_connections.dart';
 import 'package:hessdeck/services/connections/spotify_connections.dart';
 import 'package:hessdeck/services/connections/stream_elements_connections.dart';
@@ -21,6 +22,13 @@ class ManageConnections {
       );
     } else if (connectionType == 'OBS') {
       await OBSConnections.connectToOBS(
+        context,
+        controllers[0],
+        controllers[1],
+        controllers[2],
+      );
+    } else if (connectionType == 'Lights') {
+      await LightConnections.connectToLights(
         context,
         controllers[0],
         controllers[1],

@@ -220,6 +220,58 @@ class SpotifyConnection extends Connection {
   }
 }
 
+class LightsConnection extends Connection {
+  final String primaryServiceUuid;
+  final String receiveCharUuid;
+  final String sendCharUuid;
+  LightsConnection({
+    required this.primaryServiceUuid,
+    required this.receiveCharUuid,
+    required this.sendCharUuid,
+    bool connected = false, // Provide a default value for connected
+  }) : super(
+          'Lights',
+          'https://cdn-icons-png.flaticon.com/512/176/176860.png',
+          connected,
+        );
+
+  @override
+  LightsConnection copyWith({
+    String? primaryServiceUuid,
+    String? receiveCharUuid,
+    String? sendCharUuid,
+    required bool connected,
+  }) {
+    return LightsConnection(
+      primaryServiceUuid: primaryServiceUuid ?? this.primaryServiceUuid,
+      receiveCharUuid: receiveCharUuid ?? this.receiveCharUuid,
+      sendCharUuid: sendCharUuid ?? this.sendCharUuid,
+      connected: connected, // Update connected property
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type,
+      'image': image,
+      'connected': connected,
+      'primaryServiceUuid': primaryServiceUuid,
+      'receiveCharUuid': receiveCharUuid,
+      'sendCharUuid': sendCharUuid,
+    };
+  }
+
+  factory LightsConnection.fromJson(Map<String, dynamic> json) {
+    return LightsConnection(
+      primaryServiceUuid: json['primaryServiceUuid'],
+      receiveCharUuid: json['receiveCharUuid'],
+      sendCharUuid: json['sendCharUuid'],
+      connected: json['connected'],
+    );
+  }
+}
+
 class StreamElementsConnection extends Connection {
   final String jwtToken;
   final String accounId;

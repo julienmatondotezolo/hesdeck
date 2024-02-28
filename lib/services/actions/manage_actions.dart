@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hessdeck/services/actions/lights_elements_actions.dart';
 import 'package:hessdeck/services/actions/obs_actions.dart';
 import 'package:hessdeck/services/actions/stream_elements_actions.dart';
 
@@ -12,6 +13,11 @@ class ManageAcions {
     switch (connectionType) {
       case 'OBS':
         return await obsMethods[actionName]!(
+          context,
+          actionParameter ?? '',
+        );
+      case 'Lights':
+        return await lightsMethods[actionName]!(
           context,
           actionParameter ?? '',
         );
@@ -39,6 +45,11 @@ class ManageAcions {
           context,
           actionParameter ?? '',
         );
+      case 'Lights':
+        return await lightsMethodParameters[actionName]!(
+          context,
+          actionParameter ?? '',
+        );
       case 'StreamElements':
         return await streamElementsMethodParameters[actionName]!(
           context,
@@ -54,6 +65,7 @@ class ManageAcions {
   static Map<String, dynamic> getAllActions() {
     return {
       'OBS': obsMethods,
+      'Lights': lightsMethods,
       'StreamElements': streamElementsMethods,
     };
   }
@@ -74,10 +86,13 @@ class ManageAcions {
     Map<String, dynamic> methodMetadataList = {};
     Map<String, OBSMethodMetadata> obsMethodMetadata =
         OBSActions.obsMethodMetadata;
+    Map<String, LightsMethodMetadata> lightsMethodMetadata =
+        LightsActions.lightsMethodMetadata;
     Map<String, StreamElementsMethodMetadata> streamElementsMethodMetadata =
         StreamElementsActions.streamElementsMethodMetadata;
 
     methodMetadataList.addAll(obsMethodMetadata);
+    methodMetadataList.addAll(lightsMethodMetadata);
     methodMetadataList.addAll(streamElementsMethodMetadata);
 
     List<String> methodParameter =

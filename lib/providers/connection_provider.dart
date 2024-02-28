@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:hessdeck/models/connection.dart';
 import 'package:hessdeck/utils/helpers.dart';
 import 'package:obs_websocket/obs_websocket.dart';
@@ -24,6 +25,13 @@ class ConnectionProvider extends ChangeNotifier {
     password: '*********',
   );
   ObsWebSocket? _obsWebSocket;
+
+  late LightsConnection _lightsConnectionObject = LightsConnection(
+    primaryServiceUuid: 'f000aa60-0451-4000-b000-000000000000',
+    receiveCharUuid: 'f000aa63-0451-4000-b000-000000000000',
+    sendCharUuid: 'f000aa61-0451-4000-b000-000000000000',
+  );
+  BluetoothDevice? _lightClient;
 
   late TwitchConnection _twitchConnectionObject = TwitchConnection(
     clientId: 'xxx.xxx.xxx.x',
@@ -53,6 +61,9 @@ class ConnectionProvider extends ChangeNotifier {
 
   OBSConnection get obsConnectionObject => _obsConnectionObject;
   ObsWebSocket? get obsWebSocket => _obsWebSocket;
+
+  LightsConnection get lightsConnectionObject => _lightsConnectionObject;
+  BluetoothDevice? get lightClient => _lightClient;
 
   TwitchConnection get twitchConnectionObject => _twitchConnectionObject;
   Map<String, dynamic>? get twitchClient => _twitchClient;
@@ -170,7 +181,7 @@ class ConnectionProvider extends ChangeNotifier {
         if (connJson["type"] == 'Apple Music') {
           AppleMusicConnection appleMusicConnectionObject =
               AppleMusicConnection.fromJson(connJson);
-          // If OBS WebSocket is null put connected to false
+          // If Apple Music is null put connected to false
           _appleMusicClient == null
               ? appleMusicConnectionObject =
                   appleMusicConnectionObject.copyWith(connected: false)
@@ -186,10 +197,20 @@ class ConnectionProvider extends ChangeNotifier {
               : obsConnectionObject;
           addConnection(obsConnectionObject);
           _obsConnectionObject = obsConnectionObject;
+        } else if (connJson["type"] == 'Lights') {
+          LightsConnection lightsConnectionObject =
+              LightsConnection.fromJson(connJson);
+          // If OBS WebSocket is null put connected to false
+          _lightClient == null
+              ? lightsConnectionObject =
+                  lightsConnectionObject.copyWith(connected: false)
+              : lightsConnectionObject;
+          addConnection(lightsConnectionObject);
+          _lightsConnectionObject = lightsConnectionObject;
         } else if (connJson["type"] == 'Twitch') {
           TwitchConnection twitchConnectionObject =
               TwitchConnection.fromJson(connJson);
-          // If OBS WebSocket is null put connected to false
+          // If Twitch is null put connected to false
           _twitchClient == null
               ? twitchConnectionObject =
                   twitchConnectionObject.copyWith(connected: false)
@@ -199,7 +220,7 @@ class ConnectionProvider extends ChangeNotifier {
         } else if (connJson["type"] == 'Spotify') {
           SpotifyConnection spotifyConnectionObject =
               SpotifyConnection.fromJson(connJson);
-          // If OBS WebSocket is null put connected to false
+          // If Spotify is null put connected to false
           _spotifyClient == null
               ? spotifyConnectionObject =
                   spotifyConnectionObject.copyWith(connected: false)
@@ -345,6 +366,128 @@ class ConnectionProvider extends ChangeNotifier {
       notifyListeners();
     } else {
       throw Exception('You are not connected to OBS.');
+    }
+  }
+
+  /* ===================================================
+           ===== OBS CONNECTION SETTINGS ======
+  *** ================================================= */
+
+  // Connect to OBS WebSocket server
+  Future<void> connectToLights(LightsConnection lightsConnectionObject) async {
+    FlutterBlue flutterBlue = FlutterBlue.instance;
+
+    BluetoothCharacteristic? sendCharacteristic;
+    BluetoothCharacteristic? receiveCharacteristic;
+    String primaryServiceUuid = lightsConnectionObject.primaryServiceUuid;
+    String receiveCharUuid = lightsConnectionObject.receiveCharUuid;
+    String sendCharUuid = lightsConnectionObject.sendCharUuid;
+
+    void discoverServices() async {
+      if (_lightClient == null) return;
+
+      List<BluetoothService> services = await _lightClient!.discoverServices();
+      for (var service in services) {
+        if (service.uuid.toString() == primaryServiceUuid) {
+          for (var characteristic in service.characteristics) {
+            if (characteristic.uuid.toString() == receiveCharUuid) {
+              receiveCharacteristic = characteristic;
+            } else if (characteristic.uuid.toString() == sendCharUuid) {
+              sendCharacteristic = characteristic;
+            }
+          }
+        }
+      }
+    }
+
+    Future<void> flickerLed() async {
+      if (sendCharacteristic == null) return;
+
+      // Blue color command
+      List<int> blueColorCommand = [0, 0, 255];
+      // White color command
+      List<int> whiteColorCommand = [255, 255, 255];
+
+      for (int i = 0; i < 5; i++) {
+        // Send blue color command
+        await sendCharacteristic!.write(blueColorCommand);
+        await Future.delayed(
+            const Duration(milliseconds: 500)); // Adjust delay as needed
+
+        // Send white color command
+        await sendCharacteristic!.write(whiteColorCommand);
+        await Future.delayed(
+            const Duration(milliseconds: 500)); // Adjust delay as needed
+      }
+    }
+
+    void connectToDevice() async {
+      if (_lightClient == null) return;
+
+      await _lightClient!.connect();
+      discoverServices();
+    }
+
+    try {
+      flutterBlue.startScan(timeout: const Duration(seconds: 4));
+
+      // Listening to scan results
+      var subscription = flutterBlue.scanResults.listen((results) {
+        for (ScanResult result in results) {
+          if (result.device.name == 'YONGNUO LED') {
+            // Adjust this to match your device
+            _lightClient = result.device;
+
+            if (_lightClient == null) return;
+            flutterBlue.stopScan();
+            connectToDevice();
+            break;
+          }
+        }
+      });
+
+      Future.delayed(const Duration(seconds: 4)).then((_) {
+        subscription.cancel();
+        flutterBlue.stopScan();
+      });
+
+      if (_lightClient != null) {
+        flickerLed();
+        debugPrint('Connected to Lights.');
+
+        lightsConnectionObject =
+            lightsConnectionObject.copyWith(connected: true);
+
+        addConnection(lightsConnectionObject);
+        _saveConnectionSettings();
+      }
+    } catch (e) {
+      throw Exception('Error connecting to LIGHTS: $e');
+    }
+
+    notifyListeners();
+  }
+
+  // Disconnect from OBS StreamElements
+  Future<void> disconnectFromLights() async {
+    if (_lightClient != null) {
+      _lightClient = await _lightClient?.disconnect();
+
+      // Update the connected property of the existing connection object
+      final existingConnectionIndex = _connections.indexWhere((existingConn) =>
+          existingConn.type == _streamElementsConnectionObject.type);
+
+      if (existingConnectionIndex != -1) {
+        _connections[existingConnectionIndex] =
+            _streamElementsConnectionObject.copyWith(connected: false);
+        debugPrint('Disconnected from Lights.');
+      } else {
+        debugPrint('Lights connection not found in the list.');
+      }
+
+      notifyListeners();
+    } else {
+      throw Exception('You are not connected to Lights.');
     }
   }
 
