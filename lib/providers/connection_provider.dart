@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hessdeck/models/connection.dart';
+import 'package:hessdeck/utils/helpers.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -295,15 +296,17 @@ class ConnectionProvider extends ChangeNotifier {
 
   // Connect to OBS WebSocket server
   Future<void> connectToOBS(OBSConnection obsConnectionObject) async {
-    _obsWebSocket = await ObsWebSocket.connect(
-      'ws://${obsConnectionObject.ipAddress}:${obsConnectionObject.port}',
-      password: obsConnectionObject.password,
-      fallbackEventHandler: (Event event) => debugPrint(
-        '[OBS LISTENER]: type: ${event.eventType} data: ${event.eventData}',
-      ),
-    );
+    String ipAddress = Helpers.checkIfIPv6(obsConnectionObject.ipAddress);
 
     try {
+      _obsWebSocket = await ObsWebSocket.connect(
+        'ws://$ipAddress:${obsConnectionObject.port}',
+        password: obsConnectionObject.password,
+        fallbackEventHandler: (Event event) => debugPrint(
+          '[OBS LISTENER]: type: ${event.eventType} data: ${event.eventData}',
+        ),
+      );
+
       if (_obsWebSocket != null) {
         debugPrint('Connected to OBS WebSocket server.');
 
@@ -316,7 +319,7 @@ class ConnectionProvider extends ChangeNotifier {
         await _obsWebSocket?.listen(EventSubscription.all.code);
       }
     } catch (e) {
-      throw Exception('Error connecting to OBS WebSocket server.');
+      throw Exception('Error connecting to OBS WebSocket server: $e');
     }
     notifyListeners();
   }

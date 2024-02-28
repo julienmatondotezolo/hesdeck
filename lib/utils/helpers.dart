@@ -261,4 +261,15 @@ class Helpers {
 
     return fields;
   }
+
+  static String checkIfIPv6(String address) {
+    final ipv6RegExp = RegExp(r'^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$');
+    final isIPv6 = ipv6RegExp.hasMatch(address);
+
+    if (isIPv6) {
+      return '[$address]';
+    }
+
+    return address;
+  }
 }

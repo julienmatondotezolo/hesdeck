@@ -47,7 +47,8 @@ class ManageConnections {
       );
     } else {
       throw Exception(
-          'No CONNECTION for [$connectionType] exists in this services.');
+        'No CONNECTION for [$connectionType] exists in this services.',
+      );
     }
   }
 
@@ -66,7 +67,9 @@ class ManageConnections {
       await SpotifyConnections.disconnectSpotify(connectionProvider);
     } else if (connectionType == 'StreamElements') {
       await StreamElementsConnections.disconnectStreamElements(
-          context, connectionProvider);
+        context,
+        connectionProvider,
+      );
     }
   }
 

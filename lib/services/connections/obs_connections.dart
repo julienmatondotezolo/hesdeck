@@ -27,6 +27,7 @@ class OBSConnections {
     try {
       await connectionProvider.connectToOBS(obsObject);
     } catch (e) {
+      if (!context.mounted) return;
       // Handle connection error here, show an error message or take appropriate action.
       showDialog(
         context: context,
