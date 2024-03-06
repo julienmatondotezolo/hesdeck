@@ -168,8 +168,6 @@ class StreamElementsActions {
             ? allAlerts[0][allAlerts[0].keys.first]['volume'] * 100.0
             : 0.0;
 
-        print('initialVolume: $initialVolume');
-
         SliderValueNotifier.sliderValue.value = initialVolume;
 
         // // Play sound
