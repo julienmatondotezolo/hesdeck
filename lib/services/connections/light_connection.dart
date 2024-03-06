@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:hessdeck/models/connection.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
+import 'package:hessdeck/screens/settings/settings_screen.dart';
 import 'package:provider/provider.dart';
 
 class LightConnections {
@@ -85,6 +87,47 @@ class LightConnections {
     } catch (e) {
       // Handle any errors that occur while changing the scene
       throw Exception('Error deleting Lights connection: $e');
+    }
+  }
+
+  static Future<bool> checkIfConnectedToLights(
+    BuildContext context,
+    BluetoothDevice? lightClient,
+  ) async {
+    try {
+      if (lightClient != null) {
+        return true;
+      }
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Connection Error'),
+          content: const Text('Not connected to Lights.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Go back'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SettingsScreen(),
+                  ),
+                ).then((_) => Navigator.pop(context));
+              },
+              child: const Text('Connect to Lights'),
+            ),
+          ],
+        ),
+      );
+      return false;
+    } catch (e) {
+      debugPrint('Lights connection error: $e');
+      return false;
     }
   }
 }

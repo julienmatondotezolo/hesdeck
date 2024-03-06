@@ -32,6 +32,7 @@ class ConnectionProvider extends ChangeNotifier {
     sendCharUuid: 'f000aa61-0451-4000-b000-000000000000',
   );
   BluetoothDevice? _lightClient;
+  BluetoothCharacteristic? _sendCharacteristic;
 
   late TwitchConnection _twitchConnectionObject = TwitchConnection(
     clientId: 'xxx.xxx.xxx.x',
@@ -64,6 +65,7 @@ class ConnectionProvider extends ChangeNotifier {
 
   LightsConnection get lightsConnectionObject => _lightsConnectionObject;
   BluetoothDevice? get lightClient => _lightClient;
+  BluetoothCharacteristic? get sendCharacteristic => _sendCharacteristic;
 
   TwitchConnection get twitchConnectionObject => _twitchConnectionObject;
   Map<String, dynamic>? get twitchClient => _twitchClient;
@@ -377,7 +379,6 @@ class ConnectionProvider extends ChangeNotifier {
   Future<void> connectToLights(LightsConnection lightsConnectionObject) async {
     FlutterBlue flutterBlue = FlutterBlue.instance;
 
-    BluetoothCharacteristic? sendCharacteristic;
     BluetoothCharacteristic? receiveCharacteristic;
     String primaryServiceUuid = lightsConnectionObject.primaryServiceUuid;
     String receiveCharUuid = lightsConnectionObject.receiveCharUuid;
@@ -392,7 +393,7 @@ class ConnectionProvider extends ChangeNotifier {
           // Check if the characteristic's UUID matches the sendCharUuid
           if (characteristic.uuid.toString() == sendCharUuid) {
             // Save the sendCharacteristic
-            sendCharacteristic = characteristic;
+            _sendCharacteristic = characteristic;
             // Optionally, break the loop if you've found the characteristic you're looking for
             break;
           }

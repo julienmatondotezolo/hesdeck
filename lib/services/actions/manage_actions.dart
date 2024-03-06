@@ -19,7 +19,6 @@ class ManageAcions {
       case 'Lights':
         return await lightsMethods[actionName]!(
           context,
-          actionParameter ?? '',
         );
       case 'StreamElements':
         return await streamElementsMethods[actionName]!(
@@ -42,11 +41,6 @@ class ManageAcions {
     switch (connectionType) {
       case 'OBS':
         return await obsMethodParameters[actionName]!(
-          context,
-          actionParameter ?? '',
-        );
-      case 'Lights':
-        return await lightsMethodParameters[actionName]!(
           context,
           actionParameter ?? '',
         );
