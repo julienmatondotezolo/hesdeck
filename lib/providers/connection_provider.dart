@@ -370,10 +370,10 @@ class ConnectionProvider extends ChangeNotifier {
   }
 
   /* ===================================================
-           ===== OBS CONNECTION SETTINGS ======
+           ===== LIGHTS CONNECTION SETTINGS ======
   *** ================================================= */
 
-  // Connect to OBS WebSocket server
+  // Connect to LIGHTS
   Future<void> connectToLights(LightsConnection lightsConnectionObject) async {
     FlutterBlue flutterBlue = FlutterBlue.instance;
 
@@ -383,49 +383,69 @@ class ConnectionProvider extends ChangeNotifier {
     String receiveCharUuid = lightsConnectionObject.receiveCharUuid;
     String sendCharUuid = lightsConnectionObject.sendCharUuid;
 
-    void discoverServices() async {
-      if (_lightClient == null) return;
-
-      List<BluetoothService> services = await _lightClient!.discoverServices();
+    Future<void> discoverServices(BluetoothDevice device) async {
+      print('Discover services...');
+      List<BluetoothService> services = await device.discoverServices();
       for (var service in services) {
-        if (service.uuid.toString() == primaryServiceUuid) {
-          for (var characteristic in service.characteristics) {
-            if (characteristic.uuid.toString() == receiveCharUuid) {
-              receiveCharacteristic = characteristic;
-            } else if (characteristic.uuid.toString() == sendCharUuid) {
-              sendCharacteristic = characteristic;
-            }
+        for (BluetoothCharacteristic characteristic
+            in service.characteristics) {
+          // Check if the characteristic's UUID matches the sendCharUuid
+          if (characteristic.uuid.toString() == sendCharUuid) {
+            // Save the sendCharacteristic
+            sendCharacteristic = characteristic;
+            // Optionally, break the loop if you've found the characteristic you're looking for
+            break;
           }
         }
       }
     }
 
-    Future<void> flickerLed() async {
-      if (sendCharacteristic == null) return;
+    List<int> updateColor(int r, int g, int b) {
+      // Command prefix [0xae, 0xa1] followed by RGB values and a checksum [0x56]
+      List<int> data = [0xae, 0xa1, r, g, b, 0x56];
 
-      // Blue color command
-      List<int> blueColorCommand = [0, 0, 255];
-      // White color command
-      List<int> whiteColorCommand = [255, 255, 255];
-
-      for (int i = 0; i < 5; i++) {
-        // Send blue color command
-        await sendCharacteristic!.write(blueColorCommand);
-        await Future.delayed(
-            const Duration(milliseconds: 500)); // Adjust delay as needed
-
-        // Send white color command
-        await sendCharacteristic!.write(whiteColorCommand);
-        await Future.delayed(
-            const Duration(milliseconds: 500)); // Adjust delay as needed
-      }
+      return data;
     }
 
-    void connectToDevice() async {
-      if (_lightClient == null) return;
+    Future<void> flickerLed() async {
+      print('Flickering...');
 
-      await _lightClient!.connect();
-      discoverServices();
+      // Blue color command
+      List<int> blueColorCommand = updateColor(0, 0, 255);
+      // White color command
+      List<int> whiteColorCommand = updateColor(255, 255, 255);
+
+      for (int i = 0; i < 6; i++) {
+        // Send blue color command
+        await sendCharacteristic?.write(
+          blueColorCommand,
+        );
+        await Future.delayed(
+          const Duration(milliseconds: 500),
+        ); // Adjust delay as needed
+
+        // Send white color command
+        await sendCharacteristic?.write(
+          whiteColorCommand,
+        );
+        await Future.delayed(
+          const Duration(milliseconds: 500),
+        ); // Adjust delay as needed
+      }
+
+      print('Flickering done');
+    }
+
+    void connectToDevice(BluetoothDevice device) async {
+      await device.connect();
+      print('Connected to YONGNUO LED');
+      await discoverServices(device);
+      await flickerLed();
+
+      debugPrint('Connected to Lights.');
+      lightsConnectionObject = lightsConnectionObject.copyWith(connected: true);
+      addConnection(lightsConnectionObject);
+      _saveConnectionSettings();
     }
 
     try {
@@ -434,13 +454,18 @@ class ConnectionProvider extends ChangeNotifier {
       // Listening to scan results
       var subscription = flutterBlue.scanResults.listen((results) {
         for (ScanResult result in results) {
+          print('Scanning....');
+          print(result.device.name);
           if (result.device.name == 'YONGNUO LED') {
+            print('Connecting....');
             // Adjust this to match your device
             _lightClient = result.device;
 
+            print('_lightClient: $_lightClient');
+
             if (_lightClient == null) return;
             flutterBlue.stopScan();
-            connectToDevice();
+            connectToDevice(_lightClient!);
             break;
           }
         }
@@ -450,17 +475,6 @@ class ConnectionProvider extends ChangeNotifier {
         subscription.cancel();
         flutterBlue.stopScan();
       });
-
-      if (_lightClient != null) {
-        flickerLed();
-        debugPrint('Connected to Lights.');
-
-        lightsConnectionObject =
-            lightsConnectionObject.copyWith(connected: true);
-
-        addConnection(lightsConnectionObject);
-        _saveConnectionSettings();
-      }
     } catch (e) {
       throw Exception('Error connecting to LIGHTS: $e');
     }
@@ -468,10 +482,10 @@ class ConnectionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Disconnect from OBS StreamElements
+  // Disconnect from LIGHTS
   Future<void> disconnectFromLights() async {
     if (_lightClient != null) {
-      _lightClient = await _lightClient?.disconnect();
+      _lightClient = await _lightClient!.disconnect();
 
       // Update the connected property of the existing connection object
       final existingConnectionIndex = _connections.indexWhere((existingConn) =>

@@ -20,7 +20,6 @@
     {
         "name": "Lights",
         "image": "https://cdn-icons-png.flaticon.com/512/176/176860.png",
-        "scan": true,
         "fields": [
             "primaryServiceUuid",
             "receiveCharUuid",

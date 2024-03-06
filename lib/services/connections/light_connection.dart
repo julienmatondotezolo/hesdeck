@@ -10,9 +10,13 @@ class LightConnections {
     TextEditingController receiveCharUuidController,
     TextEditingController sendCharUuidController,
   ) async {
-    String primaryServiceUuid = primaryServiceUuidController.text;
-    String receiveCharUuid = receiveCharUuidController.text;
-    String sendCharUuid = sendCharUuidController.text;
+    // String primaryServiceUuid = primaryServiceUuidController.text;
+    // String receiveCharUuid = receiveCharUuidController.text;
+    // String sendCharUuid = sendCharUuidController.text;
+
+    String primaryServiceUuid = 'f000aa60-0451-4000-b000-000000000000';
+    String receiveCharUuid = 'f000aa63-0451-4000-b000-000000000000';
+    String sendCharUuid = 'f000aa61-0451-4000-b000-000000000000';
 
     LightsConnection lightObject = LightsConnection(
       primaryServiceUuid: primaryServiceUuid,
@@ -44,6 +48,43 @@ class LightConnections {
         ),
       );
       throw Exception('Error connecting to Lights: $e');
+    }
+  }
+
+  static Future<void> disconnectLights(
+    BuildContext context,
+    ConnectionProvider connectionProvider,
+  ) async {
+    try {
+      connectionProvider.disconnectFromLights();
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Connection Error'),
+          content: Text('Failed to disconnect from Lights. $e'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  static Future<void> deleteLightsConnection(
+    ConnectionProvider connectionProvider,
+    Connection connectionObject,
+  ) async {
+    try {
+      connectionProvider.removeConnectionFromSP(connectionObject);
+    } catch (e) {
+      // Handle any errors that occur while changing the scene
+      throw Exception('Error deleting Lights connection: $e');
     }
   }
 }

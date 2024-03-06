@@ -69,6 +69,8 @@ class ManageConnections {
       await AppleMusicConnections.disconnectAppleMusic(connectionProvider);
     } else if (connectionType == 'OBS') {
       await OBSConnections.disconnectOBS(context, connectionProvider);
+    } else if (connectionType == 'Lights') {
+      await LightConnections.disconnectLights(context, connectionProvider);
     } else if (connectionType == 'Twitch') {
       await TwitchConnections.disconnectTwitch(connectionProvider);
     } else if (connectionType == 'Spotify') {
@@ -93,6 +95,11 @@ class ManageConnections {
       );
     } else if (connectionType == 'OBS') {
       await OBSConnections.deleteOBSConnection(
+        connectionProvider,
+        connectionObject,
+      );
+    } else if (connectionType == 'Lights') {
+      await LightConnections.deleteLightsConnection(
         connectionProvider,
         connectionObject,
       );
