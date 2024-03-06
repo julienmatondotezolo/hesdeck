@@ -163,17 +163,17 @@ class StreamElementsActions {
           }
         });
 
-        // Initialize SliderValueNotifier.sliderValue after populating allAlerts
+        // // Initialize SliderValueNotifier.sliderValue after populating allAlerts
         final initialVolume = allAlerts.isNotEmpty
-            ? allAlerts[0][allAlerts[0].keys.first]['volume'] * 100
+            ? allAlerts[0][allAlerts[0].keys.first]['volume'] * 100.0
             : 0.0;
 
         SliderValueNotifier.sliderValue.value = initialVolume;
 
-        // Play sound
+        // // Play sound
         final audioPlayer = AudioPlayer();
 
-        // print('allAlerts: $allAlerts');
+        if (!context.mounted) return;
 
         if (overlayName.isNotEmpty) {
           // ignore: use_build_context_synchronously
@@ -181,7 +181,7 @@ class StreamElementsActions {
             context: context,
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(
-                top: Radius.circular(25),
+                top: Radius.circular(25.0),
               ),
             ),
             clipBehavior: Clip.antiAliasWithSaveLayer,

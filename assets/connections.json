@@ -18,6 +18,15 @@
         ]
     },
     {
+        "name": "Lights",
+        "image": "https://cdn-icons-png.flaticon.com/512/176/176860.png",
+        "fields": [
+            "primaryServiceUuid",
+            "receiveCharUuid",
+            "sendCharUuid"
+        ]
+    },
+    {
         "name": "Spotify",
         "image": "https://cdn-icons-png.flaticon.com/512/174/174872.png",
         "fields": [

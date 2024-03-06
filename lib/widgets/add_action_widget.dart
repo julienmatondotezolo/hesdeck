@@ -247,6 +247,7 @@ class AddActionWidget extends StatelessWidget {
         _showAddActionModal(context);
       },
       style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.white,
         backgroundColor: AppColors.darkGrey, // Dark grey color
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0), // Rounded corners

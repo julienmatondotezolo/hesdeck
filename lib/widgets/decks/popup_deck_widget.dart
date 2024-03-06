@@ -41,7 +41,6 @@ class PopupDeckWidget extends StatelessWidget {
         );
       },
       child: Container(
-        padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           gradient: deck!.backgroundColor,
           border: Border.all(color: AppColors.darkGrey, width: 5),

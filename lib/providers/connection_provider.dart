@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:hessdeck/models/connection.dart';
+import 'package:hessdeck/utils/helpers.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,6 +25,14 @@ class ConnectionProvider extends ChangeNotifier {
     password: '*********',
   );
   ObsWebSocket? _obsWebSocket;
+
+  late LightsConnection _lightsConnectionObject = LightsConnection(
+    primaryServiceUuid: 'f000aa60-0451-4000-b000-000000000000',
+    receiveCharUuid: 'f000aa63-0451-4000-b000-000000000000',
+    sendCharUuid: 'f000aa61-0451-4000-b000-000000000000',
+  );
+  BluetoothDevice? _lightClient;
+  BluetoothCharacteristic? _sendCharacteristic;
 
   late TwitchConnection _twitchConnectionObject = TwitchConnection(
     clientId: 'xxx.xxx.xxx.x',
@@ -52,6 +62,10 @@ class ConnectionProvider extends ChangeNotifier {
 
   OBSConnection get obsConnectionObject => _obsConnectionObject;
   ObsWebSocket? get obsWebSocket => _obsWebSocket;
+
+  LightsConnection get lightsConnectionObject => _lightsConnectionObject;
+  BluetoothDevice? get lightClient => _lightClient;
+  BluetoothCharacteristic? get sendCharacteristic => _sendCharacteristic;
 
   TwitchConnection get twitchConnectionObject => _twitchConnectionObject;
   Map<String, dynamic>? get twitchClient => _twitchClient;
@@ -169,7 +183,7 @@ class ConnectionProvider extends ChangeNotifier {
         if (connJson["type"] == 'Apple Music') {
           AppleMusicConnection appleMusicConnectionObject =
               AppleMusicConnection.fromJson(connJson);
-          // If OBS WebSocket is null put connected to false
+          // If Apple Music is null put connected to false
           _appleMusicClient == null
               ? appleMusicConnectionObject =
                   appleMusicConnectionObject.copyWith(connected: false)
@@ -185,10 +199,20 @@ class ConnectionProvider extends ChangeNotifier {
               : obsConnectionObject;
           addConnection(obsConnectionObject);
           _obsConnectionObject = obsConnectionObject;
+        } else if (connJson["type"] == 'Lights') {
+          LightsConnection lightsConnectionObject =
+              LightsConnection.fromJson(connJson);
+          // If OBS WebSocket is null put connected to false
+          _lightClient == null
+              ? lightsConnectionObject =
+                  lightsConnectionObject.copyWith(connected: false)
+              : lightsConnectionObject;
+          addConnection(lightsConnectionObject);
+          _lightsConnectionObject = lightsConnectionObject;
         } else if (connJson["type"] == 'Twitch') {
           TwitchConnection twitchConnectionObject =
               TwitchConnection.fromJson(connJson);
-          // If OBS WebSocket is null put connected to false
+          // If Twitch is null put connected to false
           _twitchClient == null
               ? twitchConnectionObject =
                   twitchConnectionObject.copyWith(connected: false)
@@ -198,7 +222,7 @@ class ConnectionProvider extends ChangeNotifier {
         } else if (connJson["type"] == 'Spotify') {
           SpotifyConnection spotifyConnectionObject =
               SpotifyConnection.fromJson(connJson);
-          // If OBS WebSocket is null put connected to false
+          // If Spotify is null put connected to false
           _spotifyClient == null
               ? spotifyConnectionObject =
                   spotifyConnectionObject.copyWith(connected: false)
@@ -295,15 +319,17 @@ class ConnectionProvider extends ChangeNotifier {
 
   // Connect to OBS WebSocket server
   Future<void> connectToOBS(OBSConnection obsConnectionObject) async {
-    _obsWebSocket = await ObsWebSocket.connect(
-      'ws://${obsConnectionObject.ipAddress}:${obsConnectionObject.port}',
-      password: obsConnectionObject.password,
-      fallbackEventHandler: (Event event) => debugPrint(
-        '[OBS LISTENER]: type: ${event.eventType} data: ${event.eventData}',
-      ),
-    );
+    String ipAddress = Helpers.checkIfIPv6(obsConnectionObject.ipAddress);
 
     try {
+      _obsWebSocket = await ObsWebSocket.connect(
+        'ws://$ipAddress:${obsConnectionObject.port}',
+        password: obsConnectionObject.password,
+        fallbackEventHandler: (Event event) => debugPrint(
+          '[OBS LISTENER]: type: ${event.eventType} data: ${event.eventData}',
+        ),
+      );
+
       if (_obsWebSocket != null) {
         debugPrint('Connected to OBS WebSocket server.');
 
@@ -316,7 +342,7 @@ class ConnectionProvider extends ChangeNotifier {
         await _obsWebSocket?.listen(EventSubscription.all.code);
       }
     } catch (e) {
-      throw Exception('Error connecting to OBS WebSocket server.');
+      throw Exception('Error connecting to OBS WebSocket server: $e');
     }
     notifyListeners();
   }
@@ -342,6 +368,141 @@ class ConnectionProvider extends ChangeNotifier {
       notifyListeners();
     } else {
       throw Exception('You are not connected to OBS.');
+    }
+  }
+
+  /* ===================================================
+           ===== LIGHTS CONNECTION SETTINGS ======
+  *** ================================================= */
+
+  // Connect to LIGHTS
+  Future<void> connectToLights(LightsConnection lightsConnectionObject) async {
+    FlutterBlue flutterBlue = FlutterBlue.instance;
+
+    BluetoothCharacteristic? receiveCharacteristic;
+    String primaryServiceUuid = lightsConnectionObject.primaryServiceUuid;
+    String receiveCharUuid = lightsConnectionObject.receiveCharUuid;
+    String sendCharUuid = lightsConnectionObject.sendCharUuid;
+
+    Future<void> discoverServices(BluetoothDevice device) async {
+      print('Discover services...');
+      List<BluetoothService> services = await device.discoverServices();
+      for (var service in services) {
+        for (BluetoothCharacteristic characteristic
+            in service.characteristics) {
+          // Check if the characteristic's UUID matches the sendCharUuid
+          if (characteristic.uuid.toString() == sendCharUuid) {
+            // Save the sendCharacteristic
+            _sendCharacteristic = characteristic;
+            // Optionally, break the loop if you've found the characteristic you're looking for
+            break;
+          }
+        }
+      }
+    }
+
+    List<int> updateColor(int r, int g, int b) {
+      // Command prefix [0xae, 0xa1] followed by RGB values and a checksum [0x56]
+      List<int> data = [0xae, 0xa1, r, g, b, 0x56];
+
+      return data;
+    }
+
+    Future<void> flickerLed() async {
+      print('Flickering...');
+
+      // Blue color command
+      List<int> blueColorCommand = updateColor(0, 0, 255);
+      // White color command
+      List<int> whiteColorCommand = updateColor(255, 255, 255);
+
+      for (int i = 0; i < 6; i++) {
+        // Send blue color command
+        await sendCharacteristic?.write(
+          blueColorCommand,
+        );
+        await Future.delayed(
+          const Duration(milliseconds: 500),
+        ); // Adjust delay as needed
+
+        // Send white color command
+        await sendCharacteristic?.write(
+          whiteColorCommand,
+        );
+        await Future.delayed(
+          const Duration(milliseconds: 500),
+        ); // Adjust delay as needed
+      }
+
+      print('Flickering done');
+    }
+
+    void connectToDevice(BluetoothDevice device) async {
+      await device.connect();
+      print('Connected to YONGNUO LED');
+      await discoverServices(device);
+      await flickerLed();
+
+      debugPrint('Connected to Lights.');
+      lightsConnectionObject = lightsConnectionObject.copyWith(connected: true);
+      addConnection(lightsConnectionObject);
+      _saveConnectionSettings();
+    }
+
+    try {
+      flutterBlue.startScan(timeout: const Duration(seconds: 4));
+
+      // Listening to scan results
+      var subscription = flutterBlue.scanResults.listen((results) {
+        for (ScanResult result in results) {
+          print('Scanning....');
+          print(result.device.name);
+          if (result.device.name == 'YONGNUO LED') {
+            print('Connecting....');
+            // Adjust this to match your device
+            _lightClient = result.device;
+
+            print('_lightClient: $_lightClient');
+
+            if (_lightClient == null) return;
+            flutterBlue.stopScan();
+            connectToDevice(_lightClient!);
+            break;
+          }
+        }
+      });
+
+      Future.delayed(const Duration(seconds: 4)).then((_) {
+        subscription.cancel();
+        flutterBlue.stopScan();
+      });
+    } catch (e) {
+      throw Exception('Error connecting to LIGHTS: $e');
+    }
+
+    notifyListeners();
+  }
+
+  // Disconnect from LIGHTS
+  Future<void> disconnectFromLights() async {
+    if (_lightClient != null) {
+      _lightClient = await _lightClient!.disconnect();
+
+      // Update the connected property of the existing connection object
+      final existingConnectionIndex = _connections.indexWhere((existingConn) =>
+          existingConn.type == _streamElementsConnectionObject.type);
+
+      if (existingConnectionIndex != -1) {
+        _connections[existingConnectionIndex] =
+            _streamElementsConnectionObject.copyWith(connected: false);
+        debugPrint('Disconnected from Lights.');
+      } else {
+        debugPrint('Lights connection not found in the list.');
+      }
+
+      notifyListeners();
+    } else {
+      throw Exception('You are not connected to Lights.');
     }
   }
 

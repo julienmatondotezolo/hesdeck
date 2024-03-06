@@ -1,31 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:hessdeck/models/connection.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
 import 'package:hessdeck/screens/settings/settings_screen.dart';
-import 'package:obs_websocket/obs_websocket.dart';
 import 'package:provider/provider.dart';
 
-class OBSConnections {
-  static Future<void> connectToOBS(
+class LightConnections {
+  static Future<void> connectToLights(
     BuildContext context,
-    TextEditingController ipAddressController,
-    TextEditingController portController,
-    TextEditingController passwordController,
+    TextEditingController primaryServiceUuidController,
+    TextEditingController receiveCharUuidController,
+    TextEditingController sendCharUuidController,
   ) async {
-    String ipAddress = ipAddressController.text;
-    String port = portController.text;
-    String password = passwordController.text;
+    // String primaryServiceUuid = primaryServiceUuidController.text;
+    // String receiveCharUuid = receiveCharUuidController.text;
+    // String sendCharUuid = sendCharUuidController.text;
 
-    OBSConnection obsObject = OBSConnection(
-      ipAddress: ipAddress,
-      port: port,
-      password: password,
+    String primaryServiceUuid = 'f000aa60-0451-4000-b000-000000000000';
+    String receiveCharUuid = 'f000aa63-0451-4000-b000-000000000000';
+    String sendCharUuid = 'f000aa61-0451-4000-b000-000000000000';
+
+    LightsConnection lightObject = LightsConnection(
+      primaryServiceUuid: primaryServiceUuid,
+      receiveCharUuid: receiveCharUuid,
+      sendCharUuid: sendCharUuid,
     );
 
     ConnectionProvider connectionProvider =
         Provider.of<ConnectionProvider>(context, listen: false);
     try {
-      await connectionProvider.connectToOBS(obsObject);
+      await connectionProvider.connectToLights(lightObject);
     } catch (e) {
       if (!context.mounted) return;
       // Handle connection error here, show an error message or take appropriate action.
@@ -34,7 +38,7 @@ class OBSConnections {
         builder: (context) => AlertDialog(
           title: const Text('Connection Error'),
           content: const Text(
-              'Failed to connect to OBS. Please check the connection settings and try again.'),
+              'Failed to connect to Lights. Please check the connection settings and try again.'),
           actions: [
             TextButton(
               onPressed: () {
@@ -45,22 +49,22 @@ class OBSConnections {
           ],
         ),
       );
-      throw Exception('Error connecting to OBS: $e');
+      throw Exception('Error connecting to Lights: $e');
     }
   }
 
-  static Future<void> disconnectOBS(
+  static Future<void> disconnectLights(
     BuildContext context,
     ConnectionProvider connectionProvider,
   ) async {
     try {
-      connectionProvider.disconnectFromOBS();
+      connectionProvider.disconnectFromLights();
     } catch (e) {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Connection Error'),
-          content: Text('Failed to disconnect from OBS. $e'),
+          content: Text('Failed to disconnect from Lights. $e'),
           actions: [
             TextButton(
               onPressed: () {
@@ -74,41 +78,31 @@ class OBSConnections {
     }
   }
 
-  static Future<SceneListResponse?> getScenes(
-    ObsWebSocket? obsWebSocket,
-  ) async {
-    SceneListResponse? response = await obsWebSocket?.scenes.getSceneList();
-    debugPrint('[SCENES]: $response');
-    return response;
-  }
-
-  static Future<void> deleteOBSConnection(
+  static Future<void> deleteLightsConnection(
     ConnectionProvider connectionProvider,
     Connection connectionObject,
   ) async {
     try {
       connectionProvider.removeConnectionFromSP(connectionObject);
-      connectionProvider.disconnectFromOBS();
     } catch (e) {
       // Handle any errors that occur while changing the scene
-      throw Exception('Error deleting OBS connection: $e');
+      throw Exception('Error deleting Lights connection: $e');
     }
   }
 
-  static Future<bool> checkIfConnectedToObS(
+  static Future<bool> checkIfConnectedToLights(
     BuildContext context,
-    ObsWebSocket? obsWebSocket,
+    BluetoothDevice? lightClient,
   ) async {
     try {
-      if (obsWebSocket != null) {
-        obsWebSocket.general.getStats();
+      if (lightClient != null) {
         return true;
       }
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Connection Error'),
-          content: const Text('Not connected to OBS.'),
+          content: const Text('Not connected to Lights.'),
           actions: [
             TextButton(
               onPressed: () {
@@ -125,14 +119,14 @@ class OBSConnections {
                   ),
                 ).then((_) => Navigator.pop(context));
               },
-              child: const Text('Connect to OBS'),
+              child: const Text('Connect to Lights'),
             ),
           ],
         ),
       );
       return false;
     } catch (e) {
-      print('OBS connection error: $e');
+      debugPrint('Lights connection error: $e');
       return false;
     }
   }
