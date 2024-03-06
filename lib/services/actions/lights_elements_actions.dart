@@ -2,13 +2,20 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
 import 'package:hessdeck/services/connections/light_connection.dart';
+import 'package:hessdeck/themes/colors.dart';
 
 const changeLightMethod = 'Change light';
 
 class SliderValueNotifier {
   static final ValueNotifier<double> sliderValue = ValueNotifier<double>(0.0);
+}
+
+class ColorValueNotifier {
+  static final ValueNotifier<Color> colorValue =
+      ValueNotifier<Color>(Colors.white);
 }
 
 class LightsMethodMetadata {
@@ -22,17 +29,91 @@ class LightsActions {
     BluetoothDevice? lightClient = connectionProvider(context).lightClient;
     BluetoothCharacteristic? sendCharacteristic =
         connectionProvider(context).sendCharacteristic;
+    final screenHeight = MediaQuery.of(context).size.height;
 
     if (await LightConnections.checkIfConnectedToLights(context, lightClient)) {
-      var rng = Random();
-
-      List<int> randomColor =
-          updateColor(rng.nextInt(256), rng.nextInt(256), rng.nextInt(256));
-
       try {
-        await sendCharacteristic?.write(
-          randomColor,
+        if (!context.mounted) return;
+
+        showModalBottomSheet<String>(
+          context: context,
+          isScrollControlled: true,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(25.0),
+            ),
+          ),
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          builder: (context) {
+            return Container(
+              padding: const EdgeInsets.symmetric(vertical: 20.0),
+              decoration: const BoxDecoration(
+                gradient: AppColors.blueToGreyGradient,
+              ),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Divider(
+                      color: AppColors.darkGrey,
+                      thickness: 5,
+                      indent: 140,
+                      endIndent: 140,
+                    ),
+                    SizedBox(height: screenHeight * 0.03),
+                    const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Change color",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: screenHeight * 0.025),
+                    ColorPicker(
+                      pickerColor: ColorValueNotifier.colorValue.value,
+                      hexInputBar: true,
+                      enableAlpha: false,
+                      showLabel: false,
+                      displayThumbColor: false,
+                      onColorChanged: (color) async {
+                        ColorValueNotifier.colorValue.value = color;
+
+                        await sendCharacteristic?.write(
+                          updateColor(
+                            color.red,
+                            color.green,
+                            color.blue,
+                          ),
+                        );
+                      },
+                      paletteType: PaletteType.hueWheel,
+                      pickerAreaHeightPercent: 0.8,
+                    ),
+                    SizedBox(height: screenHeight * 0.025),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Update overlayName in the body
+                        Navigator.pop(context);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white,
+                      ),
+                      child: const Text('Save light color'),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
         );
+        //
       } catch (e) {
         // Handle any errors that occur while changing the scene
         throw Exception('Error updating lights: $e');
