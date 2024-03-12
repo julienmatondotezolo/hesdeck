@@ -163,8 +163,6 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
                                   widget.connectionName,
                                   controllers,
                                 );
-
-                                Navigator.pop(context);
                               }
                             },
                             style: ElevatedButton.styleFrom(

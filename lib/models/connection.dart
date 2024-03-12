@@ -175,11 +175,7 @@ class TwitchConnection extends Connection {
 }
 
 class SpotifyConnection extends Connection {
-  final String clientId;
-  final String clientSecret;
   SpotifyConnection({
-    required this.clientId,
-    required this.clientSecret,
     bool connected = false, // Provide a default value for connected
   }) : super(
           'Spotify',
@@ -189,13 +185,9 @@ class SpotifyConnection extends Connection {
 
   @override
   SpotifyConnection copyWith({
-    String? clientId,
-    String? clientSecret,
     required bool connected,
   }) {
     return SpotifyConnection(
-      clientId: clientId ?? this.clientId,
-      clientSecret: clientSecret ?? this.clientSecret,
       connected: connected, // Update connected property
     );
   }
@@ -206,15 +198,11 @@ class SpotifyConnection extends Connection {
       'type': type,
       'image': image,
       'connected': connected,
-      'clientId': clientId,
-      'clientSecret': clientSecret,
     };
   }
 
   factory SpotifyConnection.fromJson(Map<String, dynamic> json) {
     return SpotifyConnection(
-      clientId: json['clientId'],
-      clientSecret: json['clientSecret'],
       connected: json['connected'],
     );
   }

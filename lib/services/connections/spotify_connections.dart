@@ -6,23 +6,16 @@ import 'package:provider/provider.dart';
 class SpotifyConnections {
   static Future<void> connectToSpotify(
     BuildContext context,
-    TextEditingController clientIdController,
-    TextEditingController clientSecretController,
   ) async {
-    String clientId = clientIdController.text;
-    String clientSecret = clientSecretController.text;
-
-    SpotifyConnection spotifyObject = SpotifyConnection(
-      clientId: clientId,
-      clientSecret: clientSecret,
-    );
+    SpotifyConnection spotifyObject = SpotifyConnection();
 
     ConnectionProvider connectionProvider =
         Provider.of<ConnectionProvider>(context, listen: false);
 
     try {
-      await connectionProvider.connectToSpotify(spotifyObject);
+      await connectionProvider.connectToSpotify(context, spotifyObject);
     } catch (e) {
+      if (!context.mounted) return;
       // Handle connection error here, show an error message or take appropriate action.
       showDialog(
         context: context,

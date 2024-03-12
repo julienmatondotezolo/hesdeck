@@ -8,6 +8,7 @@ import 'package:hessdeck/utils/helpers.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:spotify_api/spotify_api.dart';
 import 'package:stream_elements_package/stream_elements.dart';
 
 class ConnectionProvider extends ChangeNotifier {
@@ -41,11 +42,8 @@ class ConnectionProvider extends ChangeNotifier {
   );
   Map<String, dynamic>? _twitchClient;
 
-  late SpotifyConnection _spotifyConnectionObject = SpotifyConnection(
-    clientId: '**********',
-    clientSecret: '************',
-  );
-  Map<String, dynamic>? _spotifyClient;
+  late SpotifyConnection _spotifyConnectionObject = SpotifyConnection();
+  SpotifyApi? _spotifyApi;
 
   late StreamElementsConnection _streamElementsConnectionObject =
       StreamElementsConnection(
@@ -71,7 +69,7 @@ class ConnectionProvider extends ChangeNotifier {
   Map<String, dynamic>? get twitchClient => _twitchClient;
 
   SpotifyConnection get spotifyConnectionObject => _spotifyConnectionObject;
-  Map<String, dynamic>? get spotifyClient => _spotifyClient;
+  SpotifyApi? get spotifyApi => _spotifyApi;
 
   StreamElementsConnection get streamElementsConnectionObject =>
       _streamElementsConnectionObject;
@@ -223,7 +221,7 @@ class ConnectionProvider extends ChangeNotifier {
           SpotifyConnection spotifyConnectionObject =
               SpotifyConnection.fromJson(connJson);
           // If Spotify is null put connected to false
-          _spotifyClient == null
+          _spotifyApi == null
               ? spotifyConnectionObject =
                   spotifyConnectionObject.copyWith(connected: false)
               : spotifyConnectionObject;
@@ -277,7 +275,7 @@ class ConnectionProvider extends ChangeNotifier {
   // Connect to Apple Music
   Future<void> connectToAppleMusic(
       AppleMusicConnection appleMusicConnectionObject) async {
-    _spotifyClient = {"Connected": true};
+    _appleMusicClient = {"Connected": true};
 
     try {
       debugPrint('Connected to Apple Music client.');
@@ -293,7 +291,7 @@ class ConnectionProvider extends ChangeNotifier {
 
   // Disconnect from Apple Music WebSocket server
   Future<void> disconnectFromAppleMusic() async {
-    if (_spotifyClient != null) {
+    if (_appleMusicClient != null) {
       // Update the connected property of the existing connection object
       final existingConnectionIndex = _connections.indexWhere((existingConn) =>
           existingConn.type == _appleMusicConnectionObject.type);
@@ -306,7 +304,7 @@ class ConnectionProvider extends ChangeNotifier {
         debugPrint('Apple Music connection not found in the list.');
       }
 
-      _spotifyClient = null;
+      _appleMusicClient = null;
       notifyListeners();
     } else {
       throw Exception('You are not connected to Apple Music.');
@@ -603,24 +601,33 @@ class ConnectionProvider extends ChangeNotifier {
 
   // Connect to Spotify
   Future<void> connectToSpotify(
-      SpotifyConnection spotifyConnectionObject) async {
-    _spotifyClient = {"Connected": true};
+    BuildContext context,
+    SpotifyConnection spotifyConnectionObject,
+  ) async {
+    _spotifyApi = SpotifyApi(
+      clientId: '821782afcd0341d2b7a75d0d808240e5',
+      clientSecret: '6bfb65fa73cf4f2bb7e6cea4841e6bc9',
+      redirectUri: 'com.hessdeck.tv.hessdeck://login-callback',
+    );
 
     try {
-      debugPrint('Connected to Spotify client.');
-      spotifyConnectionObject =
-          spotifyConnectionObject.copyWith(connected: true);
+      if (_spotifyApi != null) {
+        await _spotifyApi?.launchAuth(context);
+        debugPrint('Connected to Spotify API.');
+        spotifyConnectionObject =
+            spotifyConnectionObject.copyWith(connected: true);
 
-      addConnection(spotifyConnectionObject);
-      _saveConnectionSettings();
+        addConnection(spotifyConnectionObject);
+        _saveConnectionSettings();
+      }
     } catch (e) {
-      throw Exception('Error connecting to Spotify client: $e');
+      throw Exception('Error connecting to Spotify API: $e');
     }
   }
 
   // Disconnect from OBS WebSocket server
   Future<void> disconnectFromSpotify() async {
-    if (_spotifyClient != null) {
+    if (_spotifyApi != null) {
       // Update the connected property of the existing connection object
       final existingConnectionIndex = _connections.indexWhere(
           (existingConn) => existingConn.type == _spotifyConnectionObject.type);
@@ -628,15 +635,15 @@ class ConnectionProvider extends ChangeNotifier {
       if (existingConnectionIndex != -1) {
         _connections[existingConnectionIndex] =
             _spotifyConnectionObject.copyWith(connected: false);
-        debugPrint('Disconnected from Spotify WebSocket server.');
+        debugPrint('Disconnected from Spotify API.');
       } else {
         debugPrint('Spotify connection not found in the list.');
       }
 
-      _spotifyClient = null;
+      _spotifyApi = null;
       notifyListeners();
     } else {
-      throw Exception('You are not connected to Spotify.');
+      throw Exception('You are not connected to Spotify API.');
     }
   }
 }

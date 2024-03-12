@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:spotify_api/spotify_api.dart';
 
 class SpotifyScreen extends StatelessWidget {
@@ -6,6 +7,16 @@ class SpotifyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String? clientId = dotenv.env['CLIENT_ID'];
+    String? clientSecret = dotenv.env['CLIENT_SECRET'];
+    String? redirectUri = dotenv.env['REDIRECT_URL'];
+
+    print({
+      clientId: clientId,
+      clientSecret: clientSecret,
+      redirectUri: redirectUri,
+    });
+
     // SpotifyApi spotifyAuth = SpotifyApi();
     SpotifyApi spotifyAuth = SpotifyApi(
       clientId: '821782afcd0341d2b7a75d0d808240e5',
