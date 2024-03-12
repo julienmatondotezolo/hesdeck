@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/services/actions/lights_elements_actions.dart';
 import 'package:hessdeck/services/actions/obs_actions.dart';
+import 'package:hessdeck/services/actions/spotify_actions.dart';
+import 'package:hessdeck/services/actions/stream_elements_actions.dart';
 import 'package:hessdeck/services/actions/stream_elements_actions.dart';
 
 class ManageAcions {
@@ -19,6 +21,11 @@ class ManageAcions {
       case 'Lights':
         return await lightsMethods[actionName]!(
           context,
+        );
+      case 'Spotify':
+        return await spotifyMethods[actionName]!(
+          context,
+          actionParameter ?? '',
         );
       case 'StreamElements':
         return await streamElementsMethods[actionName]!(
@@ -44,6 +51,11 @@ class ManageAcions {
           context,
           actionParameter ?? '',
         );
+      case 'Spotify':
+        return await spotifyMethodParameters[actionName]!(
+          context,
+          actionParameter ?? '',
+        );
       case 'StreamElements':
         return await streamElementsMethodParameters[actionName]!(
           context,
@@ -60,6 +72,7 @@ class ManageAcions {
     return {
       'OBS': obsMethods,
       'Lights': lightsMethods,
+      'Spotify': spotifyMethods,
       'StreamElements': streamElementsMethods,
     };
   }
@@ -82,11 +95,14 @@ class ManageAcions {
         OBSActions.obsMethodMetadata;
     Map<String, LightsMethodMetadata> lightsMethodMetadata =
         LightsActions.lightsMethodMetadata;
+    Map<String, SpotifyMethodMetadata> spotifyMethodMetadata =
+        SpotifyActions.spotifyMethodMetadata;
     Map<String, StreamElementsMethodMetadata> streamElementsMethodMetadata =
         StreamElementsActions.streamElementsMethodMetadata;
 
     methodMetadataList.addAll(obsMethodMetadata);
     methodMetadataList.addAll(lightsMethodMetadata);
+    methodMetadataList.addAll(spotifyMethodMetadata);
     methodMetadataList.addAll(streamElementsMethodMetadata);
 
     List<String> methodParameter =
