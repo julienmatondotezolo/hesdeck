@@ -205,12 +205,38 @@ class SpotifyApi with ChangeNotifier {
     }
   }
 
-  Future<void> startPlayback() async {
+  Future<Map<String, dynamic>?> getCurrentPlaybackState() async {
     if (await checkTokenValidity()) {
       try {
-        List devices = await getAllDevices();
-        String deviceId = devices[0]['id'];
+        final response = await http.get(
+          Uri.parse('https://api.spotify.com/v1/me/player'),
+          headers: {
+            'Authorization': 'Bearer $_accessToken',
+          },
+        );
 
+        if (response.statusCode == 200) {
+          // The request was successful, return the playback state
+          return json.decode(response.body);
+        } else if (response.statusCode == 204) {
+          // The request was successful but no content was returned, indicating no active playback
+          return null;
+        } else {
+          throw Exception({
+            "code": response.statusCode,
+            "reason": response.reasonPhrase,
+          });
+        }
+      } catch (e) {
+        throw Exception('Failed to get playback state $e');
+      }
+    }
+    return null;
+  }
+
+  Future<void> startPlayback(String deviceId) async {
+    if (await checkTokenValidity()) {
+      try {
         // Then, start playback on that device
         final responsePlay = await http.put(
           Uri.parse('https://api.spotify.com/v1/me/player/play'),
@@ -236,11 +262,8 @@ class SpotifyApi with ChangeNotifier {
     }
   }
 
-  Future<void> pausePlayback() async {
+  Future<void> pausePlayback(String deviceId) async {
     try {
-      List devices = await getAllDevices();
-      String deviceId = devices[0]['id'];
-
       // Then, start playback on that device
       final responsePause = await http.put(
         Uri.parse('https://api.spotify.com/v1/me/player/pause'),
@@ -265,12 +288,9 @@ class SpotifyApi with ChangeNotifier {
     }
   }
 
-  Future<void> nextPlayback() async {
+  Future<void> nextPlayback(String deviceId) async {
     if (await checkTokenValidity()) {
       try {
-        List devices = await getAllDevices();
-        String deviceId = devices[0]['id'];
-
         // Then, start playback on that device
         final responseNext = await http.post(
           Uri.parse('https://api.spotify.com/v1/me/player/next'),
@@ -296,11 +316,8 @@ class SpotifyApi with ChangeNotifier {
     }
   }
 
-  Future<void> previousPlayback() async {
+  Future<void> previousPlayback(String deviceId) async {
     try {
-      List devices = await getAllDevices();
-      String deviceId = devices[0]['id'];
-
       // Then, start playback on that device
       final responsePrevious = await http.post(
         Uri.parse('https://api.spotify.com/v1/me/player/previous'),

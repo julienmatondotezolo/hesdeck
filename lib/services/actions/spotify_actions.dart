@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
-import 'package:hessdeck/services/connections/obs_connections.dart';
 import 'package:hessdeck/services/connections/spotify_connections.dart';
 import 'package:hessdeck/themes/colors.dart';
 import 'package:hessdeck/utils/helpers.dart';
-import 'package:obs_websocket/obs_websocket.dart';
 import 'package:spotify_api/spotify_api.dart';
 
 const getPlayBackStateMethod = 'Playback state';
@@ -28,7 +26,7 @@ class SpotifyActions {
     if (await SpotifyConnections.checkIfConnectedToSpotify(
         context, spotifyApi)) {
       try {
-        await spotifyApi!.startPlayback();
+        await spotifyApi!.getCurrentPlaybackState();
       } catch (e) {
         // Handle any errors that occur while changing the scene
         throw Exception('Error starting playback: $e');
@@ -148,7 +146,7 @@ class SpotifyActions {
     if (await SpotifyConnections.checkIfConnectedToSpotify(
         context, spotifyApi)) {
       try {
-        await spotifyApi!.startPlayback();
+        await spotifyApi!.startPlayback(deviceId);
       } catch (e) {
         // Handle any errors that occur while changing the scene
         throw Exception('Error starting playback: $e');
@@ -165,7 +163,7 @@ class SpotifyActions {
     if (await SpotifyConnections.checkIfConnectedToSpotify(
         context, spotifyApi)) {
       try {
-        await spotifyApi!.pausePlayback();
+        await spotifyApi!.pausePlayback(deviceId);
       } catch (e) {
         // Handle any errors that occur while changing the scene
         throw Exception('Error pausing playback: $e');
@@ -182,7 +180,7 @@ class SpotifyActions {
     if (await SpotifyConnections.checkIfConnectedToSpotify(
         context, spotifyApi)) {
       try {
-        await spotifyApi!.previousPlayback();
+        await spotifyApi!.previousPlayback(deviceId);
       } catch (e) {
         // Handle any errors that occur while changing the scene
         throw Exception('Error previousing playback: $e');
@@ -199,7 +197,7 @@ class SpotifyActions {
     if (await SpotifyConnections.checkIfConnectedToSpotify(
         context, spotifyApi)) {
       try {
-        await spotifyApi!.nextPlayback();
+        await spotifyApi!.nextPlayback(deviceId);
       } catch (e) {
         // Handle any errors that occur while changing the scene
         throw Exception('Error nexting playback: $e');
