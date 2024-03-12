@@ -29,10 +29,7 @@
     {
         "name": "Spotify",
         "image": "https://cdn-icons-png.flaticon.com/512/174/174872.png",
-        "fields": [
-            "clientId",
-            "clientSecret"
-        ]
+        "fields": []
     },
     {
         "name": "StreamElements",

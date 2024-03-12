@@ -42,11 +42,7 @@ class ManageConnections {
         controllers[2],
       );
     } else if (connectionType == 'Spotify') {
-      await SpotifyConnections.connectToSpotify(
-        context,
-        controllers[0],
-        controllers[1],
-      );
+      await SpotifyConnections.connectToSpotify(context);
     } else if (connectionType == 'StreamElements') {
       await StreamElementsConnections.connectToStreamElements(
         context,

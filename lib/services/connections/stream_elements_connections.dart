@@ -23,6 +23,8 @@ class StreamElementsConnections {
         Provider.of<ConnectionProvider>(context, listen: false);
     try {
       await connectionProvider.connectToStreamElements(streamElementsObject);
+      if (!context.mounted) return;
+      Navigator.pop(context);
     } catch (e) {
       // Handle connection error here, show an error message or take appropriate action.
       showDialog(
