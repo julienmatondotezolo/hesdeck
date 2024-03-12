@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/models/connection.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
+import 'package:hessdeck/screens/settings/settings_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:spotify_api/spotify_api.dart';
 
 class SpotifyConnections {
   static Future<void> connectToSpotify(
@@ -51,6 +53,47 @@ class SpotifyConnections {
     } catch (e) {
       // Handle any errors that occur while changing the scene
       throw Exception('Error deleting Spotify connection: $e');
+    }
+  }
+
+  static Future<bool> checkIfConnectedToSpotify(
+    BuildContext context,
+    SpotifyApi? spotifyApi,
+  ) async {
+    try {
+      if (spotifyApi != null) {
+        return true;
+      }
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Connection Error'),
+          content: const Text('Not connected to Spotify.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Go back'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SettingsScreen(),
+                  ),
+                ).then((_) => Navigator.pop(context));
+              },
+              child: const Text('Connect to Spotify'),
+            ),
+          ],
+        ),
+      );
+      return false;
+    } catch (e) {
+      debugPrint('Spotify connection error: $e');
+      return false;
     }
   }
 }
