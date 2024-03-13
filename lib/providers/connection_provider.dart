@@ -26,6 +26,7 @@ class ConnectionProvider extends ChangeNotifier {
     password: '*********',
   );
   ObsWebSocket? _obsWebSocket;
+  String? _obsCurrentScene;
 
   late LightsConnection _lightsConnectionObject = LightsConnection(
     primaryServiceUuid: 'f000aa60-0451-4000-b000-000000000000',
@@ -60,6 +61,7 @@ class ConnectionProvider extends ChangeNotifier {
 
   OBSConnection get obsConnectionObject => _obsConnectionObject;
   ObsWebSocket? get obsWebSocket => _obsWebSocket;
+  String? get obsCurrentScene => _obsCurrentScene;
 
   LightsConnection get lightsConnectionObject => _lightsConnectionObject;
   BluetoothDevice? get lightClient => _lightClient;
@@ -321,12 +323,26 @@ class ConnectionProvider extends ChangeNotifier {
 
     try {
       _obsWebSocket = await ObsWebSocket.connect(
-        'ws://$ipAddress:${obsConnectionObject.port}',
-        password: obsConnectionObject.password,
-        fallbackEventHandler: (Event event) => debugPrint(
-          '[OBS LISTENER]: type: ${event.eventType} data: ${event.eventData}',
-        ),
-      );
+          'ws://$ipAddress:${obsConnectionObject.port}',
+          password: obsConnectionObject.password,
+          fallbackEventHandler: (Event event) async => {
+                if (event.eventData!.containsKey('sceneName'))
+                  {
+                    debugPrint(
+                      'eventData: ${event.eventData?['sceneName']}',
+                    ),
+                    _obsCurrentScene = await event.eventData?['sceneName'],
+                    debugPrint('_obsCurrentScene: $_obsCurrentScene'),
+                  }
+                else
+                  {
+                    debugPrint(
+                      '[OBS LISTENER]: type: ${event.eventType} data: ${event.eventData}',
+                    ),
+                  }
+              });
+
+      notifyListeners();
 
       if (_obsWebSocket != null) {
         debugPrint('Connected to OBS WebSocket server.');

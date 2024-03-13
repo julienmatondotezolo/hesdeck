@@ -274,6 +274,91 @@
       ]
    },
    {
+      "actionName": "Spotify",
+      "actionDecks": [
+         {
+            "name": "Play",
+            "action": "Start song",
+            "actionConnectionType": "Spotify",
+            "iconData": null,
+            "customIconData": 59394,
+            "backgroundColor": {
+               "colors": [
+                  4281719177,
+                  4279991314
+               ],
+               "begin": "Alignment.topLeft",
+               "end": "Alignment.bottomLeft"
+            },
+            "iconColor": 4294967295,
+            "defaultDeck": false,
+            "dossierDeck": false,
+            "popupDeck": false,
+            "clickableDeck": true
+         },
+         {
+            "name": "Pause",
+            "action": "Pause song",
+            "actionConnectionType": "Spotify",
+            "iconData": null,
+            "customIconData": 59394,
+            "backgroundColor": {
+               "colors": [
+                  4281719177,
+                  4279991314
+               ],
+               "begin": "Alignment.topLeft",
+               "end": "Alignment.bottomLeft"
+            },
+            "iconColor": 4294967295,
+            "defaultDeck": false,
+            "dossierDeck": false,
+            "popupDeck": false,
+            "clickableDeck": true
+         },
+         {
+            "name": "Next",
+            "action": "Next song",
+            "actionConnectionType": "Spotify",
+            "iconData": null,
+            "customIconData": 59394,
+            "backgroundColor": {
+               "colors": [
+                  4281719177,
+                  4279991314
+               ],
+               "begin": "Alignment.topLeft",
+               "end": "Alignment.bottomLeft"
+            },
+            "iconColor": 4294967295,
+            "defaultDeck": false,
+            "dossierDeck": false,
+            "popupDeck": false,
+            "clickableDeck": true
+         },
+         {
+            "name": "Previous",
+            "action": "Previous song",
+            "actionConnectionType": "Spotify",
+            "iconData": null,
+            "customIconData": 59394,
+            "backgroundColor": {
+               "colors": [
+                  4281719177,
+                  4279991314
+               ],
+               "begin": "Alignment.topLeft",
+               "end": "Alignment.bottomLeft"
+            },
+            "iconColor": 4294967295,
+            "defaultDeck": false,
+            "dossierDeck": false,
+            "popupDeck": false,
+            "clickableDeck": true
+         }
+      ]
+   },
+   {
       "actionName": "StreamElements",
       "actionDecks": [
          {

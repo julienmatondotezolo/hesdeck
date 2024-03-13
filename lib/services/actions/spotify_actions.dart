@@ -80,7 +80,7 @@ class SpotifyActions {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            "Select scene",
+                            "Select device",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 24,

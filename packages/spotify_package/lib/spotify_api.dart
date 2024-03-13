@@ -248,8 +248,13 @@ class SpotifyApi with ChangeNotifier {
           }),
         );
 
+        print('responsePlay ${responsePlay.body}');
+
         if (responsePlay.statusCode == 204) {
           print('responsePlay: ${responsePlay.body}');
+        } else if (responsePlay.statusCode == 403) {
+          throw Exception(
+              {"code": responsePlay.body, "reason": responsePlay.reasonPhrase});
         } else {
           throw Exception({
             "code": responsePlay.statusCode,

@@ -86,8 +86,7 @@ class Deck {
       'actionConnectionType': actionConnectionType,
       'actionParameter': actionParameter,
       'iconData': iconData.codePoint, // Save the icon data (int)
-      'customIconData':
-          customIconData != null ? customIconData!.codePoint : null,
+      'customIconData': customIconData?.codePoint,
       'backgroundColor': backgroundColor != null
           ? {
               'colors':
@@ -110,11 +109,7 @@ class Deck {
       'dossierDeck': dossierDeck,
       'popupDeck': popupDeck,
       'clickableDeck': clickableDeck,
-      'content': content != null
-          ? content!
-              .map((deck) => deck.toJson())
-              .toList() // Convert content decks to JSON
-          : null,
+      'content': content?.map((deck) => deck.toJson()).toList(),
     };
   }
 

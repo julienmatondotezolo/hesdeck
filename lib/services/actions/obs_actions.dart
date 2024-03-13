@@ -44,9 +44,11 @@ class OBSActions {
         final screenHeight = MediaQuery.of(context).size.height;
 
         if (sceneList?.scenes != null && sceneList!.scenes.isNotEmpty) {
+          if (!context.mounted) return '';
           // ignore: use_build_context_synchronously
           return await showModalBottomSheet<String>(
               context: context,
+              isScrollControlled: true,
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.vertical(
                   top: Radius.circular(25),
