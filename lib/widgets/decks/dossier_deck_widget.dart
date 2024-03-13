@@ -24,10 +24,9 @@ class DossierDeckWidget extends StatelessWidget {
       },
       onDoubleTap: () {
         Helpers.vibration();
-        Helpers.openDeckSettingsScreen(context, deckIndex, deck!);
+        Helpers.openDeckSettingsScreen(context, deckIndex, deck!, null);
       },
       child: Container(
-        padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           gradient: deck!.backgroundColor,
           border: Border.all(color: AppColors.darkGrey, width: 5),
@@ -41,7 +40,7 @@ class DossierDeckWidget extends StatelessWidget {
           children: [
             Center(
               child: Icon(
-                deck!.iconData,
+                deck!.customIconData ?? deck!.iconData,
                 color: deck!.iconColor,
                 size: 36.0,
               ),

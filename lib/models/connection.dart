@@ -22,6 +22,52 @@ class Connection {
   }
 }
 
+class AppleMusicConnection extends Connection {
+  final String clientId;
+  final String clientSecret;
+  AppleMusicConnection({
+    required this.clientId,
+    required this.clientSecret,
+    bool connected = false, // Provide a default value for connected
+  }) : super(
+          'Apple Music',
+          'https://music.apple.com/assets/favicon/favicon-180.png',
+          connected,
+        );
+
+  @override
+  AppleMusicConnection copyWith({
+    String? clientId,
+    String? clientSecret,
+    required bool connected,
+  }) {
+    return AppleMusicConnection(
+      clientId: clientId ?? this.clientId,
+      clientSecret: clientSecret ?? this.clientSecret,
+      connected: connected, // Update connected property
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type,
+      'image': image,
+      'connected': connected,
+      'clientId': clientId,
+      'clientSecret': clientSecret,
+    };
+  }
+
+  factory AppleMusicConnection.fromJson(Map<String, dynamic> json) {
+    return AppleMusicConnection(
+      clientId: json['clientId'],
+      clientSecret: json['clientSecret'],
+      connected: json['connected'],
+    );
+  }
+}
+
 class OBSConnection extends Connection {
   final String ipAddress;
   final String port;
@@ -129,11 +175,7 @@ class TwitchConnection extends Connection {
 }
 
 class SpotifyConnection extends Connection {
-  final String clientId;
-  final String clientSecret;
   SpotifyConnection({
-    required this.clientId,
-    required this.clientSecret,
     bool connected = false, // Provide a default value for connected
   }) : super(
           'Spotify',
@@ -143,13 +185,9 @@ class SpotifyConnection extends Connection {
 
   @override
   SpotifyConnection copyWith({
-    String? clientId,
-    String? clientSecret,
     required bool connected,
   }) {
     return SpotifyConnection(
-      clientId: clientId ?? this.clientId,
-      clientSecret: clientSecret ?? this.clientSecret,
       connected: connected, // Update connected property
     );
   }
@@ -160,15 +198,109 @@ class SpotifyConnection extends Connection {
       'type': type,
       'image': image,
       'connected': connected,
-      'clientId': clientId,
-      'clientSecret': clientSecret,
     };
   }
 
   factory SpotifyConnection.fromJson(Map<String, dynamic> json) {
     return SpotifyConnection(
-      clientId: json['clientId'],
-      clientSecret: json['clientSecret'],
+      connected: json['connected'],
+    );
+  }
+}
+
+class LightsConnection extends Connection {
+  final String primaryServiceUuid;
+  final String receiveCharUuid;
+  final String sendCharUuid;
+  LightsConnection({
+    required this.primaryServiceUuid,
+    required this.receiveCharUuid,
+    required this.sendCharUuid,
+    bool connected = false, // Provide a default value for connected
+  }) : super(
+          'Lights',
+          'https://cdn-icons-png.flaticon.com/512/176/176860.png',
+          connected,
+        );
+
+  @override
+  LightsConnection copyWith({
+    String? primaryServiceUuid,
+    String? receiveCharUuid,
+    String? sendCharUuid,
+    required bool connected,
+  }) {
+    return LightsConnection(
+      primaryServiceUuid: primaryServiceUuid ?? this.primaryServiceUuid,
+      receiveCharUuid: receiveCharUuid ?? this.receiveCharUuid,
+      sendCharUuid: sendCharUuid ?? this.sendCharUuid,
+      connected: connected, // Update connected property
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type,
+      'image': image,
+      'connected': connected,
+      'primaryServiceUuid': primaryServiceUuid,
+      'receiveCharUuid': receiveCharUuid,
+      'sendCharUuid': sendCharUuid,
+    };
+  }
+
+  factory LightsConnection.fromJson(Map<String, dynamic> json) {
+    return LightsConnection(
+      primaryServiceUuid: json['primaryServiceUuid'],
+      receiveCharUuid: json['receiveCharUuid'],
+      sendCharUuid: json['sendCharUuid'],
+      connected: json['connected'],
+    );
+  }
+}
+
+class StreamElementsConnection extends Connection {
+  final String jwtToken;
+  final String accounId;
+  StreamElementsConnection({
+    required this.jwtToken,
+    required this.accounId,
+    bool connected = false, // Provide a default value for connected
+  }) : super(
+          'StreamElements',
+          'https://cdn.streamelements.com/static/logo/logo_red.png',
+          connected,
+        );
+
+  @override
+  StreamElementsConnection copyWith({
+    String? jwtToken,
+    String? accounId,
+    required bool connected,
+  }) {
+    return StreamElementsConnection(
+      jwtToken: jwtToken ?? this.jwtToken,
+      accounId: accounId ?? this.accounId,
+      connected: connected, // Update connected property
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type,
+      'image': image,
+      'connected': connected,
+      'jwtToken': jwtToken,
+      'accounId': accounId,
+    };
+  }
+
+  factory StreamElementsConnection.fromJson(Map<String, dynamic> json) {
+    return StreamElementsConnection(
+      jwtToken: json['jwtToken'],
+      accounId: json['accounId'],
       connected: json['connected'],
     );
   }

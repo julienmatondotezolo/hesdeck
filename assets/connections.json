@@ -1,7 +1,16 @@
 [
     {
+        "name": "Apple Music",
+        "image": "https://music.apple.com/assets/favicon/favicon-180.png",
+        "fields": [
+            "clientId",
+            "clientSecret"
+        ]
+    },
+    {
         "name": "OBS",
         "image": "https://obsproject.com/assets/images/new_icon_small-r.png",
+        "scan": true,
         "fields": [
             "ipAddress",
             "port",
@@ -9,11 +18,25 @@
         ]
     },
     {
+        "name": "Lights",
+        "image": "https://cdn-icons-png.flaticon.com/512/176/176860.png",
+        "fields": [
+            "primaryServiceUuid",
+            "receiveCharUuid",
+            "sendCharUuid"
+        ]
+    },
+    {
         "name": "Spotify",
         "image": "https://cdn-icons-png.flaticon.com/512/174/174872.png",
+        "fields": []
+    },
+    {
+        "name": "StreamElements",
+        "image": "https://cdn.streamelements.com/static/logo/logo_red.png",
         "fields": [
-            "clientId",
-            "clientSecret"
+            "jwtToken",
+            "accounId"
         ]
     },
     {

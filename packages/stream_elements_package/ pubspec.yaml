@@ -1,0 +1,15 @@
+name: stream_elements
+version: 1.0.0
+description: A package for StreamElements API integration
+
+environment:
+  sdk: '>=3.0.6 <4.0.0'
+
+dependencies:
+  http: ^1.1.0
+  # Add any other dependencies if needed
+
+dev_dependencies:
+  # Add dev dependencies if needed
+
+

@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:hessdeck/models/deck.dart';
-import 'package:hessdeck/screens/deck_settings_screen.dart';
 import 'package:hessdeck/themes/colors.dart';
+import 'package:hessdeck/utils/helpers.dart';
 
 class CollapsableWidget extends StatelessWidget {
   final dynamic item;
   final int deckIndex;
+  final int? folderIndex;
 
-  const CollapsableWidget(
-      {super.key, required this.item, required this.deckIndex});
+  const CollapsableWidget({
+    super.key,
+    required this.item,
+    required this.deckIndex,
+    this.folderIndex,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +41,8 @@ class CollapsableWidget extends StatelessWidget {
           for (var actionDeck in item['actionDecks'])
             GestureDetector(
               onTap: () {
-                openDeckSettingsScreen(
-                    context, deckIndex, Deck.fromJson(actionDeck));
+                Helpers.openDeckSettingsScreen(
+                    context, deckIndex, Deck.fromJson(actionDeck), folderIndex);
               },
               child: Container(
                 decoration: const BoxDecoration(
@@ -63,16 +68,4 @@ class CollapsableWidget extends StatelessWidget {
       ),
     );
   }
-}
-
-void openDeckSettingsScreen(BuildContext context, int deckIndex, Deck deck) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => DeckSettingsScreen(
-        deck: deck, // Provide a default value for deck
-        deckIndex: deckIndex,
-      ),
-    ),
-  );
 }

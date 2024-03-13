@@ -45,7 +45,9 @@ class SettingsScreenState extends State<SettingsScreen> {
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(30.0)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(30.0),
+        ),
       ),
       backgroundColor: const Color(0xFF262626),
       builder: (BuildContext context) {
@@ -89,6 +91,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                   for (var connectionData in allConnectionsData)
                     GestureDetector(
                       onTap: () {
+                        Helpers.vibration();
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -97,7 +100,9 @@ class SettingsScreenState extends State<SettingsScreen> {
                               fields: connectionData['fields'],
                             ),
                           ),
-                        );
+                        ).then((_) {
+                          Navigator.pop(context);
+                        });
                       },
                       child: Container(
                         decoration: const BoxDecoration(
@@ -123,7 +128,8 @@ class SettingsScreenState extends State<SettingsScreen> {
                             Text(
                               connectionData['name'],
                               style: const TextStyle(
-                                  color: Colors.white), // White text color
+                                color: Colors.white,
+                              ),
                             ),
                           ],
                         ),
@@ -152,7 +158,13 @@ class SettingsScreenState extends State<SettingsScreen> {
 
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Settings'),
+          iconTheme: const IconThemeData(
+            color: Colors.white, //change your color here
+          ),
+          title: const Text(
+            'Settings',
+            style: TextStyle(color: Colors.white),
+          ),
         ),
         body: SafeArea(
           child: Container(
@@ -198,7 +210,9 @@ class SettingsScreenState extends State<SettingsScreen> {
                               builder: (context) => ConnectionSettingsScreen(
                                 connectionName: connection.type,
                                 fields: Helpers.getConnectionField(
-                                    allConnectionsData, connection.type),
+                                  allConnectionsData,
+                                  connection.type,
+                                ),
                               ),
                             ),
                           );
@@ -292,7 +306,10 @@ class SettingsScreenState extends State<SettingsScreen> {
                       children: [
                         Icon(Icons.add, color: Colors.white), // + icon
                         SizedBox(width: 8), // Spacing
-                        Text('Add Connection'), // Text
+                        Text(
+                          'Add Connection',
+                          style: TextStyle(color: Colors.white),
+                        ), // Text
                       ],
                     ),
                   ),
@@ -304,6 +321,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                     ),
                     child: const Text(
                       'Logout',
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ],

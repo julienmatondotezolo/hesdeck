@@ -4,7 +4,11 @@ import 'package:hessdeck/utils/helpers.dart';
 
 class Deck {
   final String name;
+  final String action;
+  final String actionConnectionType;
+  final String? actionParameter;
   final IconData iconData;
+  final IconData? customIconData;
   final LinearGradient? backgroundColor; // Optional background color
   final LinearGradient? activeBackgroundColor; //
   final Color? iconColor; // Optional icon color
@@ -16,7 +20,11 @@ class Deck {
 
   Deck({
     required this.name,
+    required this.action,
+    required this.actionConnectionType,
+    this.actionParameter,
     required this.iconData,
+    this.customIconData,
     this.backgroundColor = AppColors.blueToGreyGradient,
     this.activeBackgroundColor = AppColors.activeBlueToDarkGradient,
     this.iconColor = AppColors.lightGrey,
@@ -32,12 +40,16 @@ class Deck {
             popupDeck,
             clickableDeck,
           ),
-          "A deck can be only one type.",
+          "A deck can only be type.",
         );
 
   Deck copyWith({
     String? name,
+    String? action,
+    String? actionConnectionType,
+    String? actionParameter,
     IconData? iconData,
+    IconData? customIconData,
     LinearGradient? backgroundColor,
     LinearGradient? activeBackgroundColor,
     Color? iconColor,
@@ -49,7 +61,11 @@ class Deck {
   }) {
     return Deck(
       name: name ?? this.name,
+      action: action ?? this.action,
+      actionConnectionType: actionConnectionType ?? this.actionConnectionType,
+      actionParameter: actionParameter ?? this.actionParameter,
       iconData: iconData ?? this.iconData,
+      customIconData: customIconData ?? this.customIconData,
       backgroundColor: backgroundColor ?? this.backgroundColor,
       activeBackgroundColor:
           activeBackgroundColor ?? this.activeBackgroundColor,
@@ -66,7 +82,11 @@ class Deck {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
+      'action': action,
+      'actionConnectionType': actionConnectionType,
+      'actionParameter': actionParameter,
       'iconData': iconData.codePoint, // Save the icon data (int)
+      'customIconData': customIconData?.codePoint,
       'backgroundColor': backgroundColor != null
           ? {
               'colors':
@@ -89,11 +109,7 @@ class Deck {
       'dossierDeck': dossierDeck,
       'popupDeck': popupDeck,
       'clickableDeck': clickableDeck,
-      'content': content != null
-          ? content!
-              .map((deck) => deck.toJson())
-              .toList() // Convert content decks to JSON
-          : null,
+      'content': content?.map((deck) => deck.toJson()).toList(),
     };
   }
 
@@ -101,9 +117,15 @@ class Deck {
   factory Deck.fromJson(Map<String, dynamic> json) {
     return Deck(
       name: json['name'],
+      action: json['action'],
+      actionConnectionType: json['actionConnectionType'],
+      actionParameter: json['actionParameter'],
       iconData: json['iconData'] != null
           ? IconData(json['iconData'], fontFamily: 'MaterialIcons')
           : Icons.widgets, // Replace with the default icon you want to use
+      customIconData: json['customIconData'] != null
+          ? IconData(json['customIconData'], fontFamily: 'HessDeck')
+          : null,
       backgroundColor: json['backgroundColor'] != null
           ? LinearGradient(
               colors: (json['backgroundColor']['colors'] as List<dynamic>)

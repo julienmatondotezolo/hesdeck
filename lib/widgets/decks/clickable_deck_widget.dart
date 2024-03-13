@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:hessdeck/models/deck.dart';
+import 'package:hessdeck/services/actions/manage_actions.dart';
 import 'package:hessdeck/themes/colors.dart';
 import 'package:hessdeck/utils/helpers.dart';
 
@@ -7,12 +9,14 @@ class ClickableDeckWidget extends StatefulWidget {
   final Deck? deck; // Deck can be null
   final BuildContext context; // Pass the HomeScreen's context
   final int deckIndex; // Index of the deck in the list
+  final int? folderIndex;
 
   const ClickableDeckWidget({
     Key? key,
     required this.deck,
     required this.context,
     required this.deckIndex,
+    this.folderIndex,
   }) : super(key: key);
 
   @override
@@ -57,13 +61,25 @@ class ClickableDeckWidgetState extends State<ClickableDeckWidget>
         setState(() {
           isClicked = !isClicked;
         });
+        isClicked
+            ? ManageAcions.selectAction(
+                context,
+                widget.deck!.actionConnectionType,
+                widget.deck!.action,
+                widget.deck!.actionParameter,
+              )
+            : null;
       },
       onDoubleTap: () {
         Helpers.vibration();
-        Helpers.openDeckSettingsScreen(context, widget.deckIndex, widget.deck!);
+        Helpers.openDeckSettingsScreen(
+          context,
+          widget.deckIndex,
+          widget.deck!,
+          widget.folderIndex,
+        );
       },
       child: Container(
-        padding: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           gradient: isClicked
               ? widget.deck!.activeBackgroundColor
@@ -83,17 +99,25 @@ class ClickableDeckWidgetState extends State<ClickableDeckWidget>
           mainAxisSize: MainAxisSize.min,
           children: [
             Center(
-              child: Icon(
-                widget.deck!.iconData,
-                color: widget.deck!.iconColor,
-                size: 36.0,
+              child: Column(
+                children: [
+                  Icon(
+                    widget.deck!.customIconData ?? widget.deck!.iconData,
+                    color: widget.deck!.iconColor,
+                    size: 36.0,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    widget.deck?.name ?? "Add name to deck",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              widget.deck?.name ?? "Add name to deck",
-              style: const TextStyle(color: Colors.white, fontSize: 12),
-            ),
+            )
           ],
         ),
       ),

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hessdeck/models/connection.dart';
 import 'package:hessdeck/providers/connection_provider.dart';
+import 'package:hessdeck/screens/settings/mobile_scanner_screen.dart';
 import 'package:hessdeck/services/connections/manage_connections.dart';
 import 'package:hessdeck/utils/helpers.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 
 class ConnectionSettingsScreen extends StatefulWidget {
@@ -26,6 +28,12 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
 
   late List<TextEditingController> controllers;
 
+  MobileScannerController scannerController = MobileScannerController(
+    detectionSpeed: DetectionSpeed.normal,
+    facing: CameraFacing.back,
+    torchEnabled: false,
+  );
+
   @override
   void initState() {
     super.initState();
@@ -44,6 +52,7 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
   void dispose() {
     for (var controller in controllers) {
       controller.dispose();
+      scannerController.stop();
     }
     super.dispose();
   }
@@ -63,7 +72,13 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
 
       return Scaffold(
         appBar: AppBar(
-          title: Text('${widget.connectionName} settings'),
+          iconTheme: const IconThemeData(
+            color: Colors.white, //change your color here
+          ),
+          title: Text(
+            '${widget.connectionName} settings',
+            style: const TextStyle(color: Colors.white),
+          ),
         ),
         body: SafeArea(
           child: Container(
@@ -84,6 +99,7 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
                               labelStyle: const TextStyle(color: Colors.white),
                               border: const OutlineInputBorder(),
                             ),
+                            enableInteractiveSelection: true,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 HapticFeedback.vibrate();
@@ -95,6 +111,47 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
                           const SizedBox(height: 16),
                         ],
                       ),
+                    widget.connectionName == 'OBS' && !isConnected
+                        ? ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => MobileScannerScreen(
+                                    scannerController: scannerController,
+                                    connectionType: widget.connectionName,
+                                  ),
+                                ),
+                              ).then((barcodeRawValue) {
+                                controllers[0].value =
+                                    TextEditingValue(text: barcodeRawValue[0]);
+
+                                controllers[1].value =
+                                    TextEditingValue(text: barcodeRawValue[1]);
+
+                                controllers[2].value =
+                                    TextEditingValue(text: barcodeRawValue[2]);
+
+                                Helpers.vibration();
+                                ManageConnections.selectConnection(
+                                  context,
+                                  widget.connectionName,
+                                  controllers,
+                                );
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.blue,
+                            ),
+                            child: const Text(
+                              'Scan to Connect',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        : const SizedBox(),
                     const Spacer(),
                     !isConnected
                         ? ElevatedButton(
@@ -106,15 +163,14 @@ class ConnectionSettingsScreenState extends State<ConnectionSettingsScreen> {
                                   widget.connectionName,
                                   controllers,
                                 );
-
-                                Navigator.pop(context);
                               }
                             },
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.blue,
+                            ),
                             child: const Text(
                               'Connect',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
                             ),
                           )
                         : ElevatedButton(

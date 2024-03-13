@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hessdeck/models/deck.dart';
-import 'package:hessdeck/providers/deck_provider.dart';
 import 'package:hessdeck/screens/home_screen.dart';
+import 'package:hessdeck/services/decks/process_decks.dart';
 import 'package:hessdeck/utils/helpers.dart';
+import 'package:hessdeck/widgets/add_action_widget.dart';
 import 'package:hessdeck/widgets/gradient_color_picker.dart';
 
 class DeckSettingsScreen extends StatefulWidget {
   final Deck deck;
   final int deckIndex; // Index of the deck in the list
+  final int? folderIndex;
 
   const DeckSettingsScreen({
     Key? key,
     required this.deck,
     required this.deckIndex,
+    this.folderIndex,
   }) : super(key: key);
 
   @override
@@ -22,6 +25,9 @@ class DeckSettingsScreen extends StatefulWidget {
 
 class DeckSettingsScreenState extends State<DeckSettingsScreen> {
   late String _name;
+  late String _action;
+  late String _actionConnectionType;
+  late String? _actionParameter;
   late Color _iconColor;
   late LinearGradient _backgroundColor;
   late LinearGradient _activeBackgroundColor;
@@ -30,6 +36,9 @@ class DeckSettingsScreenState extends State<DeckSettingsScreen> {
   void initState() {
     super.initState();
     _name = widget.deck.name;
+    _action = widget.deck.action;
+    _actionConnectionType = widget.deck.actionConnectionType;
+    _actionParameter = widget.deck.actionParameter;
     _iconColor = widget.deck.iconColor!;
     _backgroundColor = widget.deck.backgroundColor!;
     _activeBackgroundColor = widget.deck.activeBackgroundColor!;
@@ -79,7 +88,13 @@ class DeckSettingsScreenState extends State<DeckSettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_name),
+        iconTheme: const IconThemeData(
+          color: Colors.white, //change your color here
+        ),
+        title: Text(
+          _name,
+          style: const TextStyle(color: Colors.white),
+        ),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -101,9 +116,29 @@ class DeckSettingsScreenState extends State<DeckSettingsScreen> {
                 ),
               ),
               const SizedBox(height: 16.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: AddActionWidget(
+                  context: context,
+                  action: _action,
+                  actionConnectionType: _actionConnectionType,
+                  actionParameter: _actionParameter,
+                  onActionChanged: (String action, String actionConnectionType,
+                      String? actionParameter) {
+                    setState(() {
+                      _action = action;
+                      _actionConnectionType = actionConnectionType;
+                      _actionParameter = actionParameter;
+                    });
+                  },
+                ),
+              ),
+              const SizedBox(height: 16.0),
               ListTile(
-                title: const Text('Icon Color',
-                    style: TextStyle(color: Colors.white)),
+                title: const Text(
+                  'Icon Color',
+                  style: TextStyle(color: Colors.white),
+                ),
                 trailing: CircleAvatar(
                   backgroundColor: _iconColor,
                   radius: 18,
@@ -161,13 +196,24 @@ class DeckSettingsScreenState extends State<DeckSettingsScreen> {
               const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: () {
-                  Deck updatedDeck = widget.deck.copyWith(
+                  Deck? updatedDeck;
+
+                  updatedDeck = widget.deck.copyWith(
                     name: _name,
+                    action: _action,
+                    actionConnectionType: _actionConnectionType,
+                    actionParameter: _actionParameter,
                     iconColor: _iconColor,
                     activeBackgroundColor: _activeBackgroundColor,
                     backgroundColor: _backgroundColor,
                   );
-                  Helpers.addNewDeck(context, widget.deckIndex, updatedDeck);
+
+                  ProcessDecks.addNewDeck(
+                    context,
+                    widget.deckIndex,
+                    widget.folderIndex,
+                    updatedDeck,
+                  );
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -185,8 +231,11 @@ class DeckSettingsScreenState extends State<DeckSettingsScreen> {
               ElevatedButton(
                 onPressed: () {
                   HapticFeedback.vibrate();
-                  deckProvider(context)
-                      .removeDeck(widget.deck, widget.deckIndex);
+                  ProcessDecks.removeDeck(
+                    context,
+                    widget.deckIndex,
+                    widget.folderIndex,
+                  );
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.red),

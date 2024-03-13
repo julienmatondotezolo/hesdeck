@@ -36,12 +36,25 @@ cd hessdeck
 
 ```bash
 flutter pub get
+
+flutter clean
+flutter pub get
+cd ios
+pod install
+cd ..
 ```
+
 
 4. Run the app:
 
 ```bash
 flutter run
+```
+
+5. Build IOS release:
+
+```bash
+flutter build ipa --release --no-tree-shake-icons
 ```
 
 ## Dependencies

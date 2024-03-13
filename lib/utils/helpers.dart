@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:hessdeck/models/connection.dart';
 import 'package:hessdeck/models/deck.dart';
 import 'package:hessdeck/providers/deck_provider.dart';
 import 'package:hessdeck/screens/deck_screen.dart';
@@ -13,6 +14,31 @@ import 'package:hessdeck/widgets/collapsable_widget.dart';
 import 'package:provider/provider.dart';
 
 class Helpers {
+  // readScanners
+  static OBSConnection? getScanResults(String? qrCodeString) {
+    if (qrCodeString!.contains('obsws')) {
+      List<String> parts = qrCodeString.split('://');
+      String protocolAndAddress = parts[1];
+
+      List<String> ipPortAndPassword = protocolAndAddress.split('/');
+      String ipPort = ipPortAndPassword[0];
+      String password = ipPortAndPassword[1];
+
+      String port = ipPort.split(':').last;
+      String ipAddress = ipPort.split(':$port').first;
+
+      OBSConnection obsConnectionObject = OBSConnection(
+        ipAddress: ipAddress,
+        port: port,
+        password: password,
+      );
+
+      return obsConnectionObject;
+    }
+
+    return null;
+  }
+
   // Vibrations
   static void vibration() {
     if (Platform.isAndroid || Platform.isIOS) {
@@ -21,7 +47,8 @@ class Helpers {
   }
 
   // Function to show a dialog
-  static void showAddDeckDialog(BuildContext context, int deckIndex) {
+  static void showAddDeckDialog(
+      BuildContext context, int deckIndex, int? folderIndex) {
     // Get the screen height using MediaQuery
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -87,7 +114,11 @@ class Helpers {
                   ),
                   SizedBox(height: screenHeight * 0.025),
                   for (var item in data)
-                    CollapsableWidget(item: item, deckIndex: deckIndex),
+                    CollapsableWidget(
+                      item: item,
+                      deckIndex: deckIndex,
+                      folderIndex: folderIndex,
+                    ),
                 ],
               ),
             ),
@@ -149,18 +180,6 @@ class Helpers {
     }
   }
 
-  static void addNewDeck(BuildContext context, int deckIndex, Deck deck) {
-    final newDeck = deck;
-
-    Provider.of<DeckProvider>(context, listen: false)
-        .addDeck(newDeck, deckIndex);
-    Navigator.pop(context);
-  }
-
-  static void removeDeck(BuildContext context, int deckIndex, Deck deck) {
-    deckProvider(context).removeDeck(deck, deckIndex);
-  }
-
   static void updateDeck(BuildContext context, int deckIndex, Deck deck) {
     bool deckClickToggle = deck.clickableDeck == true ? false : true;
     final deckProvider = Provider.of<DeckProvider>(context, listen: false);
@@ -185,13 +204,18 @@ class Helpers {
   }
 
   static void openDeckSettingsScreen(
-      BuildContext context, int deckIndex, Deck deck) {
+    BuildContext context,
+    int deckIndex,
+    Deck deck,
+    int? folderIndex,
+  ) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => DeckSettingsScreen(
           deck: deck, // Provide a default value for deck
           deckIndex: deckIndex,
+          folderIndex: folderIndex,
         ),
       ),
     );
@@ -236,5 +260,16 @@ class Helpers {
     }
 
     return fields;
+  }
+
+  static String checkIfIPv6(String address) {
+    final ipv6RegExp = RegExp(r'^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$');
+    final isIPv6 = ipv6RegExp.hasMatch(address);
+
+    if (isIPv6) {
+      return '[$address]';
+    }
+
+    return address;
   }
 }
