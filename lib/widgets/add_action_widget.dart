@@ -227,11 +227,14 @@ class AddActionWidget extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    Text(
-                      actionParameter ?? '',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
+                    Expanded(
+                      child: Text(
+                        actionParameter ?? '',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],

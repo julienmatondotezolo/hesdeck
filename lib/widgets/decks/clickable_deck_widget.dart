@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:hessdeck/models/deck.dart';
 import 'package:hessdeck/services/actions/manage_actions.dart';
 import 'package:hessdeck/themes/colors.dart';
@@ -98,17 +99,25 @@ class ClickableDeckWidgetState extends State<ClickableDeckWidget>
           mainAxisSize: MainAxisSize.min,
           children: [
             Center(
-              child: Icon(
-                widget.deck!.customIconData ?? widget.deck!.iconData,
-                color: widget.deck!.iconColor,
-                size: 36.0,
+              child: Column(
+                children: [
+                  Icon(
+                    widget.deck!.customIconData ?? widget.deck!.iconData,
+                    color: widget.deck!.iconColor,
+                    size: 36.0,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    widget.deck?.name ?? "Add name to deck",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              widget.deck?.name ?? "Add name to deck",
-              style: const TextStyle(color: Colors.white, fontSize: 12),
-            ),
+            )
           ],
         ),
       ),
