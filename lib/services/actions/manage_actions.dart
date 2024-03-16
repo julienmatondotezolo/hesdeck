@@ -3,7 +3,6 @@ import 'package:hessdeck/services/actions/lights_elements_actions.dart';
 import 'package:hessdeck/services/actions/obs_actions.dart';
 import 'package:hessdeck/services/actions/spotify_actions.dart';
 import 'package:hessdeck/services/actions/stream_elements_actions.dart';
-import 'package:hessdeck/services/actions/stream_elements_actions.dart';
 
 class ManageAcions {
   static Future<dynamic> selectAction(
@@ -12,30 +11,34 @@ class ManageAcions {
     String actionName,
     String? actionParameter,
   ) async {
-    switch (connectionType) {
-      case 'OBS':
-        return await obsMethods[actionName]!(
-          context,
-          actionParameter ?? '',
-        );
-      case 'Lights':
-        return await lightsMethods[actionName]!(
-          context,
-        );
-      case 'Spotify':
-        return await spotifyMethods[actionName]!(
-          context,
-          actionParameter ?? '',
-        );
-      case 'StreamElements':
-        return await streamElementsMethods[actionName]!(
-          context,
-          actionParameter ?? '',
-        );
-      default:
-        throw Exception(
-          'No ACTIONS for [$connectionType] exists in this services.',
-        );
+    try {
+      switch (connectionType) {
+        case 'OBS':
+          return await obsMethods[actionName]!(
+            context,
+            actionParameter ?? '',
+          );
+        case 'Lights':
+          return await lightsMethods[actionName]!(
+            context,
+          );
+        case 'Spotify':
+          return await spotifyMethods[actionName]!(
+            context,
+            actionParameter ?? '',
+          );
+        case 'StreamElements':
+          return await streamElementsMethods[actionName]!(
+            context,
+            actionParameter ?? '',
+          );
+        default:
+          throw Exception(
+            'No ACTIONS for [$connectionType] exists in this services.',
+          );
+      }
+    } catch (e) {
+      ManageAcions.showErrorBanner(context, e.toString());
     }
   }
 
@@ -109,5 +112,30 @@ class ManageAcions {
         methodMetadataList[methodName]?.parameterNames ?? [];
 
     return methodParameter;
+  }
+
+  static void showErrorBanner(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: MaterialBanner(
+          content: Text(
+            message,
+            style: const TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          backgroundColor: Colors.red,
+          actions: [
+            TextButton(
+              onPressed: () {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              },
+              child: const Text('DISMISS'),
+            ),
+          ],
+        ),
+        duration: const Duration(seconds: 5),
+      ),
+    );
   }
 }

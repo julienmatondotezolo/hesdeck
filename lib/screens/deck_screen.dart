@@ -16,7 +16,13 @@ class DeckScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(deck.name),
+        iconTheme: const IconThemeData(
+          color: Colors.white, //change your color here
+        ),
+        title: Text(
+          deck.name,
+          style: const TextStyle(color: Colors.white),
+        ),
       ),
       body: SafeArea(
         child: Container(
