@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hessdeck/screens/settings/settings_screen.dart';
 import 'package:hessdeck/themes/colors.dart';
 import 'package:hessdeck/widgets/deck_grid_widget.dart';
+import 'package:hessdeck/widgets/gallery/example.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -47,6 +48,7 @@ class HomeScreen extends StatelessWidget {
               ),
               const Expanded(
                 child: DeckGridWidget(),
+                // child: GridGalleryExample(),
               ),
               // Add additional widgets below if needed
             ],

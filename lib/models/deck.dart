@@ -43,6 +43,8 @@ class Deck {
           "A deck can only be type.",
         );
 
+  get id => null;
+
   Deck copyWith({
     String? name,
     String? action,
