@@ -3,7 +3,7 @@ import 'package:my_mobile_deck/models/connection.dart';
 import 'package:my_mobile_deck/providers/connection_provider.dart';
 import 'package:my_mobile_deck/screens/settings/settings_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:stream_elements_package/stream_elements.dart';
+import 'package:stream_elements_api/stream_elements_api.dart';
 
 class StreamElementsConnections {
   static Future<void> connectToStreamElements(

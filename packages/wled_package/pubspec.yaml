@@ -1,0 +1,13 @@
+name: wled_api
+version: 1.0.0
+description: A package for WLED API integration
+
+environment:
+  sdk: '>=3.0.6 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.1.0
+
+
