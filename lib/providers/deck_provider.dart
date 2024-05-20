@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:hessdeck/models/deck.dart';
+import 'package:my_mobile_deck/models/deck.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DeckProvider extends ChangeNotifier {

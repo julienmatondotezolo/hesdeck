@@ -3,14 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:hessdeck/models/connection.dart';
-import 'package:hessdeck/models/deck.dart';
-import 'package:hessdeck/providers/deck_provider.dart';
-import 'package:hessdeck/screens/deck_screen.dart';
-import 'package:hessdeck/screens/deck_settings_screen.dart';
-import 'package:hessdeck/services/api_services.dart';
-import 'package:hessdeck/themes/colors.dart';
-import 'package:hessdeck/widgets/collapsable_widget.dart';
+import 'package:my_mobile_deck/models/connection.dart';
+import 'package:my_mobile_deck/models/deck.dart';
+import 'package:my_mobile_deck/providers/deck_provider.dart';
+import 'package:my_mobile_deck/screens/deck_screen.dart';
+import 'package:my_mobile_deck/screens/deck_settings_screen.dart';
+import 'package:my_mobile_deck/services/api_services.dart';
+import 'package:my_mobile_deck/themes/colors.dart';
+import 'package:my_mobile_deck/widgets/collapsable_widget.dart';
 import 'package:provider/provider.dart';
 
 class Helpers {

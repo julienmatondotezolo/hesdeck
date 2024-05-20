@@ -3,9 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:hessdeck/providers/connection_provider.dart';
-import 'package:hessdeck/services/connections/light_connection.dart';
-import 'package:hessdeck/themes/colors.dart';
+import 'package:my_mobile_deck/providers/connection_provider.dart';
+import 'package:my_mobile_deck/services/connections/light_connection.dart';
+import 'package:my_mobile_deck/themes/colors.dart';
 
 const changeLightMethod = 'Change light';
 

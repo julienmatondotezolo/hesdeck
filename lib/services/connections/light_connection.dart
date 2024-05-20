@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:hessdeck/models/connection.dart';
-import 'package:hessdeck/providers/connection_provider.dart';
-import 'package:hessdeck/screens/settings/settings_screen.dart';
+import 'package:my_mobile_deck/models/connection.dart';
+import 'package:my_mobile_deck/providers/connection_provider.dart';
+import 'package:my_mobile_deck/screens/settings/settings_screen.dart';
 import 'package:provider/provider.dart';
 
 class LightConnections {

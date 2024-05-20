@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:hessdeck/models/deck.dart';
+import 'package:my_mobile_deck/models/deck.dart';
 import 'package:path_provider/path_provider.dart';
 
 class DataManager {

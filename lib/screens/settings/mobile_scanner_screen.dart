@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hessdeck/models/connection.dart';
-import 'package:hessdeck/utils/helpers.dart';
+import 'package:my_mobile_deck/models/connection.dart';
+import 'package:my_mobile_deck/utils/helpers.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class MobileScannerScreen extends StatelessWidget {

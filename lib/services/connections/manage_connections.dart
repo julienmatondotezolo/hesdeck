@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:hessdeck/models/connection.dart';
-import 'package:hessdeck/providers/connection_provider.dart';
-import 'package:hessdeck/services/connections/apple_music_connections.dart';
-import 'package:hessdeck/services/connections/light_connection.dart';
-import 'package:hessdeck/services/connections/obs_connections.dart';
-import 'package:hessdeck/services/connections/spotify_connections.dart';
-import 'package:hessdeck/services/connections/stream_elements_connections.dart';
-import 'package:hessdeck/services/connections/twitch_connections.dart';
+import 'package:my_mobile_deck/models/connection.dart';
+import 'package:my_mobile_deck/providers/connection_provider.dart';
+import 'package:my_mobile_deck/services/connections/apple_music_connections.dart';
+import 'package:my_mobile_deck/services/connections/deck_lights_connections.dart';
+import 'package:my_mobile_deck/services/connections/light_connection.dart';
+import 'package:my_mobile_deck/services/connections/obs_connections.dart';
+import 'package:my_mobile_deck/services/connections/spotify_connections.dart';
+import 'package:my_mobile_deck/services/connections/stream_elements_connections.dart';
+import 'package:my_mobile_deck/services/connections/twitch_connections.dart';
 
 class ManageConnections {
   static Future<void> selectConnection(
@@ -19,6 +20,11 @@ class ManageConnections {
         context,
         controllers[0],
         controllers[1],
+      );
+    } else if (connectionType == 'Deck Lights') {
+      await DeckLightsConnections.connectToDeckLights(
+        context,
+        controllers[0],
       );
     } else if (connectionType == 'OBS') {
       await OBSConnections.connectToOBS(

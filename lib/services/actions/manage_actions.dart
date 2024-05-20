@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hessdeck/services/actions/lights_elements_actions.dart';
-import 'package:hessdeck/services/actions/obs_actions.dart';
-import 'package:hessdeck/services/actions/spotify_actions.dart';
-import 'package:hessdeck/services/actions/stream_elements_actions.dart';
+import 'package:my_mobile_deck/services/actions/lights_elements_actions.dart';
+import 'package:my_mobile_deck/services/actions/obs_actions.dart';
+import 'package:my_mobile_deck/services/actions/spotify_actions.dart';
+import 'package:my_mobile_deck/services/actions/stream_elements_actions.dart';
 
 class ManageAcions {
   static Future<dynamic> selectAction(

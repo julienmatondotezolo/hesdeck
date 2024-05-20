@@ -3,8 +3,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:hessdeck/models/connection.dart';
-import 'package:hessdeck/utils/helpers.dart';
+import 'package:my_mobile_deck/models/connection.dart';
+import 'package:my_mobile_deck/utils/helpers.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';

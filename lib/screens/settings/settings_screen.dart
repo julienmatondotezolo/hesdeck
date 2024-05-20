@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:hessdeck/models/connection.dart';
-import 'package:hessdeck/providers/connection_provider.dart';
-import 'package:hessdeck/screens/settings/connection_settings_screen.dart';
-import 'package:hessdeck/services/api_services.dart';
-import 'package:hessdeck/themes/colors.dart';
-import 'package:hessdeck/utils/helpers.dart';
+import 'package:my_mobile_deck/models/connection.dart';
+import 'package:my_mobile_deck/providers/connection_provider.dart';
+import 'package:my_mobile_deck/screens/settings/connection_settings_screen.dart';
+import 'package:my_mobile_deck/services/api_services.dart';
+import 'package:my_mobile_deck/themes/colors.dart';
+import 'package:my_mobile_deck/utils/helpers.dart';
 import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {

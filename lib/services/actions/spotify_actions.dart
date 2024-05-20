@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hessdeck/providers/connection_provider.dart';
-import 'package:hessdeck/services/connections/spotify_connections.dart';
-import 'package:hessdeck/themes/colors.dart';
-import 'package:hessdeck/utils/helpers.dart';
+import 'package:my_mobile_deck/providers/connection_provider.dart';
+import 'package:my_mobile_deck/services/connections/spotify_connections.dart';
+import 'package:my_mobile_deck/themes/colors.dart';
+import 'package:my_mobile_deck/utils/helpers.dart';
 import 'package:spotify_api/spotify_api.dart';
 
 const getPlayBackStateMethod = 'Playback state';

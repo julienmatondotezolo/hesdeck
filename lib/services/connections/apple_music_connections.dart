@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hessdeck/models/connection.dart';
-import 'package:hessdeck/providers/connection_provider.dart';
+import 'package:my_mobile_deck/models/connection.dart';
+import 'package:my_mobile_deck/providers/connection_provider.dart';
 import 'package:provider/provider.dart';
 
 class AppleMusicConnections {

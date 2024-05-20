@@ -1,8 +1,8 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:hessdeck/providers/connection_provider.dart';
-import 'package:hessdeck/services/connections/stream_elements_connections.dart';
-import 'package:hessdeck/themes/colors.dart';
+import 'package:my_mobile_deck/providers/connection_provider.dart';
+import 'package:my_mobile_deck/services/connections/stream_elements_connections.dart';
+import 'package:my_mobile_deck/themes/colors.dart';
 import 'package:stream_elements_package/stream_elements.dart';
 
 const selectOverlayMethod = 'Select overlay';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hessdeck/models/deck.dart';
-import 'package:hessdeck/themes/colors.dart';
-import 'package:hessdeck/utils/helpers.dart';
+import 'package:my_mobile_deck/models/deck.dart';
+import 'package:my_mobile_deck/themes/colors.dart';
+import 'package:my_mobile_deck/utils/helpers.dart';
 
 class EmptyDeckWidget extends StatelessWidget {
   final Deck? deck; // Deck can be null

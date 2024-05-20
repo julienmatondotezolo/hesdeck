@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:hessdeck/providers/connection_provider.dart';
-import 'package:hessdeck/providers/deck_provider.dart';
-import 'package:hessdeck/screens/home_screen.dart';
-import 'package:hessdeck/themes/app_theme.dart';
-import 'package:hessdeck/utils/constants.dart';
+import 'package:my_mobile_deck/providers/connection_provider.dart';
+import 'package:my_mobile_deck/providers/deck_provider.dart';
+import 'package:my_mobile_deck/screens/home_screen.dart';
+import 'package:my_mobile_deck/themes/app_theme.dart';
+import 'package:my_mobile_deck/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 Future main() async {

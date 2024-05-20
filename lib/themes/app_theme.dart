@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hessdeck/themes/colors.dart'; // Replace 'your_app_name' with the actual name of your app
+import 'package:my_mobile_deck/themes/colors.dart'; // Replace 'your_app_name' with the actual name of your app
 
 class AppTheme {
   static ThemeData lightTheme = ThemeData(

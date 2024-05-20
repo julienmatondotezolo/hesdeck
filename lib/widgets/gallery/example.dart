@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hessdeck/widgets/gallery/grid_gallery.dart';
+import 'package:my_mobile_deck/widgets/gallery/grid_gallery.dart';
 
 final List<IconData> icons = [
   Icons.abc,
