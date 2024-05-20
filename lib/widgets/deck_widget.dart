@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:focused_menu_custom/focused_menu.dart';
 import 'package:focused_menu_custom/modals.dart';
-import 'package:hessdeck/models/deck.dart';
-import 'package:hessdeck/themes/colors.dart';
-import 'package:hessdeck/widgets/decks/clickable_deck_widget.dart';
-import 'package:hessdeck/widgets/decks/dossier_deck_widget.dart';
-import 'package:hessdeck/widgets/decks/empty_deck_widget.dart';
-import 'package:hessdeck/widgets/decks/popup_deck_widget.dart';
+import 'package:my_mobile_deck/models/deck.dart';
+import 'package:my_mobile_deck/themes/colors.dart';
+import 'package:my_mobile_deck/widgets/decks/clickable_deck_widget.dart';
+import 'package:my_mobile_deck/widgets/decks/dossier_deck_widget.dart';
+import 'package:my_mobile_deck/widgets/decks/empty_deck_widget.dart';
+import 'package:my_mobile_deck/widgets/decks/popup_deck_widget.dart';
 
 class DeckWidget extends StatelessWidget {
   final Deck? deck; // Deck can be null

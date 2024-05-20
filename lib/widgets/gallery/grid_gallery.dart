@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:hessdeck/widgets/gallery/gallery_drag.dart';
-import 'package:hessdeck/widgets/gallery/gallery_item.dart';
+import 'package:my_mobile_deck/widgets/gallery/gallery_drag.dart';
+import 'package:my_mobile_deck/widgets/gallery/gallery_item.dart';
 
 typedef GalleryItemBuilder = Widget Function();
 

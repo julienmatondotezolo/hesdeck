@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:hessdeck/models/deck.dart';
-import 'package:hessdeck/services/actions/manage_actions.dart';
-import 'package:hessdeck/themes/colors.dart';
-import 'package:hessdeck/utils/helpers.dart';
+import 'package:my_mobile_deck/models/deck.dart';
+import 'package:my_mobile_deck/services/actions/manage_actions.dart';
+import 'package:my_mobile_deck/themes/colors.dart';
+import 'package:my_mobile_deck/utils/helpers.dart';
 
 class ClickableDeckWidget extends StatefulWidget {
   final Deck? deck; // Deck can be null

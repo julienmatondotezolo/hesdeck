@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hessdeck/models/connection.dart';
-import 'package:hessdeck/providers/connection_provider.dart';
-import 'package:hessdeck/screens/settings/mobile_scanner_screen.dart';
-import 'package:hessdeck/services/connections/manage_connections.dart';
-import 'package:hessdeck/utils/helpers.dart';
+import 'package:my_mobile_deck/models/connection.dart';
+import 'package:my_mobile_deck/providers/connection_provider.dart';
+import 'package:my_mobile_deck/screens/settings/mobile_scanner_screen.dart';
+import 'package:my_mobile_deck/services/connections/manage_connections.dart';
+import 'package:my_mobile_deck/utils/helpers.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:provider/provider.dart';
 

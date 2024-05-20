@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hessdeck/models/deck.dart';
-import 'package:hessdeck/providers/deck_provider.dart';
-import 'package:hessdeck/services/decks/process_decks.dart';
-import 'package:hessdeck/utils/helpers.dart';
-import 'package:hessdeck/widgets/deck_widget.dart';
+import 'package:my_mobile_deck/models/deck.dart';
+import 'package:my_mobile_deck/providers/deck_provider.dart';
+import 'package:my_mobile_deck/services/decks/process_decks.dart';
+import 'package:my_mobile_deck/utils/helpers.dart';
+import 'package:my_mobile_deck/widgets/deck_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 

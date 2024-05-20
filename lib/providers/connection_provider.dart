@@ -3,8 +3,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:hessdeck/models/connection.dart';
-import 'package:hessdeck/utils/helpers.dart';
+import 'package:my_mobile_deck/models/connection.dart';
+import 'package:my_mobile_deck/utils/helpers.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,6 +19,11 @@ class ConnectionProvider extends ChangeNotifier {
     clientSecret: '************',
   );
   Map<String, dynamic>? _appleMusicClient;
+
+  late DeckLightsConnection _deckLightsConnectionObject = DeckLightsConnection(
+    ipAddress: 'xxx.xxx.xxx.x',
+  );
+  Map<String, dynamic>? _deckLightsClient;
 
   late OBSConnection _obsConnectionObject = OBSConnection(
     ipAddress: 'xxx.xxx.xxx.x',
@@ -54,6 +59,10 @@ class ConnectionProvider extends ChangeNotifier {
   StreamElements? _streamElementsClient;
 
   List<Connection> get connections => _connections;
+
+  DeckLightsConnection get deckLightsConnectionObject =>
+      _deckLightsConnectionObject;
+  Map<String, dynamic>? get deckLightsClient => _deckLightsClient;
 
   AppleMusicConnection get appleMusicConnectionObject =>
       _appleMusicConnectionObject;
@@ -190,6 +199,16 @@ class ConnectionProvider extends ChangeNotifier {
               : appleMusicConnectionObject;
           addConnection(spotifyConnectionObject);
           _appleMusicConnectionObject = appleMusicConnectionObject;
+        } else if (connJson["type"] == 'Deck Lights') {
+          DeckLightsConnection deckLightsConnectionObject =
+              DeckLightsConnection.fromJson(connJson);
+          // If Apple Music is null put connected to false
+          _deckLightsClient == null
+              ? deckLightsConnectionObject =
+                  deckLightsConnectionObject.copyWith(connected: false)
+              : deckLightsConnectionObject;
+          addConnection(deckLightsConnectionObject);
+          _deckLightsConnectionObject = deckLightsConnectionObject;
         } else if (connJson["type"] == 'OBS') {
           OBSConnection obsConnectionObject = OBSConnection.fromJson(connJson);
           // If OBS WebSocket is null put connected to false
@@ -310,6 +329,49 @@ class ConnectionProvider extends ChangeNotifier {
       notifyListeners();
     } else {
       throw Exception('You are not connected to Apple Music.');
+    }
+  }
+
+  /* ===================================================
+          =====  DECK LIGHTS CONNECTION SETTINGS ======
+  *** ================================================= */
+
+  // Connect to Deck Lights
+  Future<void> connectToDeckLights(
+      DeckLightsConnection deckLightsConnectionObject) async {
+    _deckLightsClient = {"Connected": true};
+
+    try {
+      debugPrint('Connected to Deck Lights client.');
+      deckLightsConnectionObject =
+          deckLightsConnectionObject.copyWith(connected: true);
+
+      addConnection(deckLightsConnectionObject);
+      _saveConnectionSettings();
+    } catch (e) {
+      throw Exception('Error connecting to Deck Lights client: $e');
+    }
+  }
+
+  // Disconnect from Deck light client
+  Future<void> disconnectFromDeckLights() async {
+    if (_deckLightsClient != null) {
+      // Update the connected property of the existing connection object
+      final existingConnectionIndex = _connections.indexWhere((existingConn) =>
+          existingConn.type == _deckLightsConnectionObject.type);
+
+      if (existingConnectionIndex != -1) {
+        _connections[existingConnectionIndex] =
+            _deckLightsConnectionObject.copyWith(connected: false);
+        debugPrint('Disconnected from Deck Lights client.');
+      } else {
+        debugPrint('Deck Lights connection not found in the list.');
+      }
+
+      _deckLightsClient = null;
+      notifyListeners();
+    } else {
+      throw Exception('You are not connected to Deck Lights client.');
     }
   }
 

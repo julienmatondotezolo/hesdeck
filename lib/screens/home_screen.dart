@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hessdeck/screens/settings/settings_screen.dart';
-import 'package:hessdeck/themes/colors.dart';
-import 'package:hessdeck/widgets/deck_grid_widget.dart';
-import 'package:hessdeck/widgets/gallery/example.dart';
+import 'package:my_mobile_deck/screens/settings/settings_screen.dart';
+import 'package:my_mobile_deck/themes/colors.dart';
+import 'package:my_mobile_deck/widgets/deck_grid_widget.dart';
+import 'package:my_mobile_deck/widgets/gallery/example.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

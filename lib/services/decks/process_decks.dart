@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hessdeck/models/deck.dart';
-import 'package:hessdeck/providers/deck_provider.dart';
+import 'package:my_mobile_deck/models/deck.dart';
+import 'package:my_mobile_deck/providers/deck_provider.dart';
 import 'package:provider/provider.dart';
 
 class ProcessDecks {

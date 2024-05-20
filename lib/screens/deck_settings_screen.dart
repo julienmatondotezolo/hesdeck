@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hessdeck/models/deck.dart';
-import 'package:hessdeck/screens/home_screen.dart';
-import 'package:hessdeck/services/decks/process_decks.dart';
-import 'package:hessdeck/utils/helpers.dart';
-import 'package:hessdeck/widgets/add_action_widget.dart';
-import 'package:hessdeck/widgets/gradient_color_picker.dart';
+import 'package:my_mobile_deck/models/deck.dart';
+import 'package:my_mobile_deck/screens/home_screen.dart';
+import 'package:my_mobile_deck/services/decks/process_decks.dart';
+import 'package:my_mobile_deck/utils/helpers.dart';
+import 'package:my_mobile_deck/widgets/add_action_widget.dart';
+import 'package:my_mobile_deck/widgets/gradient_color_picker.dart';
 
 class DeckSettingsScreen extends StatefulWidget {
   final Deck deck;

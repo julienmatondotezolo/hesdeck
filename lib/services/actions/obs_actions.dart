@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hessdeck/providers/connection_provider.dart';
-import 'package:hessdeck/services/connections/obs_connections.dart';
-import 'package:hessdeck/themes/colors.dart';
-import 'package:hessdeck/utils/helpers.dart';
+import 'package:my_mobile_deck/providers/connection_provider.dart';
+import 'package:my_mobile_deck/services/connections/obs_connections.dart';
+import 'package:my_mobile_deck/themes/colors.dart';
+import 'package:my_mobile_deck/utils/helpers.dart';
 import 'package:obs_websocket/obs_websocket.dart';
 
 const changSceneMethod = 'Change scene';
