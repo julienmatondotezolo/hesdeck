@@ -68,6 +68,46 @@ class AppleMusicConnection extends Connection {
   }
 }
 
+class DeckLightsConnection extends Connection {
+  final String ipAddress;
+  DeckLightsConnection({
+    required this.ipAddress,
+    bool connected = false, // Provide a default value for connected
+  }) : super(
+          'Deck Lights',
+          'https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/6d/23/69/6d2369a1-71b0-22fd-1faf-6da57877bccb/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/135x135bb.png',
+          connected,
+        );
+
+  @override
+  DeckLightsConnection copyWith({
+    String? ipAddress,
+    required bool connected,
+  }) {
+    return DeckLightsConnection(
+      ipAddress: ipAddress ?? this.ipAddress,
+      connected: connected, // Update connected property
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type,
+      'image': image,
+      'ipAddress': ipAddress,
+      'connected': connected,
+    };
+  }
+
+  factory DeckLightsConnection.fromJson(Map<String, dynamic> json) {
+    return DeckLightsConnection(
+      ipAddress: json['ipAddress'],
+      connected: json['connected'],
+    );
+  }
+}
+
 class OBSConnection extends Connection {
   final String ipAddress;
   final String port;

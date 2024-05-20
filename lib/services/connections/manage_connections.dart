@@ -69,6 +69,8 @@ class ManageConnections {
   ) async {
     if (connectionType == 'Apple Music') {
       await AppleMusicConnections.disconnectAppleMusic(connectionProvider);
+    } else if (connectionType == 'Deck Lights') {
+      await DeckLightsConnections.disconnectDeckLight(connectionProvider);
     } else if (connectionType == 'OBS') {
       await OBSConnections.disconnectOBS(context, connectionProvider);
     } else if (connectionType == 'Lights') {
@@ -92,6 +94,11 @@ class ManageConnections {
   ) async {
     if (connectionType == 'Apple Music') {
       await AppleMusicConnections.deleteAppleMusicConnection(
+        connectionProvider,
+        connectionObject,
+      );
+    } else if (connectionType == 'Deck Lights') {
+      await DeckLightsConnections.deleteDeckLightConnection(
         connectionProvider,
         connectionObject,
       );
