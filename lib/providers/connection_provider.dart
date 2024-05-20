@@ -9,7 +9,7 @@ import 'package:obs_websocket/obs_websocket.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify_api/spotify_api.dart';
-import 'package:stream_elements_package/stream_elements.dart';
+import 'package:stream_elements_api/stream_elements_api.dart';
 
 class ConnectionProvider extends ChangeNotifier {
   final List<Connection> _connections = [];
