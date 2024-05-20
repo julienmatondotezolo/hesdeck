@@ -355,6 +355,46 @@
             "dossierDeck": false,
             "popupDeck": false,
             "clickableDeck": true
+         },
+         {
+            "name": "Volume up",
+            "action": "Volume up",
+            "actionConnectionType": "Spotify",
+            "iconData": null,
+            "customIconData": 59394,
+            "backgroundColor": {
+               "colors": [
+                  4281719177,
+                  4279991314
+               ],
+               "begin": "Alignment.topLeft",
+               "end": "Alignment.bottomLeft"
+            },
+            "iconColor": 4294967295,
+            "defaultDeck": false,
+            "dossierDeck": false,
+            "popupDeck": false,
+            "clickableDeck": true
+         },
+         {
+            "name": "Volume down",
+            "action": "Volume down",
+            "actionConnectionType": "Spotify",
+            "iconData": null,
+            "customIconData": 59394,
+            "backgroundColor": {
+               "colors": [
+                  4281719177,
+                  4279991314
+               ],
+               "begin": "Alignment.topLeft",
+               "end": "Alignment.bottomLeft"
+            },
+            "iconColor": 4294967295,
+            "defaultDeck": false,
+            "dossierDeck": false,
+            "popupDeck": false,
+            "clickableDeck": true
          }
       ]
    },
