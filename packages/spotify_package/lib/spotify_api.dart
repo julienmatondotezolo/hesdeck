@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:uni_links/uni_links.dart';
@@ -340,6 +341,103 @@ class SpotifyApi with ChangeNotifier {
         throw Exception({
           "code": responsePrevious.statusCode,
           "reason": responsePrevious.reasonPhrase
+        });
+      }
+    } catch (e) {
+      throw Exception('Failed to previous playback: $e');
+    }
+  }
+
+  Future<void> volumeUp(String deviceId) async {
+    var playBackStateResponse = await getCurrentPlaybackState();
+    int currentVolume = playBackStateResponse?["device"][0]["volume_percent"];
+    int updatedVolume = currentVolume + 10;
+
+    int newVolume = updatedVolume > 100 ? 100 : updatedVolume;
+
+    print('newVolume: $newVolume');
+
+    try {
+      // Then, start playback on that device
+      final responseVolume = await http.post(
+        Uri.parse('https://api.spotify.com/v1/me/player/volume'),
+        headers: {
+          'Authorization': 'Bearer $_accessToken',
+        },
+        body: json.encode({
+          'device_id': deviceId,
+          'volume_percent': newVolume,
+        }),
+      );
+
+      if (responseVolume.statusCode == 204) {
+        print('responseVolume: ${responseVolume.body}');
+      } else {
+        throw Exception({
+          "code": responseVolume.statusCode,
+          "reason": responseVolume.reasonPhrase
+        });
+      }
+    } catch (e) {
+      throw Exception('Failed to previous playback: $e');
+    }
+  }
+
+  Future<void> volumeDown(String deviceId) async {
+    var playBackStateResponse = await getCurrentPlaybackState();
+    int currentVolume = playBackStateResponse?["device"][0]["volume_percent"];
+    int updatedVolume = currentVolume - 10;
+
+    int newVolume = updatedVolume < 0 ? 0 : updatedVolume;
+
+    print('newVolume: $newVolume');
+
+    try {
+      // Then, start playback on that device
+      final responseVolume = await http.post(
+        Uri.parse('https://api.spotify.com/v1/me/player/volume'),
+        headers: {
+          'Authorization': 'Bearer $_accessToken',
+        },
+        body: json.encode({
+          'device_id': deviceId,
+          'volume_percent': newVolume,
+        }),
+      );
+
+      if (responseVolume.statusCode == 204) {
+        print('responseVolume: ${responseVolume.body}');
+      } else {
+        throw Exception({
+          "code": responseVolume.statusCode,
+          "reason": responseVolume.reasonPhrase
+        });
+      }
+    } catch (e) {
+      throw Exception('Failed to previous playback: $e');
+    }
+  }
+
+  Future<void> volume(String deviceId, int volume) async {
+    try {
+      // Then, start playback on that device
+      final responseVolume = await http.post(
+        Uri.parse('https://api.spotify.com/v1/me/player/volume'),
+        headers: {
+          'Authorization': 'Bearer $_accessToken',
+        },
+        body: json.encode({
+          'device_id': deviceId,
+          'volume_percent': volume,
+        }),
+      );
+
+      if (responseVolume.statusCode == 204) {
+        print('responseVolume: ${responseVolume.body}');
+      } else {
+        throw Exception({
+          "code": responseVolume.statusCode,
+          "reason": responseVolume.reasonPhrase
         });
       }
     } catch (e) {
