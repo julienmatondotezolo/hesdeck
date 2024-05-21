@@ -349,25 +349,23 @@ class SpotifyApi with ChangeNotifier {
   }
 
   Future<void> volumeUp(String deviceId) async {
-    var playBackStateResponse = await getCurrentPlaybackState();
-    int currentVolume = playBackStateResponse?["device"][0]["volume_percent"];
-    int updatedVolume = currentVolume + 10;
-
-    int newVolume = updatedVolume > 100 ? 100 : updatedVolume;
-
-    print('newVolume: $newVolume');
-
     try {
+      // Get current playback state
+      var playBackStateResponse = await getCurrentPlaybackState();
+      int currentVolume = playBackStateResponse?["device"]["volume_percent"];
+      int updatedVolume = currentVolume + 10;
+
+      int newVolume = updatedVolume > 100 ? 100 : updatedVolume;
+
       // Then, start playback on that device
-      final responseVolume = await http.post(
-        Uri.parse('https://api.spotify.com/v1/me/player/volume'),
+      final responseVolume = await http.put(
+        Uri.parse(
+          'https://api.spotify.com/v1/me/player/volume?volume_percent=$newVolume',
+        ),
         headers: {
           'Authorization': 'Bearer $_accessToken',
         },
-        body: json.encode({
-          'device_id': deviceId,
-          'volume_percent': newVolume,
-        }),
+        body: json.encode({'device_id': deviceId}),
       );
 
       if (responseVolume.statusCode == 204) {
@@ -379,29 +377,29 @@ class SpotifyApi with ChangeNotifier {
         });
       }
     } catch (e) {
-      throw Exception('Failed to previous playback: $e');
+      throw Exception('Failed to volume up state: $e');
     }
   }
 
   Future<void> volumeDown(String deviceId) async {
-    var playBackStateResponse = await getCurrentPlaybackState();
-    int currentVolume = playBackStateResponse?["device"][0]["volume_percent"];
-    int updatedVolume = currentVolume - 10;
-
-    int newVolume = updatedVolume < 0 ? 0 : updatedVolume;
-
-    print('newVolume: $newVolume');
-
     try {
+      // Get current playback state
+      var playBackStateResponse = await getCurrentPlaybackState();
+      int currentVolume = playBackStateResponse?["device"]["volume_percent"];
+      int updatedVolume = currentVolume - 10;
+
+      int newVolume = updatedVolume < 0 ? 0 : updatedVolume;
+
       // Then, start playback on that device
-      final responseVolume = await http.post(
-        Uri.parse('https://api.spotify.com/v1/me/player/volume'),
+      final responseVolume = await http.put(
+        Uri.parse(
+          'https://api.spotify.com/v1/me/player/volume?volume_percent=$newVolume',
+        ),
         headers: {
           'Authorization': 'Bearer $_accessToken',
         },
         body: json.encode({
           'device_id': deviceId,
-          'volume_percent': newVolume,
         }),
       );
 
@@ -414,7 +412,7 @@ class SpotifyApi with ChangeNotifier {
         });
       }
     } catch (e) {
-      throw Exception('Failed to previous playback: $e');
+      throw Exception('Failed to volume down state: $e');
     }
   }
 

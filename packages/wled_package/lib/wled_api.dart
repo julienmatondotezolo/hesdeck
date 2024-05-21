@@ -12,8 +12,8 @@ class WLED {
 
   static String baseUrl(String ipAddress) => 'http://$ipAddress/json/state';
 
-  static Future<Map<String, dynamic>> getState() async {
-    final Uri uri = Uri.parse(baseUrl as String);
+  static Future<Map<String, dynamic>> getState(WLED wled) async {
+    final Uri uri = Uri.parse(WLED.baseUrl(wled.ipAddress));
     final response = await http.get(uri);
 
     if (response.statusCode == 200) {
@@ -34,8 +34,8 @@ class WLED {
     }
   }
 
-  static Future<void> toggle() async {
-    final Uri uri = Uri.parse(baseUrl as String);
+  static Future<void> toggle(WLED wled) async {
+    final Uri uri = Uri.parse(WLED.baseUrl(wled.ipAddress));
 
     final Map<String, dynamic> ledJSON = {"on": "t", "v": true};
 
@@ -50,20 +50,21 @@ class WLED {
         debugPrint('LED state: ${jsonResponse['on']}');
         return jsonResponse['on'];
       } else {
-        throw Exception('Failed to update color.');
+        throw Exception('Failed to toggle LED.');
       }
     } else {
-      throw Exception('Failed to update color.');
+      throw Exception('Failed to toggle LED.');
     }
   }
 
   static Future<void> updateColor(
-    String red,
-    String green,
-    String blue,
-    String bri,
-  ) async {
-    final Uri uri = Uri.parse(baseUrl as String);
+    WLED wled, {
+    required String red,
+    required String green,
+    required String blue,
+    required String bri,
+  }) async {
+    final Uri uri = Uri.parse(WLED.baseUrl(wled.ipAddress));
 
     final Map<String, dynamic> ledJSON = {
       "bri": bri,
@@ -76,6 +77,8 @@ class WLED {
         }
       ]
     };
+
+    print('ledJSON: $ledJSON');
 
     final response = await http.post(
       uri,

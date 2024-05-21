@@ -11,6 +11,8 @@ const startPlaybackMethod = 'Start song';
 const pausePlaybackMethod = 'Pause song';
 const previousPlaybackMethod = 'Previous song';
 const nextPlaybackMethod = 'Next song';
+const volumeUpMethod = 'Volume up';
+const volumeDownMethod = 'Volume down';
 
 class SpotifyMethodMetadata {
   final List<String> parameterNames;
@@ -206,12 +208,48 @@ class SpotifyActions {
     }
   }
 
+  static Future<void> volumeUp(
+    BuildContext context,
+    String deviceId,
+  ) async {
+    SpotifyApi? spotifyApi = connectionProvider(context).spotifyApi;
+    if (await SpotifyConnections.checkIfConnectedToSpotify(
+        context, spotifyApi)) {
+      try {
+        await spotifyApi!.volumeUp(deviceId);
+      } catch (e) {
+        // Handle any errors that occur while changing the scene
+        throw Exception('Error volume up: $e');
+        // Show an error message or take appropriate action
+      }
+    }
+  }
+
+  static Future<void> volumeDown(
+    BuildContext context,
+    String deviceId,
+  ) async {
+    SpotifyApi? spotifyApi = connectionProvider(context).spotifyApi;
+    if (await SpotifyConnections.checkIfConnectedToSpotify(
+        context, spotifyApi)) {
+      try {
+        await spotifyApi!.volumeDown(deviceId);
+      } catch (e) {
+        // Handle any errors that occur while changing the scene
+        throw Exception('Error volume up: $e');
+        // Show an error message or take appropriate action
+      }
+    }
+  }
+
   static final Map<String, SpotifyMethodMetadata> spotifyMethodMetadata = {
-    getPlayBackStateMethod: SpotifyMethodMetadata([]),
+    // getPlayBackStateMethod: SpotifyMethodMetadata([]),
     startPlaybackMethod: SpotifyMethodMetadata([selectDevicesMethod]),
     pausePlaybackMethod: SpotifyMethodMetadata([selectDevicesMethod]),
     previousPlaybackMethod: SpotifyMethodMetadata([selectDevicesMethod]),
     nextPlaybackMethod: SpotifyMethodMetadata([selectDevicesMethod]),
+    volumeUpMethod: SpotifyMethodMetadata([selectDevicesMethod]),
+    volumeDownMethod: SpotifyMethodMetadata([selectDevicesMethod]),
   };
 
   getMethodParameters(String methodName) {
@@ -222,16 +260,18 @@ class SpotifyActions {
 typedef SpotifyMethod = Function(BuildContext, String);
 
 final Map<String, SpotifyMethod> spotifyMethods = {
-  getPlayBackStateMethod: (
-    BuildContext context,
-    String sceneName,
-  ) async {
-    return await SpotifyActions.getPlaybackState(context);
-  },
+  // getPlayBackStateMethod: (
+  //   BuildContext context,
+  //   String sceneName,
+  // ) async {
+  //   return await SpotifyActions.getPlaybackState(context);
+  // },
   startPlaybackMethod: SpotifyActions.startPlayback,
   pausePlaybackMethod: SpotifyActions.pausePlayback,
   previousPlaybackMethod: SpotifyActions.previousPlayback,
-  nextPlaybackMethod: SpotifyActions.nextPlayback
+  nextPlaybackMethod: SpotifyActions.nextPlayback,
+  volumeUpMethod: SpotifyActions.volumeUp,
+  volumeDownMethod: SpotifyActions.volumeDown
 };
 
 final Map<String, SpotifyMethod> spotifyMethodParameters = {

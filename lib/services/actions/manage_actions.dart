@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_mobile_deck/services/actions/deck_lights_actions.dart';
 import 'package:my_mobile_deck/services/actions/lights_elements_actions.dart';
 import 'package:my_mobile_deck/services/actions/obs_actions.dart';
 import 'package:my_mobile_deck/services/actions/spotify_actions.dart';
@@ -17,6 +18,10 @@ class ManageAcions {
           return await obsMethods[actionName]!(
             context,
             actionParameter ?? '',
+          );
+        case 'Deck lights':
+          return await deckLightsMethods[actionName]!(
+            context,
           );
         case 'Lights':
           return await lightsMethods[actionName]!(
@@ -66,7 +71,7 @@ class ManageAcions {
         );
       default:
         throw Exception(
-          'No ACTIONS for [$connectionType] exists in this services.',
+          'No ACTIONS PARAMETER for [$connectionType] exists in this services.',
         );
     }
   }
@@ -74,6 +79,7 @@ class ManageAcions {
   static Map<String, dynamic> getAllActions() {
     return {
       'OBS': obsMethods,
+      'Deck lights': deckLightsMethods,
       'Lights': lightsMethods,
       'Spotify': spotifyMethods,
       'StreamElements': streamElementsMethods,
@@ -96,6 +102,8 @@ class ManageAcions {
     Map<String, dynamic> methodMetadataList = {};
     Map<String, OBSMethodMetadata> obsMethodMetadata =
         OBSActions.obsMethodMetadata;
+    Map<String, DeckLightsMethodMetadata> deckLightsMetadata =
+        DeckLightsActions.lightsMethodMetadata;
     Map<String, LightsMethodMetadata> lightsMethodMetadata =
         LightsActions.lightsMethodMetadata;
     Map<String, SpotifyMethodMetadata> spotifyMethodMetadata =
@@ -104,6 +112,7 @@ class ManageAcions {
         StreamElementsActions.streamElementsMethodMetadata;
 
     methodMetadataList.addAll(obsMethodMetadata);
+    methodMetadataList.addAll(deckLightsMetadata);
     methodMetadataList.addAll(lightsMethodMetadata);
     methodMetadataList.addAll(spotifyMethodMetadata);
     methodMetadataList.addAll(streamElementsMethodMetadata);

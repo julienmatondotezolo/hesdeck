@@ -1,37 +1,56 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:my_mobile_deck/providers/connection_provider.dart';
-import 'package:my_mobile_deck/services/connections/light_connection.dart';
+import 'package:my_mobile_deck/services/connections/deck_lights_connections.dart';
 import 'package:my_mobile_deck/themes/colors.dart';
+import 'package:wled_api/wled_api.dart';
 
-const changeLightMethod = 'Change lights color';
+const toggleDeckLightsMethod = 'Deck light Toggle';
+const updateDeckLighstMethod = 'Deck light Change color';
 
 class SliderValueNotifier {
   static final ValueNotifier<double> sliderValue = ValueNotifier<double>(0.0);
 }
 
 class ColorValueNotifier {
-  static final ValueNotifier<Color> colorValue =
-      ValueNotifier<Color>(Colors.white);
+  static final ValueNotifier<Color> colorValue = ValueNotifier<Color>(
+    const Color.fromARGB(255, 255, 180, 0),
+  );
 }
 
-class LightsMethodMetadata {
+class DeckLightsMethodMetadata {
   final List<String> parameterNames;
 
-  LightsMethodMetadata(this.parameterNames);
+  DeckLightsMethodMetadata(this.parameterNames);
 }
 
-class LightsActions {
-  static Future<void> changeColor(BuildContext context) async {
-    BluetoothDevice? lightClient = connectionProvider(context).lightClient;
-    BluetoothCharacteristic? sendCharacteristic =
-        connectionProvider(context).sendCharacteristic;
+class DeckLightsActions {
+  static Future<void> toggleDeckLights(BuildContext context) async {
+    WLED? deckLightsClient = connectionProvider(context).deckLightsClient;
+
+    if (await DeckLightsConnections.checkIfConnectedToDeckLights(
+      context,
+      deckLightsClient,
+    )) {
+      try {
+        WLED wled = WLED(deckLightsClient!.ipAddress);
+        await WLED.toggle(wled);
+      } catch (e) {
+        // Handle any errors that occur while changing the scene
+        throw Exception('Error toggle Deck lights: $e');
+        // Show an error message or take appropriate action
+      }
+    }
+  }
+
+  static Future<void> updateDeckLightsColor(BuildContext context) async {
+    WLED? deckLightsClient = connectionProvider(context).deckLightsClient;
     final screenHeight = MediaQuery.of(context).size.height;
 
-    if (await LightConnections.checkIfConnectedToLights(context, lightClient)) {
+    if (await DeckLightsConnections.checkIfConnectedToDeckLights(
+      context,
+      deckLightsClient,
+    )) {
       try {
         if (!context.mounted) return;
 
@@ -66,7 +85,7 @@ class LightsActions {
                     const Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        "Change color",
+                        "Change Deck light colors",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 24,
@@ -79,34 +98,35 @@ class LightsActions {
                       pickerColor: ColorValueNotifier.colorValue.value,
                       hexInputBar: true,
                       enableAlpha: false,
-                      showLabel: false,
+                      labelTypes: const [],
                       displayThumbColor: false,
                       onColorChanged: (color) async {
                         ColorValueNotifier.colorValue.value = color;
+                        WLED wled = WLED(deckLightsClient!.ipAddress);
 
-                        await sendCharacteristic?.write(
-                          updateColor(
-                            color.red,
-                            color.green,
-                            color.blue,
-                          ),
+                        await WLED.updateColor(
+                          wled,
+                          red: color.red.toString(),
+                          green: color.green.toString(),
+                          blue: color.blue.toString(),
+                          bri: 255.toString(),
                         );
                       },
                       paletteType: PaletteType.hueWheel,
                       pickerAreaHeightPercent: 0.8,
                     ),
-                    SizedBox(height: screenHeight * 0.025),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Update overlayName in the body
-                        Navigator.pop(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        foregroundColor: Colors.white,
-                      ),
-                      child: const Text('Save light color'),
-                    ),
+                    // SizedBox(height: screenHeight * 0.025),
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     // Update overlayName in the body
+                    //     Navigator.pop(context);
+                    //   },
+                    //   style: ElevatedButton.styleFrom(
+                    //     backgroundColor: Colors.blue,
+                    //     foregroundColor: Colors.white,
+                    //   ),
+                    //   child: const Text('Save light color'),
+                    // ),
                   ],
                 ),
               ),
@@ -122,15 +142,16 @@ class LightsActions {
     }
   }
 
-  static final Map<String, LightsMethodMetadata> lightsMethodMetadata = {
-    changeLightMethod: LightsMethodMetadata([]),
+  static final Map<String, DeckLightsMethodMetadata> lightsMethodMetadata = {
+    updateDeckLighstMethod: DeckLightsMethodMetadata([]),
   };
 }
 
-typedef LightsMethod = Function(BuildContext);
+typedef DeckLightsMethod = Function(BuildContext);
 
-final Map<String, LightsMethod> lightsMethods = {
-  changeLightMethod: LightsActions.changeColor,
+final Map<String, DeckLightsMethod> deckLightsMethods = {
+  toggleDeckLightsMethod: DeckLightsActions.toggleDeckLights,
+  updateDeckLighstMethod: DeckLightsActions.updateDeckLightsColor,
 };
 
 List<int> updateColor(int r, int g, int b) {

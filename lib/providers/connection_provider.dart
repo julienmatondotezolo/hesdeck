@@ -9,7 +9,8 @@ import 'package:obs_websocket/obs_websocket.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:spotify_api/spotify_api.dart';
-import 'package:stream_elements_package/stream_elements.dart';
+import 'package:stream_elements_api/stream_elements_api.dart';
+import 'package:wled_api/wled_api.dart';
 
 class ConnectionProvider extends ChangeNotifier {
   final List<Connection> _connections = [];
@@ -23,7 +24,7 @@ class ConnectionProvider extends ChangeNotifier {
   late DeckLightsConnection _deckLightsConnectionObject = DeckLightsConnection(
     ipAddress: 'xxx.xxx.xxx.x',
   );
-  Map<String, dynamic>? _deckLightsClient;
+  WLED? _deckLightsClient;
 
   late OBSConnection _obsConnectionObject = OBSConnection(
     ipAddress: 'xxx.xxx.xxx.x',
@@ -62,7 +63,7 @@ class ConnectionProvider extends ChangeNotifier {
 
   DeckLightsConnection get deckLightsConnectionObject =>
       _deckLightsConnectionObject;
-  Map<String, dynamic>? get deckLightsClient => _deckLightsClient;
+  WLED? get deckLightsClient => _deckLightsClient;
 
   AppleMusicConnection get appleMusicConnectionObject =>
       _appleMusicConnectionObject;
@@ -338,8 +339,9 @@ class ConnectionProvider extends ChangeNotifier {
 
   // Connect to Deck Lights
   Future<void> connectToDeckLights(
-      DeckLightsConnection deckLightsConnectionObject) async {
-    _deckLightsClient = {"Connected": true};
+    DeckLightsConnection deckLightsConnectionObject,
+  ) async {
+    _deckLightsClient = WLED(deckLightsConnectionObject.ipAddress);
 
     try {
       debugPrint('Connected to Deck Lights client.');
