@@ -221,7 +221,7 @@
             "action": "Change scene",
             "actionConnectionType": "OBS",
             "iconData": null,
-            "customIconData": 59393,
+            "customIconData": 59394,
             "backgroundColor": {
                "colors": [
                   4282598211,
@@ -241,7 +241,7 @@
             "action": "Start record",
             "actionConnectionType": "OBS",
             "iconData": null,
-            "customIconData": 59393,
+            "customIconData": 59394,
             "backgroundColor": {
                "colors": [
                   4282598211,
@@ -261,7 +261,7 @@
             "action": "Stop record",
             "actionConnectionType": "OBS",
             "iconData": null,
-            "customIconData": 59393,
+            "customIconData": 59394,
             "backgroundColor": {
                "colors": [
                   4282598211,
@@ -281,7 +281,7 @@
             "action": "Start stream",
             "actionConnectionType": "OBS",
             "iconData": null,
-            "customIconData": 59393,
+            "customIconData": 59394,
             "backgroundColor": {
                "colors": [
                   4282598211,
@@ -301,7 +301,7 @@
             "action": "Stop stream",
             "actionConnectionType": "OBS",
             "iconData": null,
-            "customIconData": 59393,
+            "customIconData": 59394,
             "backgroundColor": {
                "colors": [
                   4282598211,
@@ -326,7 +326,7 @@
             "action": "Start song",
             "actionConnectionType": "Spotify",
             "iconData": null,
-            "customIconData": 59394,
+            "customIconData": 59396,
             "backgroundColor": {
                "colors": [
                   4281719177,
@@ -346,7 +346,7 @@
             "action": "Pause song",
             "actionConnectionType": "Spotify",
             "iconData": null,
-            "customIconData": 59394,
+            "customIconData": 59396,
             "backgroundColor": {
                "colors": [
                   4281719177,
@@ -366,7 +366,7 @@
             "action": "Next song",
             "actionConnectionType": "Spotify",
             "iconData": null,
-            "customIconData": 59394,
+            "customIconData": 59396,
             "backgroundColor": {
                "colors": [
                   4281719177,
@@ -386,7 +386,7 @@
             "action": "Previous song",
             "actionConnectionType": "Spotify",
             "iconData": null,
-            "customIconData": 59394,
+            "customIconData": 59396,
             "backgroundColor": {
                "colors": [
                   4281719177,
@@ -406,7 +406,7 @@
             "action": "Volume up",
             "actionConnectionType": "Spotify",
             "iconData": null,
-            "customIconData": 59394,
+            "customIconData": 59396,
             "backgroundColor": {
                "colors": [
                   4281719177,
@@ -426,7 +426,7 @@
             "action": "Volume down",
             "actionConnectionType": "Spotify",
             "iconData": null,
-            "customIconData": 59394,
+            "customIconData": 59396,
             "backgroundColor": {
                "colors": [
                   4281719177,
@@ -451,7 +451,7 @@
             "action": "Update overlay",
             "actionConnectionType": "StreamElements",
             "iconData": null,
-            "customIconData": 59395,
+            "customIconData": 59392,
             "backgroundColor": {
                "colors": [
                   4279336959,
@@ -476,7 +476,7 @@
             "action": "",
             "actionConnectionType": "",
             "iconData": null,
-            "customIconData": 59392,
+            "customIconData": 59395,
             "backgroundColor": {
                "colors": [
                   4294794386,
@@ -505,7 +505,7 @@
             "action": "",
             "actionConnectionType": "",
             "iconData": null,
-            "customIconData": 59394,
+            "customIconData": 59396,
             "backgroundColor": {
                "colors": [
                   4281719177,
@@ -534,7 +534,7 @@
             "action": "",
             "actionConnectionType": "",
             "iconData": null,
-            "customIconData": 59396,
+            "customIconData": 59397,
             "backgroundColor": {
                "colors": [
                   4293329146,
