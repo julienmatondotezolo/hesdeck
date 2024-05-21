@@ -50,10 +50,10 @@ class WLED {
         debugPrint('LED state: ${jsonResponse['on']}');
         return jsonResponse['on'];
       } else {
-        throw Exception('Failed to update color.');
+        throw Exception('Failed to toggle LED.');
       }
     } else {
-      throw Exception('Failed to update color.');
+      throw Exception('Failed to toggle LED.');
     }
   }
 

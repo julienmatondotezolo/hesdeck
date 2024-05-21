@@ -5,7 +5,7 @@ import 'package:my_mobile_deck/services/connections/deck_lights_connections.dart
 import 'package:my_mobile_deck/themes/colors.dart';
 import 'package:wled_api/wled_api.dart';
 
-const toggleDeckLightsMethod = 'Deck light Toggle ';
+const toggleDeckLightsMethod = 'Deck light Toggle';
 const updateDeckLighstMethod = 'Deck light Change color';
 
 class SliderValueNotifier {
@@ -37,7 +37,7 @@ class DeckLightsActions {
         await WLED.toggle(wled);
       } catch (e) {
         // Handle any errors that occur while changing the scene
-        throw Exception('Error light toggle: $e');
+        throw Exception('Error toggle Deck lights: $e');
         // Show an error message or take appropriate action
       }
     }
