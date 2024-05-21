@@ -169,6 +169,51 @@
       ]
    },
    {
+      "actionName": "Deck Lights",
+      "actionDecks": [
+         {
+            "name": "Toggle",
+            "action": "Deck light Toggle",
+            "actionConnectionType": "Deck lights",
+            "iconData": null,
+            "customIconData": 59393,
+            "backgroundColor": {
+               "colors": [
+                  4278202227,
+                  4281216558
+               ],
+               "begin": "Alignment.topLeft",
+               "end": "Alignment.bottomRight"
+            },
+            "iconColor": 4294967295,
+            "defaultDeck": false,
+            "dossierDeck": false,
+            "popupDeck": false,
+            "clickableDeck": true
+         },
+         {
+            "name": "Change color",
+            "action": "Deck light Change color",
+            "actionConnectionType": "Deck lights",
+            "iconData": null,
+            "customIconData": 59393,
+            "backgroundColor": {
+               "colors": [
+                  4278202227,
+                  4281216558
+               ],
+               "begin": "Alignment.topLeft",
+               "end": "Alignment.bottomRight"
+            },
+            "iconColor": 4294967295,
+            "defaultDeck": false,
+            "dossierDeck": false,
+            "popupDeck": true,
+            "clickableDeck": false
+         }
+      ]
+   },
+   {
       "actionName": "OBS",
       "actionDecks": [
          {
