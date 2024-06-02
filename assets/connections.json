@@ -8,6 +8,14 @@
         ]
     },
     {
+        "name": "Discord",
+        "image": "https://cdn-icons-png.flaticon.com/512/5968/5968756.png",
+        "fields": [
+            "clientId",
+            "clientSecret"
+        ]
+    },
+    {
         "name": "Deck Lights",
         "image": "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/6d/23/69/6d2369a1-71b0-22fd-1faf-6da57877bccb/AppIcon-0-0-1x_U007emarketing-0-10-0-85-220.png/135x135bb.png",
         "fields": [

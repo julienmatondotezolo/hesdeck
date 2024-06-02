@@ -22,6 +22,52 @@ class Connection {
   }
 }
 
+class DiscordConnection extends Connection {
+  final String clientId;
+  final String clientSecret;
+  DiscordConnection({
+    required this.clientId,
+    required this.clientSecret,
+    bool connected = false, // Provide a default value for connected
+  }) : super(
+          'Discord',
+          'https://cdn-icons-png.flaticon.com/512/5968/5968756.png',
+          connected,
+        );
+
+  @override
+  DiscordConnection copyWith({
+    String? clientId,
+    String? clientSecret,
+    required bool connected,
+  }) {
+    return DiscordConnection(
+      clientId: clientId ?? this.clientId,
+      clientSecret: clientSecret ?? this.clientSecret,
+      connected: connected, // Update connected property
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type,
+      'image': image,
+      'connected': connected,
+      'clientId': clientId,
+      'clientSecret': clientSecret,
+    };
+  }
+
+  factory DiscordConnection.fromJson(Map<String, dynamic> json) {
+    return DiscordConnection(
+      clientId: json['clientId'],
+      clientSecret: json['clientSecret'],
+      connected: json['connected'],
+    );
+  }
+}
+
 class AppleMusicConnection extends Connection {
   final String clientId;
   final String clientSecret;
