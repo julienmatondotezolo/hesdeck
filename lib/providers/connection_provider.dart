@@ -51,6 +51,7 @@ class ConnectionProvider extends ChangeNotifier {
 
   late SpotifyConnection _spotifyConnectionObject = SpotifyConnection();
   SpotifyApi? _spotifyApi;
+  String? _spotifyCurrentState;
 
   late StreamElementsConnection _streamElementsConnectionObject =
       StreamElementsConnection(
@@ -82,6 +83,7 @@ class ConnectionProvider extends ChangeNotifier {
 
   SpotifyConnection get spotifyConnectionObject => _spotifyConnectionObject;
   SpotifyApi? get spotifyApi => _spotifyApi;
+  String? get spotifyCurrentState => _spotifyCurrentState;
 
   StreamElementsConnection get streamElementsConnectionObject =>
       _streamElementsConnectionObject;
@@ -392,17 +394,17 @@ class ConnectionProvider extends ChangeNotifier {
           fallbackEventHandler: (Event event) async => {
                 if (event.eventData!.containsKey('sceneName'))
                   {
-                    debugPrint(
-                      'eventData: ${event.eventData?['sceneName']}',
-                    ),
+                    // debugPrint(
+                    //   'eventData: ${event.eventData?['sceneName']}',
+                    // ),
                     _obsCurrentScene = await event.eventData?['sceneName'],
-                    debugPrint('_obsCurrentScene: $_obsCurrentScene'),
+                    // debugPrint('_obsCurrentScene: $_obsCurrentScene'),
                   }
                 else
                   {
-                    debugPrint(
-                      '[OBS LISTENER]: type: ${event.eventType} data: ${event.eventData}',
-                    ),
+                    // debugPrint(
+                    //   '[OBS LISTENER]: type: ${event.eventType} data: ${event.eventData}',
+                    // ),
                   }
               });
 
@@ -411,6 +413,7 @@ class ConnectionProvider extends ChangeNotifier {
       if (_obsWebSocket != null) {
         debugPrint('Connected to OBS WebSocket server.');
 
+        _obsCurrentScene = await _obsWebSocket?.scenes.getCurrentProgramScene();
         // StatsResponse stats = await _obsWebSocket!.general.getStats();
         obsConnectionObject = obsConnectionObject.copyWith(connected: true);
 
@@ -678,6 +681,11 @@ class ConnectionProvider extends ChangeNotifier {
   /* ===================================================
           =====  SPOTIFY CONNECTION SETTINGS ======
   *** ================================================= */
+
+  void setSpotifyCurrentState({required String newState}) {
+    _spotifyCurrentState = newState;
+    notifyListeners();
+  }
 
   // Connect to Spotify
   Future<void> connectToSpotify(

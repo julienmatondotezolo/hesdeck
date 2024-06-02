@@ -1,5 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:my_mobile_deck/models/deck.dart';
+import 'package:my_mobile_deck/providers/connection_provider.dart';
 import 'package:my_mobile_deck/services/actions/manage_actions.dart';
 import 'package:my_mobile_deck/themes/colors.dart';
 import 'package:my_mobile_deck/utils/helpers.dart';
@@ -27,6 +31,7 @@ class ClickableDeckWidgetState extends State<ClickableDeckWidget>
   late AnimationController _controller;
   late Animation<Color?> _colorAnimation;
   bool isClicked = false;
+  bool isActive = false;
 
   @override
   void initState() {
@@ -39,8 +44,8 @@ class ClickableDeckWidgetState extends State<ClickableDeckWidget>
       });
 
     _colorAnimation = ColorTween(
-      begin: const Color.fromARGB(255, 18, 173, 193),
-      end: const Color.fromARGB(255, 18, 100, 193),
+      begin: const Color.fromRGBO(18, 173, 193, 1),
+      end: const Color.fromRGBO(71, 132, 231, 1),
     ).animate(_controller);
 
     _controller.repeat(reverse: true);
@@ -54,20 +59,36 @@ class ClickableDeckWidgetState extends State<ClickableDeckWidget>
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      isActive = Helpers.isDeckActive(
+        connectionType: widget.deck?.actionConnectionType,
+        context: context,
+        deck: widget.deck,
+      );
+    });
+
     return GestureDetector(
       onTap: () {
         Helpers.vibration();
         setState(() {
           isClicked = !isClicked;
         });
-        isClicked
-            ? ManageAcions.selectAction(
-                context,
-                widget.deck!.actionConnectionType,
-                widget.deck!.action,
-                widget.deck!.actionParameter,
-              )
-            : null;
+        if (isClicked) {
+          ManageAcions.selectAction(
+            context,
+            widget.deck!.actionConnectionType,
+            widget.deck!.action,
+            widget.deck!.actionParameter,
+          );
+          Timer(const Duration(milliseconds: 300), () {
+            // Set a timer to turn off the toggle after 1 second
+            setState(() {
+              isClicked = false;
+            });
+          });
+        } else {
+          null;
+        }
       },
       onDoubleTap: () {
         Helpers.vibration();
@@ -80,13 +101,15 @@ class ClickableDeckWidgetState extends State<ClickableDeckWidget>
       },
       child: Container(
         decoration: BoxDecoration(
-          gradient: isClicked
+          gradient: isClicked || isActive
               ? widget.deck!.activeBackgroundColor
               : widget.deck!.backgroundColor,
           border: Border.all(
             color: isClicked
                 ? _colorAnimation.value ?? AppColors.darkGrey
-                : AppColors.darkGrey,
+                : isActive
+                    ? const Color.fromRGBO(71, 132, 231, 1)
+                    : AppColors.darkGrey,
             width: 5,
           ),
           borderRadius: BorderRadius.circular(10.0),

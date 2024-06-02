@@ -149,6 +149,9 @@ class SpotifyActions {
         context, spotifyApi)) {
       try {
         await spotifyApi!.startPlayback(deviceId);
+        if (!context.mounted) return;
+        connectionProvider(context)
+            .setSpotifyCurrentState(newState: 'Start song');
       } catch (e) {
         // Handle any errors that occur while changing the scene
         throw Exception('Error starting playback: $e');
@@ -166,6 +169,9 @@ class SpotifyActions {
         context, spotifyApi)) {
       try {
         await spotifyApi!.pausePlayback(deviceId);
+        if (!context.mounted) return;
+        connectionProvider(context)
+            .setSpotifyCurrentState(newState: 'Pause song');
       } catch (e) {
         // Handle any errors that occur while changing the scene
         throw Exception('Error pausing playback: $e');
@@ -183,6 +189,9 @@ class SpotifyActions {
         context, spotifyApi)) {
       try {
         await spotifyApi!.previousPlayback(deviceId);
+        if (!context.mounted) return;
+        connectionProvider(context)
+            .setSpotifyCurrentState(newState: 'Start song');
       } catch (e) {
         // Handle any errors that occur while changing the scene
         throw Exception('Error previousing playback: $e');
@@ -200,6 +209,9 @@ class SpotifyActions {
         context, spotifyApi)) {
       try {
         await spotifyApi!.nextPlayback(deviceId);
+        if (!context.mounted) return;
+        connectionProvider(context)
+            .setSpotifyCurrentState(newState: 'Start song');
       } catch (e) {
         // Handle any errors that occur while changing the scene
         throw Exception('Error nexting playback: $e');
@@ -217,6 +229,9 @@ class SpotifyActions {
         context, spotifyApi)) {
       try {
         await spotifyApi!.volumeUp(deviceId);
+        if (!context.mounted) return;
+        connectionProvider(context)
+            .setSpotifyCurrentState(newState: 'Start song');
       } catch (e) {
         // Handle any errors that occur while changing the scene
         throw Exception('Error volume up: $e');
@@ -234,6 +249,9 @@ class SpotifyActions {
         context, spotifyApi)) {
       try {
         await spotifyApi!.volumeDown(deviceId);
+        if (!context.mounted) return;
+        connectionProvider(context)
+            .setSpotifyCurrentState(newState: 'Start song');
       } catch (e) {
         // Handle any errors that occur while changing the scene
         throw Exception('Error volume up: $e');

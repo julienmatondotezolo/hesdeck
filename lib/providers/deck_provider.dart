@@ -67,7 +67,7 @@ class DeckProvider extends ChangeNotifier {
     print('[SHARED DECKS SAVED]: ${decksJson.length}');
   }
 
-  void _addDefaultDeck(int i, bool remove) {
+  void _addDefaultDeck(int index, bool remove) {
     // Create and add 15 default decks with default name and icon
     Deck defaultDeck = Deck(
       // name: 'Deck $i',
@@ -81,7 +81,7 @@ class DeckProvider extends ChangeNotifier {
 
     if (remove == true) {
       // Insert the default deck at the same index where the removed deck was located
-      _decks.insert(i, defaultDeck);
+      _decks.insert(index, defaultDeck);
     } else {
       _decks.add(defaultDeck);
     }

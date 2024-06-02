@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:my_mobile_deck/models/connection.dart';
 import 'package:my_mobile_deck/models/deck.dart';
+import 'package:my_mobile_deck/providers/connection_provider.dart';
 import 'package:my_mobile_deck/providers/deck_provider.dart';
 import 'package:my_mobile_deck/screens/deck_screen.dart';
 import 'package:my_mobile_deck/screens/deck_settings_screen.dart';
@@ -260,6 +261,21 @@ class Helpers {
     }
 
     return fields;
+  }
+
+  static bool isDeckActive(
+      {required String? connectionType,
+      required BuildContext context,
+      required Deck? deck}) {
+    ConnectionProvider connProvider = connectionProvider(context);
+    switch (connectionType) {
+      case 'OBS':
+        return connProvider.obsCurrentScene == deck?.actionParameter;
+      case 'Spotify':
+        return connProvider.spotifyCurrentState == deck?.action;
+      default:
+        return false;
+    }
   }
 
   static String checkIfIPv6(String address) {
