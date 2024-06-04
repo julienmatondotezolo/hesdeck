@@ -268,6 +268,10 @@ class Helpers {
       required BuildContext context,
       required Deck? deck}) {
     ConnectionProvider connProvider = connectionProvider(context);
+    // bool isOBSactive() {
+
+    // }
+
     switch (connectionType) {
       case 'OBS':
         return connProvider.obsCurrentScene == deck?.actionParameter;

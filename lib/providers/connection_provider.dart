@@ -402,9 +402,12 @@ class ConnectionProvider extends ChangeNotifier {
                   }
                 else
                   {
-                    // debugPrint(
-                    //   '[OBS LISTENER]: type: ${event.eventType} data: ${event.eventData}',
-                    // ),
+                    debugPrint(
+                      '[OBS LISTENER]: type: ${event.eventType} data: ${event.eventData}',
+                    ),
+                    debugPrint(
+                      '[OBS LISTENER]: type: ${event.eventType} data: ${event.eventData}',
+                    ),
                   }
               });
 
